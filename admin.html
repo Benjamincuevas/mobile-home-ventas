@@ -393,6 +393,43 @@ const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, m => ({"&":"&amp
 const BADGES = { disp:["Disponible","b-disp"], oport:["Oportunidad","b-oport"], remod:["Recién Remodelada","b-remod"] };
 
 const COMMON_FEATS = ["Aire central","Deck / porche incluido","Electrodomésticos incluidos","Cocina remodelada","Pisos nuevos","Techo nuevo","Walk-in closet","Lavadora y secadora","Calentador de agua nuevo","Amueblada","Isla en la cocina","Tina en baño principal"];
+
+/* Las mismas 6 casas de muestra que enseña la página pública cuando
+   el inventario está vacío. Se cargan al panel para poder editarlas,
+   borrarlas o reemplazarlas por las casas reales. */
+const SAMPLE_NOTE = "\n\nUnidad con inspección de 40 puntos aprobada. El precio no incluye flete e instalación: te cotizamos el traslado a tu terreno o parque sin compromiso. Agenda una visita o videollamada para conocerla.";
+const SAMPLE_UNITS = [
+  { id:1, name:"Modelo Esperanza", size:"16×76", type:"single", beds:3, baths:2, price:52900, oldPrice:0, badge:"disp",
+    location:"Lote principal", brand:"Clayton", year:2018, cond:"seminueva", sqft:1216, stock:"",
+    desc:"Cocina abierta, closets amplios y aire central. Lista para entrega inmediata.",
+    descLong:"Cocina abierta, closets amplios y aire central. Lista para entrega inmediata." + SAMPLE_NOTE,
+    features:["Aire central","Electrodomésticos incluidos","Walk-in closet","Pisos nuevos"], photos:[] },
+  { id:2, name:"Modelo Familiar", size:"28×56", type:"double", beds:4, baths:2, price:79900, oldPrice:86500, badge:"remod",
+    location:"Lote principal", brand:"Fleetwood", year:2016, cond:"seminueva", sqft:1568, stock:"",
+    desc:"Recién remodelada: pisos nuevos, pintura completa y baños renovados.",
+    descLong:"Recién remodelada: pisos nuevos, pintura completa y baños renovados." + SAMPLE_NOTE,
+    features:["Cocina remodelada","Pisos nuevos","Techo nuevo","Deck / porche incluido","Isla en la cocina"], photos:[] },
+  { id:3, name:"Modelo Compacta", size:"14×60", type:"single", beds:2, baths:1, price:34500, oldPrice:0, badge:"oport",
+    location:"Lote principal", brand:"Champion", year:2015, cond:"seminueva", sqft:840, stock:"",
+    desc:"Ideal para pareja o inversión en renta. Excelente estado general.",
+    descLong:"Ideal para pareja o inversión en renta. Excelente estado general." + SAMPLE_NOTE,
+    features:["Aire central","Electrodomésticos incluidos"], photos:[] },
+  { id:4, name:"Modelo Horizonte", size:"16×80", type:"single", beds:3, baths:2, price:58900, oldPrice:0, badge:"disp",
+    location:"Lote principal", brand:"Clayton", year:2020, cond:"seminueva", sqft:1280, stock:"",
+    desc:"La single wide más amplia del inventario, con sala y comedor separados.",
+    descLong:"La single wide más amplia del inventario, con sala y comedor separados." + SAMPLE_NOTE,
+    features:["Aire central","Walk-in closet","Lavadora y secadora"], photos:[] },
+  { id:5, name:"Modelo Gran Vista", size:"28×64", type:"double", beds:4, baths:3, price:94500, oldPrice:0, badge:"disp",
+    location:"Lote principal", brand:"Palm Harbor", year:2022, cond:"nueva", sqft:1792, stock:"",
+    desc:"Double wide premium: recámara principal con baño completo y walk-in closet.",
+    descLong:"Double wide premium: recámara principal con baño completo y walk-in closet." + SAMPLE_NOTE,
+    features:["Aire central","Isla en la cocina","Tina en baño principal","Walk-in closet","Electrodomésticos incluidos"], photos:[] },
+  { id:6, name:"Modelo Inicio", size:"12×50", type:"single", beds:1, baths:1, price:24900, oldPrice:28900, badge:"oport",
+    location:"Lote principal", brand:"Champion", year:2012, cond:"seminueva", sqft:600, stock:"",
+    desc:"La puerta de entrada perfecta: precio accesible y estructura sólida.",
+    descLong:"La puerta de entrada perfecta: precio accesible y estructura sólida." + SAMPLE_NOTE,
+    features:["Calentador de agua nuevo"], photos:[] }
+];
 $("featGrid").innerHTML = COMMON_FEATS.map(function(f, i){
   return '<label class="feat"><input type="checkbox" value="' + esc(f) + '" data-feat="1">' + esc(f) + '</label>';
 }).join("");
@@ -673,6 +710,10 @@ $("fileImport").addEventListener("change", async () => {
 
 ["sWa","sPhone","sIg"].forEach(id => $(id).addEventListener("input", markDirty));
 
+/* En modo clásico (sin Supabase) el panel arranca con las casas de
+   muestra de la página; en modo nube las trae loadFromCloud() si el
+   inventario está vacío. */
+if(!SB) hydrate({ settings: {}, listings: SAMPLE_UNITS });
 renderUnits();
 
 /* ══════════════════════════════════════════════
@@ -710,11 +751,14 @@ function loadFromCloud(){
   .then(function(r){ if(!r.ok) throw new Error("HTTP " + r.status); return r.json(); })
   .then(function(rows){
     var d = rows && rows[0] && rows[0].data;
-    if(d && (Array.isArray(d.listings) || d.settings)){
+    if(d && Array.isArray(d.listings) && d.listings.length){
       hydrate(d);
       toast("Cargadas " + state.listings.length + " casas desde la nube ✔");
     } else {
-      toast("Aún no hay casas publicadas. ¡Agrega la primera!");
+      /* Nube vacía: se cargan las mismas casas de muestra que enseña
+         la página, para poder editarlas o borrarlas y publicar. */
+      hydrate({ settings: (d && d.settings) || {}, listings: SAMPLE_UNITS });
+      toast("Estas son las casas de muestra de la página. Edítalas o bórralas y presiona ☁️ Publicar.");
     }
   })
   .catch(function(err){ toast("No se pudo leer la base de datos. Revisa supabase-config.js y el script SQL."); });
