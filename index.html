@@ -28,8 +28,8 @@
   --bg:#F4F6F8;
   --white:#FFFFFF;
   --line:#DDE3E9;
-  --wa:#25D366;
-  --wa-2:#1DA851;
+  --ig:#DD2A7B;
+  --ig-2:#B91C6B;
   --ok:#1E8E3E;
   --orange:#E8710A;
   --r:10px;
@@ -59,8 +59,8 @@ h2{font-size:clamp(1.5rem,3vw,2.1rem)}
 .btn-yellow:hover{background:var(--yellow-2)}
 .btn-blue{background:var(--blue);color:#fff}
 .btn-blue:hover{background:var(--blue-2)}
-.btn-wa{background:var(--wa);color:#fff}
-.btn-wa:hover{background:var(--wa-2)}
+.btn-insta{background:linear-gradient(45deg,#F58529,#DD2A7B,#8134AF);color:#fff}
+.btn-insta:hover{background:linear-gradient(45deg,#DE7118,#C11E6A,#6C2A94)}
 .btn-line{border:1.5px solid var(--blue);color:var(--blue);background:#fff}
 .btn-line:hover{background:#EAF3FB}
 .btn-line-w{border:1.5px solid rgba(255,255,255,.7);color:#fff}
@@ -264,7 +264,7 @@ input[type=range]::-moz-range-thumb{width:21px;height:21px;border-radius:50%;bac
 .s-card{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:1.5rem 1.3rem;box-shadow:var(--sh);border-top:4px solid var(--yellow)}
 .s-card:nth-child(2){border-top-color:var(--blue)}
 .s-card:nth-child(3){border-top-color:var(--orange)}
-.s-card:nth-child(4){border-top-color:var(--wa)}
+.s-card:nth-child(4){border-top-color:var(--ig)}
 .s-ico{width:50px;height:50px;border-radius:10px;background:#EEF4FA;display:grid;place-items:center;margin-bottom:.9rem}
 .s-ico svg{width:26px;height:26px;stroke:var(--navy)}
 .s-card h3{font-family:var(--cond);font-weight:800;font-size:1.03rem;color:var(--navy);margin-bottom:.4rem}
@@ -324,6 +324,7 @@ input[type=range]::-moz-range-thumb{width:21px;height:21px;border-radius:50%;bac
 .fsuccess .big svg{width:32px;height:32px;stroke:var(--ok);stroke-width:2.5}
 .fsuccess h3{font-family:var(--cond);font-weight:800;color:var(--navy);font-size:1.25rem;margin-bottom:.35rem}
 .fsuccess p{color:var(--muted);font-size:.9rem;margin-bottom:1.2rem}
+.lead-summary{background:var(--bg);border:1px solid var(--line);border-radius:9px;padding:.9rem 1rem;text-align:left;white-space:pre-line;font-size:.82rem;color:var(--ink)}
 
 /* ── Footer ── */
 .ftr{background:#022440;color:#9DB4C9;padding:56px 0 0}
@@ -345,11 +346,11 @@ input[type=range]::-moz-range-thumb{width:21px;height:21px;border-radius:50%;bac
 .ftr-btm{border-top:1px solid rgba(255,255,255,.1);padding:1.2rem 0;font-size:.73rem;color:#5E7A93}
 .ftr-btm .wrap{display:flex;flex-wrap:wrap;gap:.6rem;justify-content:space-between}
 
-/* ── WhatsApp flotante ── */
-.wa-float{position:fixed;right:20px;bottom:20px;z-index:90;width:60px;height:60px;border-radius:50%;background:var(--wa);display:grid;place-items:center;box-shadow:0 10px 26px rgba(37,211,102,.45);transition:transform .2s}
-.wa-float:hover{transform:scale(1.08)}
-.wa-float svg{width:30px;height:30px;fill:#fff}
-.wa-float::after{content:"";position:absolute;inset:0;border-radius:50%;border:2px solid var(--wa);animation:pulse 2.2s infinite}
+/* ── Instagram flotante ── */
+.ig-float{position:fixed;right:20px;bottom:20px;z-index:90;width:60px;height:60px;border-radius:50%;background:linear-gradient(45deg,#F58529,#DD2A7B,#8134AF);display:grid;place-items:center;box-shadow:0 10px 26px rgba(221,42,123,.45);transition:transform .2s}
+.ig-float:hover{transform:scale(1.08)}
+.ig-float svg{width:28px;height:28px;fill:#fff}
+.ig-float::after{content:"";position:absolute;inset:0;border-radius:50%;border:2px solid var(--ig);animation:pulse 2.2s infinite}
 @keyframes pulse{0%{transform:scale(1);opacity:.8}100%{transform:scale(1.6);opacity:0}}
 
 .rv{opacity:0;transform:translateY(22px);transition:opacity .6s ease,transform .6s ease}
@@ -415,9 +416,9 @@ input[type=range]::-moz-range-thumb{width:21px;height:21px;border-radius:50%;bac
       </button>
     </div>
     <div class="hdr-right">
-      <a class="btn btn-wa btn-sm" href="https://wa.me/10000000000?text=Hola%2C%20quiero%20cotizar%20una%20casa%20m%C3%B3vil" target="_blank" rel="noopener">
-        <svg class="ico" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm4.6 14.1c-.2.6-1 1.1-1.7 1.2-.7.1-1.5.3-3.7-.9-1.9-1-3.4-2.6-4.4-4.5-.8-1.5-.5-2.7.4-3.6.2-.2.5-.3.7-.3h.5c.2 0 .4-.1.6.4l.8 1.9c.1.1.1.3 0 .5l-.5.6c-.2.2-.5.3-.2.7a6.7 6.7 0 0 0 3.4 3c.2.1.4.1.5-.1.1-.2.6-.7.8-1 .2-.2.4-.2.6-.1.2.1 1.4.7 1.7.8.4.1.6.2.6.2.1.1.1.6-.1 1.2z"/></svg>
-        Cotizar por WhatsApp
+      <a class="btn btn-insta btn-sm" href="https://ig.me/m/mobilehomeventas" target="_blank" rel="noopener">
+        <svg class="ico" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.2c3.2 0 3.6 0 4.8.1 1.2.1 1.9.2 2.3.4.6.2 1 .5 1.4.9.4.4.7.8.9 1.4.2.4.4 1.1.4 2.3.1 1.2.1 1.6.1 4.8s0 3.6-.1 4.8c-.1 1.2-.2 1.9-.4 2.3-.2.6-.5 1-.9 1.4-.4.4-.8.7-1.4.9-.4.2-1.1.4-2.3.4-1.2.1-1.6.1-4.8.1s-3.6 0-4.8-.1c-1.2-.1-1.9-.2-2.3-.4-.6-.2-1-.5-1.4-.9-.4-.4-.7-.8-.9-1.4-.2-.4-.4-1.1-.4-2.3-.1-1.2-.1-1.6-.1-4.8s0-3.6.1-4.8c.1-1.2.2-1.9.4-2.3.2-.6.5-1 .9-1.4.4-.4.8-.7 1.4-.9.4-.2 1.1-.4 2.3-.4 1.2-.1 1.6-.1 4.8-.1zm0 5.4a4.4 4.4 0 1 1 0 8.8 4.4 4.4 0 0 1 0-8.8zm0 7.2a2.9 2.9 0 1 0 0-5.7 2.9 2.9 0 0 0 0 5.7zm5.6-7.4a1 1 0 1 1-2.1 0 1 1 0 0 1 2.1 0z"/></svg>
+        Cotizar por Instagram
       </a>
       <button class="burger" id="burger" aria-label="Abrir menú" aria-expanded="false" aria-controls="mnav"><span></span><span></span><span></span></button>
     </div>
@@ -440,7 +441,7 @@ input[type=range]::-moz-range-thumb{width:21px;height:21px;border-radius:50%;bac
 <div class="mnav" id="mnav">
   <a href="#inicio">Inicio</a><a href="#inventario">Inventario</a><a href="#financiamiento">Financiamiento</a>
   <a href="#servicios">Servicios</a><a href="#testimonios">Testimonios</a><a href="#contacto">Contacto</a>
-  <a class="btn btn-wa btn-sm" href="https://wa.me/10000000000?text=Hola%2C%20quiero%20cotizar%20una%20casa%20m%C3%B3vil" target="_blank" rel="noopener">Cotizar por WhatsApp</a>
+  <a class="btn btn-insta btn-sm" href="https://ig.me/m/mobilehomeventas" target="_blank" rel="noopener">Cotizar por Instagram</a>
 </div>
 
 <!-- ═══ HERO COMPACTO ═══ -->
@@ -448,10 +449,10 @@ input[type=range]::-moz-range-thumb{width:21px;height:21px;border-radius:50%;bac
   <div class="wrap hero-grid">
     <div>
       <h1>Encuentra la Casa Móvil <span>Perfecta</span> para Ti y Tu Familia</h1>
-      <p>Casas móviles nuevas y seminuevas con entrega e instalación garantizada. Filtra, compara y pregunta por WhatsApp — te asesoramos en cada paso.</p>
+      <p>Casas móviles nuevas y seminuevas con entrega e instalación garantizada. Filtra, compara y pregunta por Instagram — te asesoramos en cada paso.</p>
       <div class="hero-cta">
         <a href="#inventario" class="btn btn-yellow">Ver Inventario Disponible</a>
-        <a href="https://wa.me/10000000000?text=Hola%2C%20quiero%20hablar%20con%20un%20asesor" target="_blank" rel="noopener" class="btn btn-line-w">Hablar con un Asesor</a>
+        <a href="https://ig.me/m/mobilehomeventas" target="_blank" rel="noopener" class="btn btn-line-w">Hablar con un Asesor</a>
       </div>
       <div class="hero-stats">
         <div><b>120+</b><span>Casas entregadas</span></div>
@@ -535,7 +536,7 @@ input[type=range]::-moz-range-thumb{width:21px;height:21px;border-radius:50%;bac
         <div class="results" id="results"></div>
         <div class="empty" id="empty">
           <b>No encontramos unidades con esos filtros</b>
-          Ajusta los filtros o escríbenos por WhatsApp y te avisamos en cuanto llegue una que encaje contigo.
+          Ajusta los filtros o escríbenos por Instagram y te avisamos en cuanto llegue una que encaje contigo.
         </div>
       </div>
     </div>
@@ -548,7 +549,7 @@ input[type=range]::-moz-range-thumb{width:21px;height:21px;border-radius:50%;bac
     <div class="t-item rv"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l8 4v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6z"/><path d="M9 12l2 2 4-4"/></svg><div><b>Inspección de 40 puntos</b><small>en cada unidad publicada</small></div></div>
     <div class="t-item rv"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M1 8h13v9H1z"/><path d="M14 11h5l3 3v3h-8z"/><circle cx="6" cy="19" r="2"/><circle cx="18" cy="19" r="2"/></svg><div><b>Flete e instalación</b><small>coordinados por nosotros</small></div></div>
     <div class="t-item rv"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="13" rx="2"/><path d="M2 10h20"/><path d="M6 15h4"/></svg><div><b>Financiamiento accesible</b><small>opciones con ITIN o SSN</small></div></div>
-    <div class="t-item rv"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"/><path d="M8 10h8M8 13h5"/></svg><div><b>Atención en español</b><small>WhatsApp, llamada o video</small></div></div>
+    <div class="t-item rv"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"/><path d="M8 10h8M8 13h5"/></svg><div><b>Atención en español</b><small>Instagram, llamada o video</small></div></div>
   </div>
 </div>
 
@@ -584,7 +585,7 @@ input[type=range]::-moz-range-thumb{width:21px;height:21px;border-radius:50%;bac
       </div>
       <div class="calc-result">
         <div><small>Pago mensual estimado*</small><b id="outMo">$0</b></div>
-        <a class="btn btn-yellow btn-sm" id="calcWa" href="#" target="_blank" rel="noopener">Quiero este plan</a>
+        <a class="btn btn-yellow btn-sm" href="https://ig.me/m/mobilehomeventas" target="_blank" rel="noopener">Quiero este plan</a>
       </div>
       <p class="calc-note">*Estimación ilustrativa con tasa de referencia del 9.5% anual. No constituye una oferta de crédito; el plan final depende de la financiera y tu perfil.</p>
     </div>
@@ -617,7 +618,7 @@ input[type=range]::-moz-range-thumb{width:21px;height:21px;border-radius:50%;bac
       <div class="s-card rv">
         <div class="s-ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"/><path d="M8 10h8M8 13h5"/></svg></div>
         <h3>Atención Personalizada y en Español</h3>
-        <p>Resolvemos tus dudas por WhatsApp, llamada o videollamada. Hablamos tu idioma y entendemos tu proceso.</p>
+        <p>Resolvemos tus dudas por Instagram, llamada o videollamada. Hablamos tu idioma y entendemos tu proceso.</p>
       </div>
     </div>
   </div>
@@ -662,7 +663,7 @@ input[type=range]::-moz-range-thumb{width:21px;height:21px;border-radius:50%;bac
   <div class="wrap lead-grid">
     <div class="rv">
       <h2>Cuéntanos qué buscas y te asesoramos sin costo</h2>
-      <p class="lede">Responde en menos de 1 minuto y un asesor te contacta por WhatsApp el mismo día.</p>
+      <p class="lede">Responde en menos de 1 minuto y un asesor te contacta por Instagram o llamada el mismo día.</p>
       <ul class="lead-list">
         <li><span class="chk2"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round"><path d="M4 12l5 5L20 6"/></svg></span>Sin compromiso y sin afectar tu crédito</li>
         <li><span class="chk2"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round"><path d="M4 12l5 5L20 6"/></svg></span>Opciones según tu presupuesto real</li>
@@ -674,7 +675,7 @@ input[type=range]::-moz-range-thumb{width:21px;height:21px;border-radius:50%;bac
         <div class="fgrid">
           <div class="fld"><label for="name">Nombre completo</label>
             <input type="text" id="name" name="name" placeholder="Ej. María González" required autocomplete="name"></div>
-          <div class="fld"><label for="phone">Teléfono / WhatsApp</label>
+          <div class="fld"><label for="phone">Teléfono de contacto</label>
             <input type="tel" id="phone" name="phone" placeholder="Ej. 555 123 4567" required autocomplete="tel"></div>
           <div class="fld"><label for="land">¿Tienes terreno propio?</label>
             <select id="land" name="land" required>
@@ -695,13 +696,14 @@ input[type=range]::-moz-range-thumb{width:21px;height:21px;border-radius:50%;bac
             <textarea id="msg" name="msg" placeholder="Ej. Busco una 3 recámaras para entregar en 2 meses…"></textarea></div>
         </div>
         <button type="button" class="btn btn-yellow" id="leadBtn">Solicitar Asesoría Gratuita</button>
-        <p class="fnote">Al enviar aceptas ser contactado por WhatsApp o llamada. Nunca compartimos tus datos.</p>
+        <p class="fnote">Al enviar aceptas ser contactado por Instagram o llamada. Nunca compartimos tus datos.</p>
       </form>
       <div class="fsuccess" id="fsuccess">
         <div class="big"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round"><path d="M4 12l5 5L20 6"/></svg></div>
         <h3>¡Gracias! Recibimos tu solicitud</h3>
-        <p>Un asesor te escribirá muy pronto. Si prefieres, escríbenos ahora mismo:</p>
-        <a class="btn btn-wa" id="successWa" href="#" target="_blank" rel="noopener">Continuar por WhatsApp</a>
+        <p>Si prefieres respuesta inmediata, mándanos este resumen por mensaje directo en Instagram:</p>
+        <p class="lead-summary" id="leadSummary"></p>
+        <a class="btn btn-insta" href="https://ig.me/m/mobilehomeventas" target="_blank" rel="noopener">Escribirles por Instagram</a>
       </div>
     </div>
   </div>
@@ -719,7 +721,6 @@ input[type=range]::-moz-range-thumb{width:21px;height:21px;border-radius:50%;bac
       <div class="socials">
         <a href="https://instagram.com/mobilehomeventas" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24"><path d="M12 2.2c3.2 0 3.6 0 4.8.1 1.2.1 1.9.2 2.3.4.6.2 1 .5 1.4.9.4.4.7.8.9 1.4.2.4.4 1.1.4 2.3.1 1.2.1 1.6.1 4.8s0 3.6-.1 4.8c-.1 1.2-.2 1.9-.4 2.3-.2.6-.5 1-.9 1.4-.4.4-.8.7-1.4.9-.4.2-1.1.4-2.3.4-1.2.1-1.6.1-4.8.1s-3.6 0-4.8-.1c-1.2-.1-1.9-.2-2.3-.4-.6-.2-1-.5-1.4-.9-.4-.4-.7-.8-.9-1.4-.2-.4-.4-1.1-.4-2.3-.1-1.2-.1-1.6-.1-4.8s0-3.6.1-4.8c.1-1.2.2-1.9.4-2.3.2-.6.5-1 .9-1.4.4-.4.8-.7 1.4-.9.4-.2 1.1-.4 2.3-.4 1.2-.1 1.6-.1 4.8-.1zm0 5.4a4.4 4.4 0 1 1 0 8.8 4.4 4.4 0 0 1 0-8.8zm0 7.2a2.9 2.9 0 1 0 0-5.7 2.9 2.9 0 0 0 0 5.7zm5.6-7.4a1 1 0 1 1-2.1 0 1 1 0 0 1 2.1 0z"/></svg></a>
         <a href="https://facebook.com" target="_blank" rel="noopener" aria-label="Facebook"><svg viewBox="0 0 24 24"><path d="M13.5 22v-8h2.7l.4-3.1h-3.1V8.9c0-.9.3-1.5 1.6-1.5h1.7V4.6c-.3 0-1.3-.1-2.4-.1-2.4 0-4 1.4-4 4.1v2.3H7.6V14h2.8v8z"/></svg></a>
-        <a href="https://wa.me/10000000000" target="_blank" rel="noopener" aria-label="WhatsApp"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm4.6 14.1c-.2.6-1 1.1-1.7 1.2-.7.1-1.5.3-3.7-.9-1.9-1-3.4-2.6-4.4-4.5-.8-1.5-.5-2.7.4-3.6.2-.2.5-.3.7-.3h.5c.2 0 .4-.1.6.4l.8 1.9c.1.1.1.3 0 .5l-.5.6c-.2.2-.5.3-.2.7a6.7 6.7 0 0 0 3.4 3c.2.1.4.1.5-.1.1-.2.6-.7.8-1 .2-.2.4-.2.6-.1.2.1 1.4.7 1.7.8.4.1.6.2.6.2.1.1.1.6-.1 1.2z"/></svg></a>
       </div>
     </div>
     <div>
@@ -737,13 +738,14 @@ input[type=range]::-moz-range-thumb{width:21px;height:21px;border-radius:50%;bac
       <div class="hours">
         <span><b>Lun – Vie:</b> 9:00 am – 7:00 pm</span>
         <span><b>Sábado:</b> 9:00 am – 5:00 pm</span>
-        <span><b>Domingo:</b> Citas por WhatsApp</span>
+        <span><b>Domingo:</b> Citas por Instagram</span>
       </div>
     </div>
     <div>
       <h4>Contacto directo</h4>
       <ul>
-        <li><a href="https://wa.me/10000000000">📱 WhatsApp: <span class="js-phone">(000) 000-0000</span></a></li>
+        <li><a href="https://instagram.com/mobilehomeventas" target="_blank" rel="noopener">📸 Instagram: @mobilehomeventas</a></li>
+        <li><a href="tel:+10000000000">📞 <span class="js-phone">(000) 000-0000</span></a></li>
         <li><a href="mailto:ventas@mobilehomeventas.com">✉️ ventas@mobilehomeventas.com</a></li>
         <li><a href="#contacto">📍 Visitas con cita previa</a></li>
       </ul>
@@ -774,8 +776,8 @@ input[type=range]::-moz-range-thumb{width:21px;height:21px;border-radius:50%;bac
   </div>
 </div>
 
-<a class="wa-float" href="https://wa.me/10000000000?text=Hola%2C%20vengo%20de%20la%20p%C3%A1gina%20web%20y%20quiero%20informaci%C3%B3n" target="_blank" rel="noopener" aria-label="Escríbenos por WhatsApp">
-  <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm4.6 14.1c-.2.6-1 1.1-1.7 1.2-.7.1-1.5.3-3.7-.9-1.9-1-3.4-2.6-4.4-4.5-.8-1.5-.5-2.7.4-3.6.2-.2.5-.3.7-.3h.5c.2 0 .4-.1.6.4l.8 1.9c.1.1.1.3 0 .5l-.5.6c-.2.2-.5.3-.2.7a6.7 6.7 0 0 0 3.4 3c.2.1.4.1.5-.1.1-.2.6-.7.8-1 .2-.2.4-.2.6-.1.2.1 1.4.7 1.7.8.4.1.6.2.6.2.1.1.1.6-.1 1.2z"/></svg>
+<a class="ig-float" href="https://ig.me/m/mobilehomeventas" target="_blank" rel="noopener" aria-label="Escríbenos por Instagram">
+  <svg viewBox="0 0 24 24"><path d="M12 2.2c3.2 0 3.6 0 4.8.1 1.2.1 1.9.2 2.3.4.6.2 1 .5 1.4.9.4.4.7.8.9 1.4.2.4.4 1.1.4 2.3.1 1.2.1 1.6.1 4.8s0 3.6-.1 4.8c-.1 1.2-.2 1.9-.4 2.3-.2.6-.5 1-.9 1.4-.4.4-.8.7-1.4.9-.4.2-1.1.4-2.3.4-1.2.1-1.6.1-4.8.1s-3.6 0-4.8-.1c-1.2-.1-1.9-.2-2.3-.4-.6-.2-1-.5-1.4-.9-.4-.4-.7-.8-.9-1.4-.2-.4-.4-1.1-.4-2.3-.1-1.2-.1-1.6-.1-4.8s0-3.6.1-4.8c.1-1.2.2-1.9.4-2.3.2-.6.5-1 .9-1.4.4-.4.8-.7 1.4-.9.4-.2 1.1-.4 2.3-.4 1.2-.1 1.6-.1 4.8-.1zm0 5.4a4.4 4.4 0 1 1 0 8.8 4.4 4.4 0 0 1 0-8.8zm0 7.2a2.9 2.9 0 1 0 0-5.7 2.9 2.9 0 0 0 0 5.7zm5.6-7.4a1 1 0 1 1-2.1 0 1 1 0 0 1 2.1 0z"/></svg>
 </a>
 
 <!-- Conexión a Supabase (opcional): configura url y anonKey en supabase-config.js -->
@@ -787,8 +789,9 @@ input[type=range]::-moz-range-thumb{width:21px;height:21px;border-radius:50%;bac
    DATOS
    ══════════════════════════════════════════════════════════════ */
 const DB = window.MHV_DATA || null;
-let WA = (DB && DB.settings && DB.settings.whatsapp) || "10000000000";
-const wa = t => `https://wa.me/${WA}?text=${encodeURIComponent(t)}`;
+/* Contacto principal: Instagram. igDm() abre el mensaje directo. */
+let IG = "mobilehomeventas";
+const igDm = () => "https://ig.me/m/" + IG;
 const fmt = n => "$" + Math.round(+n || 0).toLocaleString("en-US");
 const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, m => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));
 const monthlyRef = p => Math.round(p * .021 / 10) * 10;
@@ -863,7 +866,7 @@ const BADGES = { disp:["Disponible","b-disp"], oport:["Oportunidad","b-oport"], 
 
 const TESTIMONIALS = [
   { n:"Familia Ramírez", p:"Entrega en su terreno",
-    q:"Nos ayudaron con el financiamiento y en 3 semanas ya estábamos viviendo en nuestra casa. Todo el proceso por WhatsApp, súper fácil.",
+    q:"Nos ayudaron con el financiamiento y en 3 semanas ya estábamos viviendo en nuestra casa. Todo el proceso en línea, súper fácil.",
     c:{wall:"#E8E2D4", trim:"#fff", roof:"#5B6770", door:"#8A4B32", skyA:"#BFE0F0", skyB:"#F3EEDD", time:"day"} },
   { n:"Carlos y Ana", p:"Instalación en parque",
     q:"La casa llegó tal como en las fotos. Ellos coordinaron el flete y la instalación con el parque. Cero estrés para nosotros.",
@@ -990,12 +993,11 @@ function cardHTML(u){
   const sale = u.oldPrice > u.price && u.oldPrice > 0;
   const hasPh = u.photos && u.photos.length;
   const i = phIndex[u.id] || 0;
-  const ask = `Hola, me interesa el ${u.name} ${u.size} (${u.beds} rec / ${u.baths} baños) en ${fmt(u.price)}. ¿Sigue disponible?`;
   return `
   <article class="lcard rv in" data-lid="${u.id}">
     <div class="lc-media">
       ${hasPh
-        ? `<img src="${u.photos[i]}" alt="${esc(u.name)} ${esc(u.size)}" loading="lazy">
+        ? `<img src="${esc(u.photos[i])}" alt="${esc(u.name)} ${esc(u.size)}" loading="lazy">
            ${u.photos.length > 1 ? `
            <button class="ph-nav ph-prev" aria-label="Foto anterior"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round"><path d="M15 6l-6 6 6 6"/></svg></button>
            <button class="ph-nav ph-next" aria-label="Foto siguiente"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg></button>` : ""}
@@ -1030,10 +1032,10 @@ function cardHTML(u){
       <div class="now ${sale ? "sale" : ""}"><small>${sale ? "Precio rebajado" : "Precio"}</small><b>${fmt(u.price)}</b></div>
       ${sale ? `<span class="save">Ahorras ${fmt(u.oldPrice - u.price)}</span>` : ""}
       <span class="est">Est. <b>${fmt(monthlyRef(u.price))}/mes*</b></span>
-      <a class="btn btn-yellow btn-sm" href="${wa(ask)}" target="_blank" rel="noopener">Verificar Disponibilidad</a>
-      <a class="btn btn-wa btn-sm" href="${wa("Hola, quiero información del " + u.name + " " + u.size)}" target="_blank" rel="noopener">
-        <svg class="ico" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm4.6 14.1c-.2.6-1 1.1-1.7 1.2-.7.1-1.5.3-3.7-.9-1.9-1-3.4-2.6-4.4-4.5-.8-1.5-.5-2.7.4-3.6.2-.2.5-.3.7-.3h.5c.2 0 .4-.1.6.4l.8 1.9c.1.1.1.3 0 .5l-.5.6c-.2.2-.5.3-.2.7a6.7 6.7 0 0 0 3.4 3c.2.1.4.1.5-.1.1-.2.6-.7.8-1 .2-.2.4-.2.6-.1.2.1 1.4.7 1.7.8.4.1.6.2.6.2.1.1.1.6-.1 1.2z"/></svg>
-        WhatsApp
+      <a class="btn btn-yellow btn-sm" href="${igDm()}" target="_blank" rel="noopener">Verificar Disponibilidad</a>
+      <a class="btn btn-insta btn-sm" href="${igDm()}" target="_blank" rel="noopener">
+        <svg class="ico" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.2c3.2 0 3.6 0 4.8.1 1.2.1 1.9.2 2.3.4.6.2 1 .5 1.4.9.4.4.7.8.9 1.4.2.4.4 1.1.4 2.3.1 1.2.1 1.6.1 4.8s0 3.6-.1 4.8c-.1 1.2-.2 1.9-.4 2.3-.2.6-.5 1-.9 1.4-.4.4-.8.7-1.4.9-.4.2-1.1.4-2.3.4-1.2.1-1.6.1-4.8.1s-3.6 0-4.8-.1c-1.2-.1-1.9-.2-2.3-.4-.6-.2-1-.5-1.4-.9-.4-.4-.7-.8-.9-1.4-.2-.4-.4-1.1-.4-2.3-.1-1.2-.1-1.6-.1-4.8s0-3.6.1-4.8c.1-1.2.2-1.9.4-2.3.2-.6.5-1 .9-1.4.4-.4.8-.7 1.4-.9.4-.2 1.1-.4 2.3-.4 1.2-.1 1.6-.1 4.8-.1zm0 5.4a4.4 4.4 0 1 1 0 8.8 4.4 4.4 0 0 1 0-8.8zm0 7.2a2.9 2.9 0 1 0 0-5.7 2.9 2.9 0 0 0 0 5.7zm5.6-7.4a1 1 0 1 1-2.1 0 1 1 0 0 1 2.1 0z"/></svg>
+        Instagram
       </a>
     </div>
   </article>`;
@@ -1101,7 +1103,6 @@ fdim.addEventListener("click", closeFilters);
    ══════════════════════════════════════════════════════════════ */
 const rPrice = document.getElementById("rPrice"), rDown = document.getElementById("rDown");
 const outPrice = document.getElementById("outPrice"), outDown = document.getElementById("outDown"), outMo = document.getElementById("outMo");
-const calcWaBtn = document.getElementById("calcWa");
 let years = 15;
 const RATE = 0.095;
 function calc(){
@@ -1112,7 +1113,6 @@ function calc(){
   outPrice.textContent = fmt(price);
   outDown.textContent = `${downPct}% · ${fmt(down)}`;
   outMo.textContent = fmt(mo) + "/mes";
-  calcWaBtn.href = wa(`Hola, hice una simulación en la página: casa de ${fmt(price)}, enganche de ${fmt(down)} (${downPct}%), a ${years} años ≈ ${fmt(mo)}/mes. ¿Me ayudan a armar el plan real?`);
 }
 rPrice.addEventListener("input", calc);
 rDown.addEventListener("input", calc);
@@ -1153,7 +1153,9 @@ document.getElementById("leadBtn").addEventListener("click", () => {
 • Teléfono: ${d.phone}
 • Terreno: ${d.land}
 • Presupuesto: ${d.budget}${d.msg ? "\n• Mensaje: " + d.msg : ""}`;
-  document.getElementById("successWa").href = wa(text);
+  /* Instagram no permite pre-llenar mensajes: se muestra el resumen
+     para copiarlo y el botón abre el mensaje directo. */
+  document.getElementById("leadSummary").textContent = text;
   leadForm.style.display = "none";
   document.getElementById("fsuccess").style.display = "block";
 });
@@ -1184,11 +1186,11 @@ function openDetail(id){
 
   const hasPh = u.photos && u.photos.length;
   document.getElementById("dmMain").innerHTML = hasPh
-    ? '<img id="dmImg" src="' + u.photos[0] + '" alt="' + esc(u.name) + '">'
+    ? '<img id="dmImg" src="' + esc(u.photos[0]) + '" alt="' + esc(u.name) + '">'
     : homeArt(u.c, u.type === "double");
   document.getElementById("dmThumbs").innerHTML = hasPh && u.photos.length > 1
     ? u.photos.map(function(ph, i){
-        return '<img src="' + ph + '" class="' + (i === 0 ? "on" : "") + '" data-i="' + i + '" alt="Foto ' + (i + 1) + '">';
+        return '<img src="' + esc(ph) + '" class="' + (i === 0 ? "on" : "") + '" data-i="' + i + '" alt="Foto ' + (i + 1) + '">';
       }).join("")
     : "";
 
@@ -1197,7 +1199,6 @@ function openDetail(id){
       u.features.map(function(f){ return '<span class="chip hl">✓ ' + esc(f) + '</span>'; }).join("") + '</div>'
     : "";
 
-  const ask = "Hola, me interesa el " + title + " en " + fmt(u.price) + ". ¿Sigue disponible?";
   document.getElementById("dmInfo").innerHTML =
     '<div class="dm-chips">' +
       '<span class="chip">' + (u.cond === "nueva" ? "Nueva" : "Seminueva") + '</span>' +
@@ -1222,8 +1223,8 @@ function openDetail(id){
     feats +
     (u.descLong || u.desc ? '<p class="dm-desc">' + esc(u.descLong || u.desc) + '</p>' : '') +
     '<div class="dm-cta">' +
-      '<a class="btn btn-yellow" target="_blank" rel="noopener" href="' + wa(ask) + '">Verificar Disponibilidad</a>' +
-      '<a class="btn btn-wa" target="_blank" rel="noopener" href="' + wa("Hola, quiero agendar una visita o videollamada para el " + title) + '">Agendar visita por WhatsApp</a>' +
+      '<a class="btn btn-yellow" target="_blank" rel="noopener" href="' + igDm() + '">Verificar Disponibilidad</a>' +
+      '<a class="btn btn-insta" target="_blank" rel="noopener" href="' + igDm() + '">Agendar visita por Instagram</a>' +
     '</div>';
   dm.classList.add("open");
   document.body.style.overflow = "hidden";
@@ -1242,18 +1243,14 @@ document.getElementById("dmThumbs").addEventListener("click", function(e){
 /* Ajustes del negocio (desde data.js o Supabase) */
 function applySettings(s){
   if(!s) return;
-  if(s.whatsapp){
-    const num = String(s.whatsapp).replace(/\D/g, "");
-    if(num){
-      WA = num;
-      document.querySelectorAll('a[href*="wa.me/"]').forEach(a =>
-        a.href = a.href.replace(/wa\.me\/\d+/, "wa.me/" + num));
-    }
-  }
   if(s.phone) document.querySelectorAll(".js-phone").forEach(el => el.textContent = s.phone);
   if(s.instagram){
     const h = String(s.instagram).replace("@","").trim();
-    if(h) document.querySelectorAll('a[href*="instagram.com"]').forEach(a => a.href = "https://instagram.com/" + h);
+    if(h){
+      IG = h;
+      document.querySelectorAll('a[href*="instagram.com"]').forEach(a => a.href = "https://instagram.com/" + h);
+      document.querySelectorAll('a[href*="ig.me"]').forEach(a => a.href = "https://ig.me/m/" + h);
+    }
   }
 }
 if(DB) applySettings(DB.settings);

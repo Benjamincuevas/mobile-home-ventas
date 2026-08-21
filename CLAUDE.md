@@ -1,6 +1,6 @@
 # Mobile Home Ventas — Contexto del proyecto
 
-Sitio de venta de casas móviles (mobile homes) orientado a generación de leads por WhatsApp, con diseño tipo marketplace inspirado en el inventario de Camping World (rv.campingworld.com).
+Sitio de venta de casas móviles (mobile homes) orientado a generación de leads por Instagram (mensaje directo `ig.me/m/{usuario}`), con diseño tipo marketplace inspirado en el inventario de Camping World (rv.campingworld.com).
 
 ## Archivos
 
@@ -36,9 +36,9 @@ Todo por REST con `fetch` — **no** se usa la librería supabase-js (regla 1: s
 ```js
 window.MHV_DATA = {
   settings: {
-    whatsapp: "15551234567",   // solo dígitos, con código de país; reescribe todos los links wa.me
     phone: "(555) 123-4567",   // texto mostrado (elementos .js-phone)
-    instagram: "@usuario"      // reescribe links a instagram.com
+    instagram: "@usuario",     // contacto principal: reescribe links a instagram.com y ig.me (DM)
+    whatsapp: "15551234567"    // legado: se tolera en data.js viejos pero ya no se usa en la UI
   },
   listings: [{
     id: 1, name: "Modelo X", size: "16×76", type: "single|double",
@@ -59,8 +59,8 @@ Todos los campos nuevos son opcionales; el mapeo en ambos archivos aplica defaul
 - SRP: sidebar de filtros multi-select (tipo, recámaras, precio, estado) con drawer en móvil; ordenamiento; tarjetas horizontales con carrusel de fotos y favoritos.
 - Modal "ficha completa" por unidad (galería, specs, características, descripción larga, CTAs).
 - Estimador de pago mensual (sliders precio/enganche + plazo; tasa ilustrativa `RATE = 0.095`).
-- Formulario de precalificación → arma mensaje de WhatsApp con los datos.
-- Todos los CTAs abren `wa.me` con mensajes pre-llenados (helper `wa(texto)`).
+- Formulario de precalificación → muestra un resumen para copiar y abre el DM de Instagram (IG no permite pre-llenar mensajes).
+- Todos los CTAs abren el mensaje directo de Instagram (helper `igDm()` → `ig.me/m/{usuario}`).
 - Fallback visual: función `homeArt(c, wide)` genera ilustraciones SVG de casas cuando una unidad no tiene fotos.
 
 ## Reglas y restricciones (IMPORTANTES — no romper)

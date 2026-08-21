@@ -1,6 +1,6 @@
 # 🏡 Mobile Home Ventas
 
-Sitio web de venta de casas móviles (mobile homes) enfocado en generación de clientes por WhatsApp, con diseño tipo marketplace (inspirado en el inventario de Camping World) y panel de administración propio.
+Sitio web de venta de casas móviles (mobile homes) enfocado en generación de clientes por Instagram, con diseño tipo marketplace (inspirado en el inventario de Camping World) y panel de administración propio.
 
 ## Demo local
 

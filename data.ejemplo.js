@@ -2,7 +2,6 @@
    El archivo real se genera desde admin.html (botón "Descargar data.js"). */
 window.MHV_DATA = {
   settings: {
-    whatsapp: "15551234567",
     phone: "(555) 123-4567",
     instagram: "@mobilehomeventas"
   },

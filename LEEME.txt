@@ -72,6 +72,10 @@ Panel (código 2468) → "🚀 Descargar data.js" → subir data.js
 al hosting junto a la página.
 
 CONSEJOS DE SEGURIDAD:
+• MUY IMPORTANTE — apaga los registros abiertos en Supabase:
+  Authentication → Sign In / Providers → desactiva
+  "Allow new users to sign up". Si queda encendido, un extraño
+  podría crearse una cuenta y modificar tu inventario.
 • Con Supabase, el panel pide correo y contraseña de verdad:
   no compartas esa contraseña.
 • La clave "anon public" SÍ puede ir en la página (es pública

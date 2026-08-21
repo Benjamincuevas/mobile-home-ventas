@@ -73,7 +73,11 @@ create policy "fotos borrar autenticado"
 -- Policies (lectura para todos, escritura para "authenticated").
 -- ══════════════════════════════════════════════════════════════
 
--- ÚLTIMO PASO (fuera de SQL): crea tu usuario del panel.
--- Authentication → Users → "Add user" → escribe tu correo y una
--- contraseña, marcando "Auto Confirm User". Con ese correo y esa
--- contraseña entrarás a admin.html.
+-- ÚLTIMOS PASOS (fuera de SQL):
+-- 1. Crea tu usuario del panel: Authentication → Users → "Add user"
+--    → escribe tu correo y una contraseña, marcando "Auto Confirm
+--    User". Con ese correo y esa contraseña entrarás a admin.html.
+-- 2. MUY IMPORTANTE: desactiva los registros abiertos para que nadie
+--    más pueda crearse una cuenta con permiso de escritura:
+--    Authentication → Sign In / Providers → apaga
+--    "Allow new users to sign up".

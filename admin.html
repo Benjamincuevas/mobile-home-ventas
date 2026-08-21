@@ -82,7 +82,7 @@ main{padding:44px 0 90px}
 .panel-head p{font-size:.84rem;color:var(--muted)}
 
 /* ── Ajustes ── */
-.set-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}
+.set-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1rem}
 @media(max-width:780px){.set-grid{grid-template-columns:1fr}}
 .fld label{display:block;font-size:.76rem;font-weight:800;color:var(--pine);margin-bottom:.35rem}
 .fld label em{font-style:normal;font-weight:500;color:var(--muted)}
@@ -212,21 +212,16 @@ main{padding:44px 0 90px}
     <div class="panel-head">
       <div>
         <h2>Ajustes del negocio</h2>
-        <p>Estos datos actualizan el teléfono, WhatsApp e Instagram en toda la página pública.</p>
+        <p>Estos datos actualizan el teléfono y el Instagram en toda la página pública.</p>
       </div>
     </div>
     <div class="set-grid">
-      <div class="fld">
-        <label for="sWa">Número de WhatsApp <em>(con código de país, solo dígitos)</em></label>
-        <input type="text" id="sWa" placeholder="Ej. 15551234567" inputmode="numeric">
-        <p class="hint">Ejemplo EE.UU.: 1 + área + número → 15551234567</p>
-      </div>
       <div class="fld">
         <label for="sPhone">Teléfono como se muestra</label>
         <input type="text" id="sPhone" placeholder="Ej. (555) 123-4567">
       </div>
       <div class="fld">
-        <label for="sIg">Usuario de Instagram</label>
+        <label for="sIg">Usuario de Instagram <em>(todos los botones de contacto abren su mensaje directo)</em></label>
         <input type="text" id="sIg" placeholder="@mobilehomeventas">
       </div>
     </div>
@@ -467,7 +462,7 @@ function renderUnits(){
     <article class="unit">
       <div class="unit-media">
         ${u.photos.length
-          ? `<img src="${u.photos[0]}" alt="${esc(u.name)}">
+          ? `<img src="${esc(u.photos[0])}" alt="${esc(u.name)}">
              <span class="nfotos">📷 ${u.photos.length}</span>`
           : `<span class="nph">🏠<br>Sin fotos aún</span>`}
         <span class="badge ${cls}">${label}</span>
@@ -587,7 +582,7 @@ $("edSave").addEventListener("click", () => {
 function renderPhotos(){
   $("photoGrid").innerHTML = draftPhotos.map((p, i) => `
     <div class="ph ${i === 0 ? "main" : ""}">
-      <img src="${p}" alt="Foto ${i + 1}">
+      <img src="${esc(p)}" alt="Foto ${i + 1}">
       ${i === 0 ? `<span class="tag">Portada</span>` : ""}
       <button type="button" class="del" data-del="${i}" aria-label="Eliminar foto">✕</button>
       <button type="button" class="mk" data-main="${i}">★ Hacer portada</button>
@@ -642,7 +637,8 @@ function compress(file){
    PUBLICAR / RESPALDO / IMPORTAR
    ══════════════════════════════════════════════ */
 function snapshot(){
-  state.settings.whatsapp = $("sWa").value.replace(/\D/g, "");
+  /* whatsapp ya no se edita aquí; se conserva el valor que traiga
+     un data.js viejo por retro-compatibilidad. */
   state.settings.phone = $("sPhone").value.trim();
   state.settings.instagram = $("sIg").value.trim();
   return state;
@@ -685,7 +681,6 @@ function hydrate(data){
       desc: l.desc || "", photos: Array.isArray(l.photos) ? l.photos.filter(Boolean) : []
     }))
   };
-  $("sWa").value = state.settings.whatsapp || "";
   $("sPhone").value = state.settings.phone || "";
   $("sIg").value = state.settings.instagram || "";
   renderUnits(); dirty = false; $("unsaved").hidden = true;
@@ -709,7 +704,7 @@ $("fileImport").addEventListener("change", async () => {
   $("fileImport").value = "";
 });
 
-["sWa","sPhone","sIg"].forEach(id => $(id).addEventListener("input", markDirty));
+["sPhone","sIg"].forEach(id => $(id).addEventListener("input", markDirty));
 
 /* En modo clásico (sin Supabase) el panel arranca con las casas de
    muestra de la página; en modo nube las trae loadFromCloud() si el
