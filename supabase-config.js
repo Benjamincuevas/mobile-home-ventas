@@ -11,6 +11,6 @@
    que antes: con el archivo data.js.
    ══════════════════════════════════════════════════════════════ */
 window.MHV_SUPABASE = {
-  url: "",      /* Ej. "https://abcdefgh.supabase.co" */
-  anonKey: ""   /* Ej. "eyJhbGciOi..." o "sb_publishable_..." */
+  url: "https://opfrougusivipqyowbbs.supabase.co",
+  anonKey: "sb_publishable_qMZ6Cckd0dL-_xHAAmcf7Q_oDD6ZXJB"
 };
