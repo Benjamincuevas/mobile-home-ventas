@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Panel de Administración — Mobile Home Ventas</title>
+<meta name="robots" content="noindex,nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&family=Roboto+Condensed:wght@700;800&display=swap" rel="stylesheet">
+<style>
+/* ══════════════════════════════════════════════
+   PANEL ADMIN · Mobile Home Ventas
+   ══════════════════════════════════════════════ */
+:root{
+  --pine:#00305C; --pine-2:#0A4173; --pine-3:#0C5FA8;
+  --amber:#FFC629; --amber-2:#F0B400; --gold:#FFC629;
+  --sand:#EEF3F8; --paper:#F4F6F8; --ink:#1A2B3C; --muted:#5C6B7A;
+  --line:#DDE3E9; --ok:#1E8E3E; --blue:#0C5FA8; --red:#D0021B;
+  --r:10px; --sh:0 1px 4px rgba(16,35,54,.10); --sh-lg:0 12px 32px rgba(16,35,54,.18);
+  --display:'Roboto Condensed',sans-serif; --body:'Roboto',system-ui,sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+[hidden]{display:none !important}
+body{font-family:var(--body);background:var(--paper);color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased}
+img,svg{display:block;max-width:100%}
+button{font-family:inherit;cursor:pointer;border:none;background:none}
+a{color:inherit;text-decoration:none}
+.wrap{width:min(1120px,94%);margin-inline:auto}
+h1,h2,h3{font-family:var(--display);color:var(--pine)}
+:focus-visible{outline:3px solid var(--amber);outline-offset:2px;border-radius:6px}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;font-weight:700;font-size:.9rem;padding:.75rem 1.35rem;border-radius:999px;transition:transform .15s,background .15s;white-space:nowrap}
+.btn:hover{transform:translateY(-2px)}
+.btn-amber{background:var(--amber);color:var(--ink);box-shadow:var(--sh)}
+.btn-amber:hover{background:var(--amber-2)}
+.btn-pine{background:var(--pine);color:#fff}
+.btn-pine:hover{background:var(--pine-2)}
+.btn-line{border:2px solid var(--pine);color:var(--pine)}
+.btn-line:hover{background:var(--pine);color:#fff}
+.btn-sm{padding:.5rem .95rem;font-size:.82rem}
+.btn-danger{color:var(--red);border:2px solid #EAD5D0}
+.btn-danger:hover{background:var(--red);border-color:var(--red);color:#fff}
+
+/* ── Puerta de acceso ── */
+.gate{position:fixed;inset:0;z-index:100;background:linear-gradient(160deg,#022440,#00305C 60%,#0A4173);display:grid;place-items:center;padding:1rem}
+.gate-card{background:#fff;border-radius:24px;box-shadow:var(--sh-lg);padding:2.6rem 2.4rem;width:min(420px,100%);text-align:center}
+.gate-card .mark{width:60px;height:60px;border-radius:18px;background:var(--pine);display:grid;place-items:center;margin:0 auto 1.1rem}
+.gate-card h1{font-size:1.5rem;margin-bottom:.3rem}
+.gate-card p{font-size:.88rem;color:var(--muted);margin-bottom:1.4rem}
+.gate-card input{width:100%;padding:.95rem 1rem;border:1.5px solid var(--line);border-radius:13px;font-size:1.15rem;text-align:center;letter-spacing:.4em;font-weight:800;color:var(--pine)}
+.gate-card input:focus{outline:none;border-color:var(--amber);box-shadow:0 0 0 3px rgba(238,122,36,.15)}
+.gate-card .btn{width:100%;margin-top:1rem;padding:.95rem}
+.gate-err{display:none;color:var(--red);font-size:.82rem;font-weight:700;margin-top:.7rem}
+.gate-note{font-size:.72rem;color:var(--muted);margin-top:1.2rem;line-height:1.5}
+
+/* ── Header admin ── */
+.hdr{position:sticky;top:0;z-index:50;background:var(--pine);color:#fff;box-shadow:0 4px 18px rgba(20,53,43,.25)}
+.hdr .wrap{display:flex;align-items:center;justify-content:space-between;gap:1rem;height:70px}
+.hdr .brand{display:flex;align-items:center;gap:.65rem;font-family:var(--display);font-weight:700;font-size:1.05rem}
+.hdr .brand small{display:block;font-family:var(--body);font-weight:700;font-size:.58rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold)}
+.hdr .mark{width:40px;height:40px;border-radius:12px;background:rgba(255,255,255,.1);display:grid;place-items:center;flex:none}
+.hdr-actions{display:flex;gap:.6rem;flex-wrap:wrap}
+.hdr-actions .btn{background:rgba(255,255,255,.12);color:#fff;font-size:.8rem;padding:.55rem 1rem}
+.hdr-actions .btn:hover{background:rgba(255,255,255,.22)}
+.hdr-actions .btn.pub{background:var(--amber);color:var(--ink)}
+.hdr-actions .btn.pub:hover{background:var(--amber-2)}
+@media(max-width:760px){.hdr .wrap{height:auto;flex-wrap:wrap;padding:.8rem 0}}
+
+/* ── Aviso de flujo ── */
+.flow{background:#FFF8E1;border-bottom:1px solid #F0E3B8}
+.flow .wrap{display:flex;gap:1.6rem;align-items:center;padding:.85rem 0;font-size:.83rem;flex-wrap:wrap}
+.flow b{color:var(--pine)}
+.flow{color:#6B5A1E}
+.flow .stepn{display:inline-grid;place-items:center;width:22px;height:22px;border-radius:50%;background:var(--amber);color:var(--ink);font-weight:800;font-size:.72rem;margin-right:.4rem}
+.flow span{display:inline-flex;align-items:center}
+
+main{padding:44px 0 90px}
+.panel{background:#fff;border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--sh);padding:1.8rem;margin-bottom:28px}
+.panel-head{display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap;margin-bottom:1.3rem}
+.panel-head h2{font-size:1.35rem}
+.panel-head p{font-size:.84rem;color:var(--muted)}
+
+/* ── Ajustes ── */
+.set-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}
+@media(max-width:780px){.set-grid{grid-template-columns:1fr}}
+.fld label{display:block;font-size:.76rem;font-weight:800;color:var(--pine);margin-bottom:.35rem}
+.fld label em{font-style:normal;font-weight:500;color:var(--muted)}
+.fld input,.fld select,.fld textarea{width:100%;padding:.8rem .95rem;border:1.5px solid var(--line);border-radius:12px;font-family:inherit;font-size:.92rem;background:var(--paper);transition:border-color .15s,box-shadow .15s}
+.fld textarea{min-height:84px;resize:vertical}
+.fld input:focus,.fld select:focus,.fld textarea:focus{outline:none;border-color:var(--amber);box-shadow:0 0 0 3px rgba(238,122,36,.13);background:#fff}
+.hint{font-size:.72rem;color:var(--muted);margin-top:.3rem}
+
+/* ── Lista de casas ── */
+.units{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+@media(max-width:960px){.units{grid-template-columns:1fr 1fr}}
+@media(max-width:620px){.units{grid-template-columns:1fr}}
+.unit{border:1px solid var(--line);border-radius:var(--r);overflow:hidden;background:#fff;box-shadow:var(--sh);display:flex;flex-direction:column}
+.unit-media{aspect-ratio:16/10;background:var(--sand);position:relative;display:grid;place-items:center;color:var(--muted);font-size:.8rem;font-weight:700}
+.unit-media img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.unit-media .nph{display:grid;place-items:center;gap:.3rem;text-align:center}
+.unit-media .badge{position:absolute;top:10px;left:10px;padding:.3rem .7rem;border-radius:999px;font-size:.64rem;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:#fff;z-index:2}
+.b-disp{background:var(--ok)}.b-oport{background:#E8710A}.b-remod{background:var(--blue)}
+.unit-media .nfotos{position:absolute;bottom:8px;right:8px;background:rgba(20,53,43,.82);color:#fff;font-size:.68rem;font-weight:800;padding:.25rem .6rem;border-radius:999px;z-index:2}
+.unit-body{padding:1rem 1.1rem 1.15rem;display:flex;flex-direction:column;flex:1}
+.unit-body h3{font-size:1.02rem;font-weight:600}
+.unit-body .meta{font-size:.78rem;color:var(--muted);font-weight:600;margin:.25rem 0 .55rem}
+.unit-body .pr{font-family:var(--display);font-weight:700;font-size:1.25rem;color:var(--pine);margin-bottom:.8rem}
+.unit-acts{display:flex;gap:.5rem;margin-top:auto}
+.unit-acts .btn{flex:1;padding:.5rem;font-size:.78rem}
+.add-unit{border:2px dashed var(--line);border-radius:var(--r);display:grid;place-items:center;min-height:280px;color:var(--muted);font-weight:700;cursor:pointer;transition:border-color .15s,color .15s,background .15s;text-align:center;padding:1rem}
+.add-unit:hover{border-color:var(--amber);color:var(--amber);background:#FFFBF5}
+.add-unit .plus{width:52px;height:52px;border-radius:50%;background:var(--sand);display:grid;place-items:center;margin:0 auto .6rem;font-size:1.6rem;color:var(--pine)}
+
+/* ── Editor (modal) ── */
+.overlay{position:fixed;inset:0;z-index:80;background:rgba(14,36,29,.55);backdrop-filter:blur(3px);display:none;align-items:flex-start;justify-content:center;overflow-y:auto;padding:4vh 1rem}
+.overlay.open{display:flex}
+.editor{background:#fff;border-radius:22px;box-shadow:var(--sh-lg);width:min(760px,100%);padding:2rem;margin-bottom:4vh}
+.editor-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.4rem}
+.editor-head h2{font-size:1.35rem}
+.x{width:40px;height:40px;border-radius:12px;background:var(--sand);display:grid;place-items:center;font-size:1.1rem;color:var(--pine);transition:background .15s}
+.x:hover{background:#E9E1D0}
+.ed-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem}
+.ed-grid .c2{grid-column:span 2}
+.ed-grid .c3{grid-column:1/-1}
+@media(max-width:640px){.ed-grid{grid-template-columns:1fr}.ed-grid .c2,.ed-grid .c3{grid-column:auto}}
+
+/* ── Subida de fotos ── */
+.drop{border:2px dashed var(--line);border-radius:14px;background:var(--paper);padding:1.6rem 1rem;text-align:center;cursor:pointer;transition:border-color .15s,background .15s}
+.drop:hover,.drop.over{border-color:var(--amber);background:#FFFBF5}
+.drop b{color:var(--pine)}
+.drop small{display:block;font-size:.74rem;color:var(--muted);margin-top:.25rem}
+.drop svg{width:34px;height:34px;stroke:var(--amber);margin:0 auto .5rem}
+.photo-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:.7rem;margin-top:.9rem}
+.ph{position:relative;aspect-ratio:4/3;border-radius:11px;overflow:hidden;border:2px solid var(--line)}
+.ph img{width:100%;height:100%;object-fit:cover}
+.ph.main{border-color:var(--amber)}
+.ph .tag{position:absolute;top:5px;left:5px;background:var(--amber);color:var(--ink);font-size:.58rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;padding:.15rem .45rem;border-radius:999px}
+.ph .del{position:absolute;top:5px;right:5px;width:24px;height:24px;border-radius:50%;background:rgba(0,0,0,.55);color:#fff;font-size:.75rem;display:grid;place-items:center}
+.ph .del:hover{background:var(--red)}
+.ph .mk{position:absolute;bottom:5px;left:5px;right:5px;background:rgba(255,255,255,.92);color:var(--pine);font-size:.62rem;font-weight:800;padding:.22rem;border-radius:7px;opacity:0;transition:opacity .15s}
+.ph:hover .mk{opacity:1}
+.ph.main .mk{display:none}
+.editor-foot{display:flex;justify-content:flex-end;gap:.7rem;margin-top:1.6rem;flex-wrap:wrap}
+
+/* ── Características ── */
+.feat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.45rem .8rem;background:var(--paper);border:1.5px solid var(--line);border-radius:12px;padding:.9rem 1rem}
+@media(max-width:640px){.feat-grid{grid-template-columns:1fr 1fr}}
+.feat{display:flex;align-items:center;gap:.5rem;font-size:.83rem;cursor:pointer}
+.feat input{width:16px;height:16px;accent-color:var(--pine-3);flex:none;cursor:pointer}
+
+/* ── Toast ── */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);z-index:120;background:var(--pine);color:#fff;font-size:.86rem;font-weight:700;padding:.8rem 1.4rem;border-radius:999px;box-shadow:var(--sh-lg);opacity:0;pointer-events:none;transition:opacity .25s,transform .25s}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.pill-warn{display:inline-flex;align-items:center;gap:.45rem;background:#FFF3E4;border:1px solid #F5DDBB;color:#9A5B12;font-size:.76rem;font-weight:700;padding:.4rem .9rem;border-radius:999px}
+</style>
+</head>
+<body>
+
+<!-- ═══════════ ACCESO ═══════════ -->
+<div class="gate" id="gate">
+  <div class="gate-card">
+    <div class="mark"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#FFC629" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 11.5L12 4l9.5 7.5"/><path d="M5 10.5V18a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-7.5"/><path d="M9.5 19v-5h5v5"/></svg></div>
+    <h1>Panel de Administración</h1>
+    <p>Mobile Home Ventas · Solo personal autorizado</p>
+    <div id="gateForm">
+      <input type="password" id="pin" inputmode="numeric" maxlength="8" placeholder="••••" aria-label="Código de acceso" autocomplete="off" autofocus>
+      <p class="gate-err" id="gateErr">Código incorrecto. Intenta de nuevo.</p>
+      <button type="button" class="btn btn-amber" id="gateBtn">Entrar al panel</button>
+    </div>
+    <div id="gateCloud" hidden>
+      <input type="email" id="gEmail" placeholder="Correo" aria-label="Correo" autocomplete="username" style="letter-spacing:0;font-size:.95rem;text-align:left;font-weight:600">
+      <input type="password" id="gPass" placeholder="Contraseña" aria-label="Contraseña" autocomplete="current-password" style="letter-spacing:0;font-size:.95rem;text-align:left;font-weight:600;margin-top:.6rem">
+      <p class="gate-err" id="gateCloudErr">No se pudo entrar. Revisa tu correo y contraseña.</p>
+      <button type="button" class="btn btn-amber" id="gateCloudBtn">Entrar al panel</button>
+    </div>
+    <p class="gate-note" id="gateNote">⚠️ Este código es solo un candado básico. Para proteger de verdad el panel, no subas <b>admin.html</b> al hosting público (úsalo desde tu computadora) o protégelo con contraseña desde tu servidor.</p>
+  </div>
+</div>
+
+<!-- ═══════════ HEADER ═══════════ -->
+<header class="hdr">
+  <div class="wrap">
+    <span class="brand">
+      <span class="mark"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#FFC629" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 11.5L12 4l9.5 7.5"/><path d="M5 10.5V18a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-7.5"/><path d="M9.5 19v-5h5v5"/></svg></span>
+      <span>Mobile Home Ventas<small>Panel de administración</small></span>
+    </span>
+    <div class="hdr-actions">
+      <button class="btn" id="btnImport">📂 Cargar data.js</button>
+      <button class="btn" id="btnBackup">💾 Respaldo JSON</button>
+      <button class="btn pub" id="btnPublish">🚀 Descargar data.js para publicar</button>
+      <button class="btn pub" id="btnCloudSave" hidden>☁️ Publicar en la página</button>
+      <input type="file" id="fileImport" accept=".js,.json" hidden>
+    </div>
+  </div>
+</header>
+
+<!-- ═══════════ FLUJO ═══════════ -->
+<div class="flow">
+  <div class="wrap">
+    <span><span class="stepn">1</span><b>Edita</b>&nbsp;tus casas y fotos aquí</span>
+    <span><span class="stepn">2</span><b>Descarga</b>&nbsp;el archivo <b>&nbsp;data.js</b></span>
+    <span><span class="stepn">3</span><b>Súbelo</b>&nbsp;a tu hosting junto a la página — y listo, se actualiza sola</span>
+  </div>
+</div>
+
+<main class="wrap">
+
+  <!-- ═══════════ AJUSTES DEL NEGOCIO ═══════════ -->
+  <section class="panel">
+    <div class="panel-head">
+      <div>
+        <h2>Ajustes del negocio</h2>
+        <p>Estos datos actualizan el teléfono, WhatsApp e Instagram en toda la página pública.</p>
+      </div>
+    </div>
+    <div class="set-grid">
+      <div class="fld">
+        <label for="sWa">Número de WhatsApp <em>(con código de país, solo dígitos)</em></label>
+        <input type="text" id="sWa" placeholder="Ej. 15551234567" inputmode="numeric">
+        <p class="hint">Ejemplo EE.UU.: 1 + área + número → 15551234567</p>
+      </div>
+      <div class="fld">
+        <label for="sPhone">Teléfono como se muestra</label>
+        <input type="text" id="sPhone" placeholder="Ej. (555) 123-4567">
+      </div>
+      <div class="fld">
+        <label for="sIg">Usuario de Instagram</label>
+        <input type="text" id="sIg" placeholder="@mobilehomeventas">
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ CASAS ═══════════ -->
+  <section class="panel">
+    <div class="panel-head">
+      <div>
+        <h2>Casas en venta <span id="unitCount" style="font-family:var(--body);font-size:.85rem;color:var(--muted)"></span></h2>
+        <p>La primera foto de cada casa es la portada. Se muestran en este mismo orden en la página.</p>
+      </div>
+      <span class="pill-warn" id="unsaved" hidden>● Cambios sin publicar — descarga data.js</span>
+    </div>
+    <div class="units" id="units"></div>
+  </section>
+
+</main>
+
+<!-- ═══════════ EDITOR ═══════════ -->
+<div class="overlay" id="overlay">
+  <div class="editor" role="dialog" aria-modal="true" aria-labelledby="edTitle">
+    <div class="editor-head">
+      <h2 id="edTitle">Nueva casa</h2>
+      <button class="x" id="edClose" aria-label="Cerrar">✕</button>
+    </div>
+    <div id="edForm">
+      <div class="ed-grid">
+        <div class="fld c2">
+          <label for="eName">Nombre del modelo</label>
+          <input type="text" id="eName" placeholder="Ej. Modelo Esperanza" required>
+        </div>
+        <div class="fld">
+          <label for="eSize">Tamaño</label>
+          <input type="text" id="eSize" placeholder="Ej. 16×76" required>
+        </div>
+        <div class="fld">
+          <label for="eType">Tipo</label>
+          <select id="eType">
+            <option value="single">Single Wide</option>
+            <option value="double">Double Wide</option>
+          </select>
+        </div>
+        <div class="fld">
+          <label for="eBeds">Recámaras</label>
+          <input type="number" id="eBeds" min="1" max="6" value="3" required>
+        </div>
+        <div class="fld">
+          <label for="eBaths">Baños</label>
+          <input type="number" id="eBaths" min="1" max="4" value="2" required>
+        </div>
+        <div class="fld">
+          <label for="ePrice">Precio (USD)</label>
+          <input type="number" id="ePrice" min="0" step="100" placeholder="52900" required>
+        </div>
+        <div class="fld">
+          <label for="eOldPrice">Precio anterior <em>(opcional)</em></label>
+          <input type="number" id="eOldPrice" min="0" step="100" placeholder="Ej. 59900">
+          <p class="hint">Si es mayor al precio, se muestra tachado con etiqueta "Precio Rebajado".</p>
+        </div>
+        <div class="fld">
+          <label for="eLocation">Ubicación <em>(opcional)</em></label>
+          <input type="text" id="eLocation" placeholder="Ej. Lote principal">
+        </div>
+        <div class="fld">
+          <label for="eBrand">Marca / fabricante <em>(opcional)</em></label>
+          <input type="text" id="eBrand" placeholder="Ej. Clayton, Fleetwood, Champion">
+        </div>
+        <div class="fld">
+          <label for="eYear">Año <em>(opcional)</em></label>
+          <input type="number" id="eYear" min="1980" max="2030" placeholder="Ej. 2019">
+        </div>
+        <div class="fld">
+          <label for="eCond">Condición</label>
+          <select id="eCond">
+            <option value="seminueva">Seminueva</option>
+            <option value="nueva">Nueva</option>
+          </select>
+        </div>
+        <div class="fld">
+          <label for="eSqft">Pies cuadrados <em>(opcional)</em></label>
+          <input type="number" id="eSqft" min="0" placeholder="Ej. 1216">
+          <p class="hint">Tip: ancho × largo del tamaño (16×76 ≈ 1216 ft²).</p>
+        </div>
+        <div class="fld">
+          <label for="eStock">Núm. de stock <em>(opcional)</em></label>
+          <input type="text" id="eStock" placeholder="Ej. MH-2024-07">
+        </div>
+        <div class="fld">
+          <label for="eBadge">Etiqueta de estado</label>
+          <select id="eBadge">
+            <option value="disp">Disponible</option>
+            <option value="oport">Oportunidad</option>
+            <option value="remod">Recién Remodelada</option>
+          </select>
+        </div>
+        <div class="fld c3">
+          <label>Características y amenidades</label>
+          <div class="feat-grid" id="featGrid"></div>
+        </div>
+        <div class="fld c3">
+          <label for="eFeatExtra">Otras características <em>(separadas por coma)</em></label>
+          <input type="text" id="eFeatExtra" placeholder="Ej. Cerca nueva, bodega exterior, panel solar">
+        </div>
+        <div class="fld c3">
+          <label for="eDescLong">Descripción completa <em>(aparece en la ficha de detalles)</em></label>
+          <textarea id="eDescLong" style="min-height:120px" placeholder="Describe la casa a detalle: distribución, remodelaciones, qué incluye, condiciones de entrega…"></textarea>
+        </div>
+        <div class="fld c3">
+          <label for="eDesc">Descripción corta <em>(resumen de 2 líneas para la tarjeta)</em></label>
+          <textarea id="eDesc" placeholder="Ej. Cocina remodelada, aire central nuevo y deck de madera incluido."></textarea>
+        </div>
+        <div class="fld c3">
+          <label>Fotos de la casa <em>(la primera es la portada · se comprimen automáticamente)</em></label>
+          <div class="drop" id="drop" tabindex="0" role="button" aria-label="Subir fotos">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M17 8l-5-5-5 5"/><path d="M12 3v12"/></svg>
+            <b>Arrastra las fotos aquí</b> o haz clic para elegirlas
+            <small>JPG o PNG · puedes subir varias a la vez</small>
+          </div>
+          <input type="file" id="filePhotos" accept="image/*" multiple hidden>
+          <div class="photo-grid" id="photoGrid"></div>
+        </div>
+      </div>
+      <div class="editor-foot">
+        <button type="button" class="btn btn-line" id="edCancel">Cancelar</button>
+        <button type="button" class="btn btn-amber" id="edSave">Guardar casa</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="supabase-config.js"></script>
+<script>
+/* ══════════════════════════════════════════════
+   CONFIGURACIÓN
+   ══════════════════════════════════════════════ */
+const ADMIN_PIN = "2468";   // ← Cambia este código de acceso (solo se usa sin Supabase)
+const MAX_W = 1280;          // ancho máximo de fotos (se comprimen a JPG)
+const JPG_Q = 0.8;
+
+/* Conexión a Supabase (se configura en supabase-config.js).
+   Con Supabase activo: se entra con correo/contraseña y el botón
+   "☁️ Publicar" guarda todo en la nube (la página se actualiza sola). */
+const SB = (window.MHV_SUPABASE && window.MHV_SUPABASE.url && window.MHV_SUPABASE.anonKey)
+  ? { url: String(window.MHV_SUPABASE.url).replace(/\/+$/, ""), key: window.MHV_SUPABASE.anonKey }
+  : null;
+let sbSession = null;   // tokens de la sesión iniciada (solo en memoria)
+
+/* ══════════════════════════════════════════════
+   ESTADO (en memoria; se publica exportando data.js)
+   ══════════════════════════════════════════════ */
+let state = {
+  settings: { whatsapp:"", phone:"", instagram:"" },
+  listings: []
+};
+let editingId = null;      // id de la casa en edición (null = nueva)
+let draftPhotos = [];      // fotos del editor
+let dirty = false;
+
+const $ = id => document.getElementById(id);
+const fmt = n => "$" + Math.round(+n || 0).toLocaleString("en-US");
+const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, m => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));
+const BADGES = { disp:["Disponible","b-disp"], oport:["Oportunidad","b-oport"], remod:["Recién Remodelada","b-remod"] };
+
+const COMMON_FEATS = ["Aire central","Deck / porche incluido","Electrodomésticos incluidos","Cocina remodelada","Pisos nuevos","Techo nuevo","Walk-in closet","Lavadora y secadora","Calentador de agua nuevo","Amueblada","Isla en la cocina","Tina en baño principal"];
+$("featGrid").innerHTML = COMMON_FEATS.map(function(f, i){
+  return '<label class="feat"><input type="checkbox" value="' + esc(f) + '" data-feat="1">' + esc(f) + '</label>';
+}).join("");
+
+function toast(msg){
+  const t = $("toast"); t.textContent = msg; t.classList.add("show");
+  clearTimeout(toast._t); toast._t = setTimeout(() => t.classList.remove("show"), 2600);
+}
+function markDirty(){ dirty = true; $("unsaved").hidden = false; }
+window.addEventListener("beforeunload", e => { if(dirty){ e.preventDefault(); e.returnValue = ""; } });
+
+/* ══════════════════════════════════════════════
+   ACCESO
+   ══════════════════════════════════════════════ */
+function tryUnlock(){
+  if($("pin").value.trim() === ADMIN_PIN){
+    $("gate").style.display = "none";
+  } else {
+    $("gateErr").style.display = "block";
+    $("pin").value = ""; $("pin").focus();
+  }
+}
+$("gateBtn").addEventListener("click", tryUnlock);
+$("pin").addEventListener("keydown", e => { if(e.key === "Enter"){ e.preventDefault(); tryUnlock(); } });
+
+/* ══════════════════════════════════════════════
+   LISTA DE CASAS
+   ══════════════════════════════════════════════ */
+function renderUnits(){
+  const grid = $("units");
+  grid.innerHTML = state.listings.map(u => {
+    const [label, cls] = BADGES[u.badge] || BADGES.disp;
+    return `
+    <article class="unit">
+      <div class="unit-media">
+        ${u.photos.length
+          ? `<img src="${u.photos[0]}" alt="${esc(u.name)}">
+             <span class="nfotos">📷 ${u.photos.length}</span>`
+          : `<span class="nph">🏠<br>Sin fotos aún</span>`}
+        <span class="badge ${cls}">${label}</span>
+      </div>
+      <div class="unit-body">
+        <h3>${esc(u.name)}</h3>
+        <div class="meta">${u.year ? u.year + " · " : ""}${u.brand ? esc(u.brand) + " · " : ""}${u.type === "double" ? "Double Wide" : "Single Wide"} · ${esc(u.size)} · ${u.beds} rec / ${u.baths} baños${u.cond === "nueva" ? " · Nueva" : ""}</div>
+        <div class="pr">${u.oldPrice > u.price && u.oldPrice ? `<s style="color:var(--muted);font-size:.8rem;font-weight:500">${fmt(u.oldPrice)}</s> ` : ""}${fmt(u.price)}</div>
+        <div class="unit-acts">
+          <button class="btn btn-line btn-sm" data-act="edit" data-id="${u.id}">✏️ Editar</button>
+          <button class="btn btn-danger btn-sm" data-act="del" data-id="${u.id}">🗑</button>
+        </div>
+      </div>
+    </article>`;
+  }).join("") + `
+    <button class="add-unit" id="addUnit" type="button">
+      <span><span class="plus">+</span>Agregar nueva casa</span>
+    </button>`;
+  $("unitCount").textContent = `· ${state.listings.length} publicada${state.listings.length === 1 ? "" : "s"}`;
+  $("addUnit").addEventListener("click", () => openEditor(null));
+}
+
+$("units").addEventListener("click", e => {
+  const btn = e.target.closest("button[data-act]"); if(!btn) return;
+  const id = +btn.dataset.id;
+  if(btn.dataset.act === "edit") openEditor(id);
+  if(btn.dataset.act === "del"){
+    const u = state.listings.find(x => x.id === id);
+    if(confirm(`¿Eliminar "${u.name}" del inventario?`)){
+      state.listings = state.listings.filter(x => x.id !== id);
+      renderUnits(); markDirty(); toast("Casa eliminada");
+    }
+  }
+});
+
+/* ══════════════════════════════════════════════
+   EDITOR
+   ══════════════════════════════════════════════ */
+function openEditor(id){
+  editingId = id;
+  const u = id != null ? state.listings.find(x => x.id === id) : null;
+  $("edTitle").textContent = u ? "Editar casa" : "Nueva casa";
+  $("eName").value = (u && u.name) || "";
+  $("eSize").value = (u && u.size) || "";
+  $("eType").value = (u && u.type) || "single";
+  $("eBeds").value = u ? u.beds : 3;
+  $("eBaths").value = u ? u.baths : 2;
+  $("ePrice").value = u ? u.price : "";
+  $("eOldPrice").value = (u && u.oldPrice) || "";
+  $("eLocation").value = (u && u.location) || "";
+  $("eBadge").value = (u && u.badge) || "disp";
+  $("eDesc").value = (u && u.desc) || "";
+  $("eBrand").value = (u && u.brand) || "";
+  $("eYear").value = (u && u.year) || "";
+  $("eCond").value = (u && u.cond) || "seminueva";
+  $("eSqft").value = (u && u.sqft) || "";
+  $("eStock").value = (u && u.stock) || "";
+  $("eDescLong").value = (u && u.descLong) || "";
+  var feats = (u && u.features) || [];
+  var extras = [];
+  document.querySelectorAll('[data-feat]').forEach(function(c){ c.checked = feats.indexOf(c.value) > -1; });
+  feats.forEach(function(f){ if(COMMON_FEATS.indexOf(f) === -1) extras.push(f); });
+  $("eFeatExtra").value = extras.join(", ");
+  draftPhotos = u ? [...u.photos] : [];
+  renderPhotos();
+  $("overlay").classList.add("open");
+  $("eName").focus();
+}
+function closeEditor(){ $("overlay").classList.remove("open"); }
+$("edClose").addEventListener("click", closeEditor);
+$("edCancel").addEventListener("click", closeEditor);
+$("overlay").addEventListener("click", e => { if(e.target === $("overlay")) closeEditor(); });
+document.addEventListener("keydown", e => { if(e.key === "Escape") closeEditor(); });
+
+$("edSave").addEventListener("click", () => {
+  const data = {
+    name: $("eName").value.trim(),
+    size: $("eSize").value.trim(),
+    type: $("eType").value,
+    beds: +$("eBeds").value || 1,
+    baths: +$("eBaths").value || 1,
+    price: +$("ePrice").value || 0,
+    oldPrice: +$("eOldPrice").value || 0,
+    location: $("eLocation").value.trim(),
+    badge: $("eBadge").value,
+    desc: $("eDesc").value.trim(),
+    brand: $("eBrand").value.trim(),
+    year: +$("eYear").value || 0,
+    cond: $("eCond").value,
+    sqft: +$("eSqft").value || 0,
+    stock: $("eStock").value.trim(),
+    descLong: $("eDescLong").value.trim(),
+    features: (function(){
+      var out = [];
+      document.querySelectorAll('[data-feat]').forEach(function(c){ if(c.checked) out.push(c.value); });
+      $("eFeatExtra").value.split(",").forEach(function(x){ x = x.trim(); if(x) out.push(x); });
+      return out;
+    })(),
+    photos: draftPhotos
+  };
+  if(!data.name || !data.size || !data.price){ toast("Completa nombre, tamaño y precio"); return; }
+  if(editingId != null){
+    const i = state.listings.findIndex(x => x.id === editingId);
+    state.listings[i] = { ...state.listings[i], ...data };
+    toast("Casa actualizada ✔");
+  } else {
+    const id = state.listings.length ? Math.max(...state.listings.map(x => x.id)) + 1 : 1;
+    state.listings.push({ id, ...data });
+    toast("Casa agregada ✔");
+  }
+  renderUnits(); markDirty(); closeEditor();
+});
+
+/* ══════════════════════════════════════════════
+   FOTOS — subida, compresión, portada, borrar
+   ══════════════════════════════════════════════ */
+function renderPhotos(){
+  $("photoGrid").innerHTML = draftPhotos.map((p, i) => `
+    <div class="ph ${i === 0 ? "main" : ""}">
+      <img src="${p}" alt="Foto ${i + 1}">
+      ${i === 0 ? `<span class="tag">Portada</span>` : ""}
+      <button type="button" class="del" data-del="${i}" aria-label="Eliminar foto">✕</button>
+      <button type="button" class="mk" data-main="${i}">★ Hacer portada</button>
+    </div>`).join("");
+}
+$("photoGrid").addEventListener("click", e => {
+  const del = e.target.closest("[data-del]");
+  const mk = e.target.closest("[data-main]");
+  if(del){ draftPhotos.splice(+del.dataset.del, 1); renderPhotos(); }
+  if(mk){ const [p] = draftPhotos.splice(+mk.dataset.main, 1); draftPhotos.unshift(p); renderPhotos(); }
+});
+
+const drop = $("drop"), fileInput = $("filePhotos");
+drop.addEventListener("click", () => fileInput.click());
+drop.addEventListener("keydown", e => { if(e.key === "Enter" || e.key === " "){ e.preventDefault(); fileInput.click(); } });
+["dragover","dragenter"].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.add("over"); }));
+["dragleave","drop"].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.remove("over"); }));
+drop.addEventListener("drop", e => addFiles(e.dataTransfer.files));
+fileInput.addEventListener("change", () => { addFiles(fileInput.files); fileInput.value = ""; });
+
+async function addFiles(files){
+  const imgs = [...files].filter(f => f.type.startsWith("image/"));
+  if(!imgs.length) return;
+  toast(`Procesando ${imgs.length} foto${imgs.length > 1 ? "s" : ""}…`);
+  for(const f of imgs){
+    try{ draftPhotos.push(await compress(f)); }
+    catch{ toast("No se pudo leer una de las fotos"); }
+  }
+  renderPhotos();
+  toast("Fotos listas ✔");
+}
+
+function compress(file){
+  return new Promise((res, rej) => {
+    const img = new Image();
+    const url = URL.createObjectURL(file);
+    img.onload = () => {
+      const scale = Math.min(1, MAX_W / img.width);
+      const c = document.createElement("canvas");
+      c.width = Math.round(img.width * scale);
+      c.height = Math.round(img.height * scale);
+      c.getContext("2d").drawImage(img, 0, 0, c.width, c.height);
+      URL.revokeObjectURL(url);
+      res(c.toDataURL("image/jpeg", JPG_Q));
+    };
+    img.onerror = rej;
+    img.src = url;
+  });
+}
+
+/* ══════════════════════════════════════════════
+   PUBLICAR / RESPALDO / IMPORTAR
+   ══════════════════════════════════════════════ */
+function snapshot(){
+  state.settings.whatsapp = $("sWa").value.replace(/\D/g, "");
+  state.settings.phone = $("sPhone").value.trim();
+  state.settings.instagram = $("sIg").value.trim();
+  return state;
+}
+function download(name, text, type){
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([text], {type}));
+  a.download = name; a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+}
+$("btnPublish").addEventListener("click", () => {
+  const s = snapshot();
+  if(!s.listings.length && !confirm("Aún no has agregado casas. ¿Descargar de todos modos?")) return;
+  const js = "/* Generado por el panel de administración — Mobile Home Ventas */\n"
+           + "window.MHV_DATA = " + JSON.stringify(s, null, 2) + ";\n";
+  download("data.js", js, "text/javascript");
+  dirty = false; $("unsaved").hidden = true;
+  toast("data.js descargado — súbelo a tu hosting junto a la página 🚀");
+});
+$("btnBackup").addEventListener("click", () => {
+  download("respaldo-mobilehomeventas.json", JSON.stringify(snapshot(), null, 2), "application/json");
+  toast("Respaldo descargado 💾");
+});
+/* Carga un objeto {settings, listings} al estado del panel
+   (lo usan el import de data.js y la carga desde Supabase) */
+function hydrate(data){
+  state = {
+    settings: { whatsapp:"", phone:"", instagram:"", ...(data.settings || {}) },
+    listings: (Array.isArray(data.listings) ? data.listings : []).map((l, i) => ({
+      id: l.id != null ? l.id : i + 1, name: l.name || "Modelo", size: l.size || "",
+      type: l.type === "double" ? "double" : "single",
+      beds: +l.beds || 1, baths: +l.baths || 1, price: +l.price || 0,
+      oldPrice: +l.oldPrice || 0, location: l.location || "",
+      brand: l.brand || "", year: +l.year || 0,
+      cond: l.cond === "nueva" ? "nueva" : "seminueva",
+      sqft: +l.sqft || 0, stock: l.stock || "",
+      descLong: l.descLong || "",
+      features: Array.isArray(l.features) ? l.features.filter(Boolean) : [],
+      badge: ["disp","oport","remod"].includes(l.badge) ? l.badge : "disp",
+      desc: l.desc || "", photos: Array.isArray(l.photos) ? l.photos.filter(Boolean) : []
+    }))
+  };
+  $("sWa").value = state.settings.whatsapp || "";
+  $("sPhone").value = state.settings.phone || "";
+  $("sIg").value = state.settings.instagram || "";
+  renderUnits(); dirty = false; $("unsaved").hidden = true;
+}
+
+$("btnImport").addEventListener("click", () => $("fileImport").click());
+$("fileImport").addEventListener("change", async () => {
+  const f = $("fileImport").files[0]; if(!f) return;
+  try{
+    let text = await f.text();
+    const eq = text.indexOf("=");
+    if(text.includes("MHV_DATA") && eq > -1){
+      text = text.slice(eq + 1).trim().replace(/;\s*$/, "");
+    }
+    const data = JSON.parse(text);
+    if(!data || typeof data !== "object") throw 0;
+    hydrate(data);
+    if(SB) markDirty();   // recuerda publicar en la nube lo importado
+    toast(`Cargadas ${state.listings.length} casas ✔`);
+  } catch(err){ toast("No se pudo leer el archivo. Usa un data.js o respaldo JSON válido."); }
+  $("fileImport").value = "";
+});
+
+["sWa","sPhone","sIg"].forEach(id => $(id).addEventListener("input", markDirty));
+
+renderUnits();
+
+/* ══════════════════════════════════════════════
+   SUPABASE — sesión, carga y publicación en la nube
+   ══════════════════════════════════════════════ */
+function cloudLogin(){
+  var email = $("gEmail").value.trim(), pass = $("gPass").value;
+  if(!email || !pass){ $("gateCloudErr").style.display = "block"; return; }
+  var btn = $("gateCloudBtn");
+  btn.disabled = true; btn.textContent = "Entrando…";
+  fetch(SB.url + "/auth/v1/token?grant_type=password", {
+    method: "POST",
+    headers: { apikey: SB.key, "Content-Type": "application/json" },
+    body: JSON.stringify({ email: email, password: pass })
+  })
+  .then(function(r){ return r.json(); })
+  .then(function(j){
+    if(!j || !j.access_token) throw j;
+    sbSession = j;
+    $("gate").style.display = "none";
+    loadFromCloud();
+  })
+  .catch(function(err){
+    $("gateCloudErr").style.display = "block";
+    $("gPass").value = "";
+  })
+  .then(function(){ btn.disabled = false; btn.textContent = "Entrar al panel"; });
+}
+
+function loadFromCloud(){
+  toast("Cargando inventario desde la nube…");
+  fetch(SB.url + "/rest/v1/site_data?id=eq.1&select=data", {
+    headers: { apikey: SB.key, Authorization: "Bearer " + sbSession.access_token }
+  })
+  .then(function(r){ if(!r.ok) throw new Error("HTTP " + r.status); return r.json(); })
+  .then(function(rows){
+    var d = rows && rows[0] && rows[0].data;
+    if(d && (Array.isArray(d.listings) || d.settings)){
+      hydrate(d);
+      toast("Cargadas " + state.listings.length + " casas desde la nube ✔");
+    } else {
+      toast("Aún no hay casas publicadas. ¡Agrega la primera!");
+    }
+  })
+  .catch(function(err){ toast("No se pudo leer la base de datos. Revisa supabase-config.js y el script SQL."); });
+}
+
+function refreshCloudSession(){
+  if(!sbSession || !sbSession.refresh_token) return Promise.reject(new Error("sin sesión"));
+  return fetch(SB.url + "/auth/v1/token?grant_type=refresh_token", {
+    method: "POST",
+    headers: { apikey: SB.key, "Content-Type": "application/json" },
+    body: JSON.stringify({ refresh_token: sbSession.refresh_token })
+  })
+  .then(function(r){ return r.json(); })
+  .then(function(j){
+    if(!j || !j.access_token) throw new Error("refresh falló");
+    sbSession = j;
+  });
+}
+
+function dataUrlToBlob(durl){
+  var parts = durl.split(",");
+  var m = parts[0].match(/data:([^;]+)/);
+  var mime = (m && m[1]) || "image/jpeg";
+  var bin = atob(parts[1]);
+  var arr = new Uint8Array(bin.length);
+  for(var i = 0; i < bin.length; i++) arr[i] = bin.charCodeAt(i);
+  return new Blob([arr], { type: mime });
+}
+
+function uploadPhoto(durl, path){
+  var blob = dataUrlToBlob(durl);
+  return fetch(SB.url + "/storage/v1/object/fotos/" + path, {
+    method: "POST",
+    headers: {
+      apikey: SB.key,
+      Authorization: "Bearer " + sbSession.access_token,
+      "Content-Type": blob.type,
+      "x-upsert": "true"
+    },
+    body: blob
+  }).then(function(r){
+    if(!r.ok) throw new Error("foto HTTP " + r.status);
+    return SB.url + "/storage/v1/object/public/fotos/" + path;
+  });
+}
+
+/* Sube al Storage las fotos que siguen siendo data-URLs y las
+   reemplaza por su dirección pública (una por una, en orden). */
+function uploadAllPhotos(s){
+  var jobs = [];
+  s.listings.forEach(function(u){
+    u.photos.forEach(function(p, i){
+      if(String(p).indexOf("data:") === 0){
+        jobs.push({ u: u, i: i, path: "casa-" + u.id + "/" + Date.now() + "-" + i + ".jpg" });
+      }
+    });
+  });
+  var chain = Promise.resolve(), done = 0;
+  jobs.forEach(function(job){
+    chain = chain.then(function(){
+      return uploadPhoto(job.u.photos[job.i], job.path).then(function(url){
+        job.u.photos[job.i] = url;
+        done++;
+        toast("Subiendo fotos… " + done + "/" + jobs.length);
+      });
+    });
+  });
+  return chain;
+}
+
+function upsertSiteData(s){
+  return fetch(SB.url + "/rest/v1/site_data", {
+    method: "POST",
+    headers: {
+      apikey: SB.key,
+      Authorization: "Bearer " + sbSession.access_token,
+      "Content-Type": "application/json",
+      Prefer: "resolution=merge-duplicates"
+    },
+    body: JSON.stringify({ id: 1, data: s, updated_at: new Date().toISOString() })
+  });
+}
+
+function cloudSave(){
+  var s = snapshot();
+  if(!s.listings.length && !confirm("Aún no has agregado casas. ¿Publicar la página vacía?")) return;
+  var btn = $("btnCloudSave");
+  btn.disabled = true; btn.textContent = "☁️ Publicando…";
+  uploadAllPhotos(s)
+    .then(function(){ return upsertSiteData(s); })
+    .then(function(r){
+      if(r.status === 401){
+        return refreshCloudSession().then(function(){ return upsertSiteData(s); });
+      }
+      return r;
+    })
+    .then(function(r){
+      if(!r.ok) throw new Error("HTTP " + r.status);
+      dirty = false; $("unsaved").hidden = true;
+      renderUnits();   // las fotos ya quedaron como direcciones públicas
+      toast("¡Publicado! Tu página ya muestra los cambios 🚀");
+    })
+    .catch(function(err){
+      toast("No se pudo publicar. Revisa tu internet; si sigue fallando, recarga y entra de nuevo.");
+    })
+    .then(function(){ btn.disabled = false; btn.textContent = "☁️ Publicar en la página"; });
+}
+
+if(SB){
+  /* Modo nube: login con correo/contraseña y botón Publicar */
+  $("gateForm").hidden = true;
+  $("gateCloud").hidden = false;
+  $("gateNote").innerHTML = "🔐 Entra con el correo y contraseña que creaste en Supabase (Authentication → Users).";
+  $("btnCloudSave").hidden = false;
+  $("btnPublish").classList.remove("pub");
+  $("btnPublish").textContent = "💾 Descargar data.js (respaldo)";
+  $("unsaved").textContent = "● Cambios sin publicar — presiona ☁️ Publicar";
+  document.querySelector(".flow .wrap").innerHTML =
+    '<span><span class="stepn">1</span><b>Edita</b>&nbsp;tus casas y fotos aquí</span>' +
+    '<span><span class="stepn">2</span><b>Publica</b>&nbsp;con el botón <b>&nbsp;☁️ Publicar</b> — la página se actualiza sola al instante</span>';
+  $("gateCloudBtn").addEventListener("click", cloudLogin);
+  ["gEmail","gPass"].forEach(function(id){
+    $(id).addEventListener("keydown", function(e){ if(e.key === "Enter"){ e.preventDefault(); cloudLogin(); } });
+  });
+  $("btnCloudSave").addEventListener("click", cloudSave);
+  setTimeout(function(){ $("gEmail").focus(); }, 50);
+}
+</script>
+</body>
+</html>

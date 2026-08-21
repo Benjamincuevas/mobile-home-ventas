@@ -1,0 +1,1295 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mobile Home Ventas — Casas Móviles Nuevas y Seminuevas en Venta</title>
+<meta name="description" content="Inventario de casas móviles nuevas y seminuevas con entrega e instalación. Filtra por tipo, recámaras y precio. Financiamiento disponible.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&family=Roboto+Condensed:wght@700;800&display=swap" rel="stylesheet">
+<style>
+/* ══════════════════════════════════════════════════════════════
+   MOBILE HOME VENTAS · v3 "Marketplace"
+   Dirección: SRP de inventario estilo Camping World
+   (header con buscador, nav azul, filtros laterales,
+    tarjetas horizontales, precio rebajado, CTA amarillo)
+   ══════════════════════════════════════════════════════════════ */
+:root{
+  --navy:#00305C;         /* header / nav */
+  --navy-2:#0A4173;
+  --blue:#0C5FA8;         /* enlaces y títulos clicables */
+  --blue-2:#094A85;
+  --yellow:#FFC629;       /* CTA principal */
+  --yellow-2:#F0B400;
+  --red:#D0021B;          /* precio rebajado */
+  --ink:#1A2B3C;
+  --muted:#5C6B7A;
+  --bg:#F4F6F8;
+  --white:#FFFFFF;
+  --line:#DDE3E9;
+  --wa:#25D366;
+  --wa-2:#1DA851;
+  --ok:#1E8E3E;
+  --orange:#E8710A;
+  --r:10px;
+  --sh:0 1px 4px rgba(16,35,54,.10);
+  --sh-lg:0 12px 32px rgba(16,35,54,.18);
+  --body:'Roboto',system-ui,sans-serif;
+  --cond:'Roboto Condensed',sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation:none!important;transition:none!important}}
+body{font-family:var(--body);background:var(--bg);color:var(--ink);line-height:1.55;-webkit-font-smoothing:antialiased}
+img,svg{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+button{font-family:inherit;cursor:pointer;border:none;background:none}
+.wrap{width:min(1280px,95%);margin-inline:auto}
+section{padding:64px 0}
+h1,h2{font-family:var(--cond);font-weight:800;color:var(--navy);letter-spacing:.01em;text-transform:none}
+h2{font-size:clamp(1.5rem,3vw,2.1rem)}
+.lede{color:var(--muted);font-size:.98rem;max-width:60ch;margin-top:8px}
+:focus-visible{outline:3px solid var(--blue);outline-offset:2px;border-radius:4px}
+
+/* ── Botones ── */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;font-weight:700;font-size:.92rem;padding:.8rem 1.4rem;border-radius:7px;transition:background .15s,transform .12s;white-space:nowrap;text-align:center}
+.btn:active{transform:scale(.98)}
+.btn-yellow{background:var(--yellow);color:var(--ink);box-shadow:var(--sh)}
+.btn-yellow:hover{background:var(--yellow-2)}
+.btn-blue{background:var(--blue);color:#fff}
+.btn-blue:hover{background:var(--blue-2)}
+.btn-wa{background:var(--wa);color:#fff}
+.btn-wa:hover{background:var(--wa-2)}
+.btn-line{border:1.5px solid var(--blue);color:var(--blue);background:#fff}
+.btn-line:hover{background:#EAF3FB}
+.btn-line-w{border:1.5px solid rgba(255,255,255,.7);color:#fff}
+.btn-line-w:hover{background:rgba(255,255,255,.12)}
+.btn-sm{padding:.55rem 1rem;font-size:.83rem}
+.ico{width:17px;height:17px;flex:none}
+
+/* ── Topbar utilitaria ── */
+.topbar{background:#022440;color:#B9CCDE;font-size:.78rem}
+.topbar .wrap{display:flex;justify-content:space-between;gap:1rem;padding:.4rem 0}
+.topbar b{color:var(--yellow)}
+@media(max-width:700px){.topbar .r2{display:none}}
+
+/* ── Header con buscador ── */
+.hdr{background:#fff;border-bottom:1px solid var(--line);position:relative;z-index:60}
+.hdr .wrap{display:flex;align-items:center;gap:1.4rem;height:82px}
+.brand{display:flex;align-items:center;gap:.6rem;flex:none}
+.brand-mark{width:46px;height:46px;border-radius:9px;background:var(--navy);display:grid;place-items:center;flex:none}
+.brand-name{font-family:var(--cond);font-weight:800;font-size:1.2rem;color:var(--navy);line-height:1.05}
+.brand-name span{color:var(--orange)}
+.brand-name small{display:block;font-family:var(--body);font-weight:700;font-size:.58rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+.search{flex:1;display:flex;max-width:640px}
+.search input{flex:1;padding:.85rem 1.1rem;border:2px solid var(--line);border-right:none;border-radius:8px 0 0 8px;font-family:inherit;font-size:.92rem;min-width:0}
+.search input:focus{outline:none;border-color:var(--blue)}
+.search button{background:var(--yellow);border-radius:0 8px 8px 0;padding:0 1.2rem;display:grid;place-items:center;transition:background .15s}
+.search button:hover{background:var(--yellow-2)}
+.search button svg{width:20px;height:20px;stroke:var(--ink)}
+.hdr-right{display:flex;align-items:center;gap:.8rem;flex:none}
+.burger{display:none;width:44px;height:44px;border-radius:9px;border:1.5px solid var(--line)}
+.burger span{display:block;width:20px;height:2.5px;background:var(--navy);margin:4.5px auto;border-radius:2px}
+@media(max-width:1020px){
+  .hdr .wrap{height:auto;flex-wrap:wrap;padding:.8rem 0;gap:.8rem}
+  .search{order:3;width:100%;max-width:none}
+  .hdr-right .btn{display:none}
+  .burger{display:block}
+}
+
+/* ── Nav bar azul ── */
+.navbar{background:var(--navy);position:sticky;top:0;z-index:55;box-shadow:0 2px 8px rgba(2,36,64,.25)}
+.navbar ul{display:flex;list-style:none;overflow-x:auto;scrollbar-width:none}
+.navbar ul::-webkit-scrollbar{display:none}
+.navbar a{display:block;color:#DCE8F3;font-weight:700;font-size:.88rem;padding:.85rem 1.25rem;border-bottom:3px solid transparent;transition:background .15s,border-color .15s;white-space:nowrap}
+.navbar a:hover{background:var(--navy-2);border-color:var(--yellow);color:#fff}
+.mnav{display:none;flex-direction:column;background:#fff;border-bottom:1px solid var(--line);padding:.6rem 3%}
+.mnav a{padding:.8rem .4rem;font-weight:700;color:var(--navy);border-radius:8px}
+.mnav a:hover{background:var(--bg)}
+.mnav .btn{margin:.5rem 0;justify-content:center}
+.mnav.open{display:flex}
+
+/* ── Hero compacto ── */
+.hero{background:linear-gradient(120deg,#022440 0%,var(--navy) 55%,var(--navy-2) 100%);color:#fff;padding:56px 0;position:relative;overflow:hidden}
+.hero-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:44px;align-items:center;position:relative}
+.hero h1{color:#fff;font-size:clamp(1.9rem,4.4vw,3rem);line-height:1.08}
+.hero h1 span{color:var(--yellow)}
+.hero p{color:#C4D5E6;margin:1rem 0 1.6rem;font-size:1.04rem;max-width:34rem}
+.hero-cta{display:flex;flex-wrap:wrap;gap:.9rem}
+.hero-stats{display:flex;gap:2rem;margin-top:2rem}
+.hero-stats b{display:block;font-family:var(--cond);font-size:1.6rem;font-weight:800;color:var(--yellow);line-height:1}
+.hero-stats span{font-size:.78rem;color:#9FB6CC;font-weight:600}
+.hero-art{filter:drop-shadow(0 24px 32px rgba(0,0,0,.35))}
+@media(max-width:920px){.hero-grid{grid-template-columns:1fr}.hero-art{display:none}}
+
+/* ══════════════════════════════════════════════════════════════
+   SRP — Página de resultados de inventario (estilo Camping World)
+   ══════════════════════════════════════════════════════════════ */
+.srp{padding:36px 0 72px}
+.crumbs{font-size:.78rem;color:var(--muted);margin-bottom:10px}
+.crumbs a{color:var(--blue)}
+.crumbs a:hover{text-decoration:underline}
+.srp-head{display:flex;justify-content:space-between;align-items:end;gap:1rem;flex-wrap:wrap;margin-bottom:18px}
+.srp-head h1{font-size:clamp(1.4rem,3vw,1.9rem)}
+.srp-head .n{color:var(--muted);font-family:var(--body);font-weight:500;font-size:.95rem}
+.srp-tools{display:flex;gap:.7rem;align-items:center}
+.sort{display:flex;align-items:center;gap:.5rem;font-size:.84rem;font-weight:700;color:var(--muted)}
+.sort select{padding:.55rem .8rem;border:1.5px solid var(--line);border-radius:7px;font-family:inherit;font-weight:700;font-size:.85rem;color:var(--navy);background:#fff;cursor:pointer}
+.filter-toggle{display:none}
+.srp-body{display:grid;grid-template-columns:260px 1fr;gap:24px;align-items:start}
+@media(max-width:960px){
+  .srp-body{grid-template-columns:1fr}
+  .filter-toggle{display:inline-flex}
+}
+
+/* ── Filtros laterales ── */
+.filters{background:#fff;border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--sh);position:sticky;top:64px;max-height:calc(100vh - 84px);overflow-y:auto}
+.filters-head{display:flex;justify-content:space-between;align-items:center;padding:.95rem 1.1rem;border-bottom:1px solid var(--line)}
+.filters-head b{font-family:var(--cond);font-size:1.05rem;color:var(--navy);display:flex;align-items:center;gap:.5rem}
+.filters-head b svg{width:18px;height:18px;stroke:var(--blue)}
+.clear-f{font-size:.78rem;font-weight:700;color:var(--blue)}
+.clear-f:hover{text-decoration:underline}
+.filters-close{display:none;width:36px;height:36px;border-radius:8px;background:var(--bg);font-size:1rem;color:var(--navy)}
+.fgroup{border-bottom:1px solid var(--line)}
+.fgroup:last-child{border-bottom:none}
+.fg-head{width:100%;display:flex;justify-content:space-between;align-items:center;padding:.9rem 1.1rem;font-weight:700;font-size:.88rem;color:var(--navy)}
+.fg-head svg{width:15px;height:15px;stroke:var(--muted);transition:transform .2s}
+.fgroup.closed .fg-head svg{transform:rotate(-90deg)}
+.fg-body{padding:0 1.1rem .95rem;display:grid;gap:.55rem}
+.fgroup.closed .fg-body{display:none}
+.chk{display:flex;align-items:center;gap:.6rem;font-size:.86rem;cursor:pointer;color:var(--ink)}
+.chk input{width:17px;height:17px;accent-color:var(--blue);cursor:pointer;flex:none}
+.chk .cnt{margin-left:auto;font-size:.74rem;color:var(--muted)}
+@media(max-width:960px){
+  .filters{position:fixed;inset:0 auto 0 0;width:min(340px,88%);z-index:95;border-radius:0;max-height:none;transform:translateX(-105%);transition:transform .25s ease;box-shadow:var(--sh-lg)}
+  .filters.open{transform:none}
+  .filters-close{display:grid;place-items:center}
+  .fdim{position:fixed;inset:0;z-index:94;background:rgba(2,36,64,.5);opacity:0;pointer-events:none;transition:opacity .25s}
+  .fdim.show{opacity:1;pointer-events:auto}
+}
+
+/* ── Tarjetas horizontales de inventario ── */
+.results{display:grid;gap:16px}
+.lcard{background:#fff;border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--sh);display:grid;grid-template-columns:310px 1fr 250px;overflow:hidden;transition:box-shadow .2s}
+.lcard:hover{box-shadow:var(--sh-lg)}
+@media(max-width:1100px){.lcard{grid-template-columns:270px 1fr 220px}}
+@media(max-width:880px){.lcard{grid-template-columns:1fr}}
+
+.lc-media{position:relative;aspect-ratio:4/3;background:#E8EDF2;overflow:hidden}
+@media(max-width:880px){.lc-media{aspect-ratio:16/9}}
+.lc-media img,.lc-media svg{width:100%;height:100%;object-fit:cover}
+.badges-col{position:absolute;top:10px;left:10px;display:flex;flex-direction:column;gap:6px;z-index:3}
+.bdg{padding:.3rem .7rem;border-radius:5px;font-size:.68rem;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:#fff;width:max-content;box-shadow:0 2px 6px rgba(0,0,0,.2)}
+.b-disp{background:var(--ok)}.b-oport{background:var(--orange)}.b-remod{background:var(--blue)}.b-rebaja{background:var(--red)}
+.fav{position:absolute;top:10px;right:10px;width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.94);display:grid;place-items:center;box-shadow:0 2px 8px rgba(0,0,0,.2);z-index:3;transition:transform .15s}
+.fav:hover{transform:scale(1.1)}
+.fav svg{width:17px;height:17px;stroke:var(--red);fill:none}
+.fav.on svg{fill:var(--red)}
+.ph-nav{position:absolute;top:50%;transform:translateY(-50%);width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.92);display:grid;place-items:center;box-shadow:0 2px 8px rgba(0,0,0,.25);z-index:3;opacity:0;transition:opacity .15s}
+.lc-media:hover .ph-nav{opacity:1}
+.ph-nav svg{width:16px;height:16px;stroke:var(--navy);stroke-width:2.5}
+.ph-prev{left:8px}.ph-next{right:8px}
+.ph-count{position:absolute;bottom:10px;left:10px;background:rgba(2,36,64,.78);color:#fff;font-size:.7rem;font-weight:700;padding:.25rem .6rem;border-radius:5px;display:flex;align-items:center;gap:.35rem;z-index:3}
+.ph-count svg{width:12px;height:12px;stroke:#fff}
+
+.lc-info{padding:1.1rem 1.3rem;min-width:0}
+.lc-info h3{font-family:var(--cond);font-weight:800;font-size:1.22rem;color:var(--blue);line-height:1.2}
+.lc-info h3 a:hover{text-decoration:underline}
+.lc-loc{display:flex;align-items:center;gap:.35rem;font-size:.78rem;color:var(--muted);margin:.3rem 0 .75rem}
+.lc-loc svg{width:13px;height:13px;stroke:var(--muted);flex:none}
+.lc-specs{display:flex;flex-wrap:wrap;gap:0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin-bottom:.75rem}
+.lc-specs div{padding:.55rem .9rem .55rem 0;margin-right:.9rem;border-right:1px solid var(--line)}
+.lc-specs div:last-child{border-right:none}
+.lc-specs small{display:block;font-size:.66rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+.lc-specs b{font-size:.9rem;color:var(--ink)}
+.lc-desc{font-size:.84rem;color:var(--muted);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+
+.lc-buy{border-left:1px solid var(--line);padding:1.1rem 1.2rem;display:flex;flex-direction:column;justify-content:center;gap:.35rem;background:#FBFCFD}
+@media(max-width:880px){.lc-buy{border-left:none;border-top:1px solid var(--line)}}
+.was{font-size:.8rem;color:var(--muted)}
+.was s{color:var(--muted)}
+.now small{display:block;font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
+.now b{font-family:var(--cond);font-size:1.75rem;font-weight:800;color:var(--navy);line-height:1.05}
+.now.sale b{color:var(--red)}
+.save{font-size:.78rem;font-weight:800;color:var(--red)}
+.est{font-size:.8rem;color:var(--muted);margin-bottom:.6rem}
+.est b{color:var(--ok)}
+.lc-buy .btn{width:100%}
+.lc-buy .btn + .btn{margin-top:.5rem}
+.empty{display:none;text-align:center;background:#fff;border:1.5px dashed var(--line);border-radius:var(--r);padding:56px 20px;color:var(--muted)}
+.empty b{display:block;font-family:var(--cond);font-size:1.15rem;color:var(--navy);margin-bottom:.3rem}
+
+/* ── Franja de confianza ── */
+.trust{background:#fff;border-block:1px solid var(--line);padding:26px 0}
+.trust .wrap{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+@media(max-width:960px){.trust .wrap{grid-template-columns:1fr 1fr}}
+@media(max-width:560px){.trust .wrap{grid-template-columns:1fr}}
+.t-item{display:flex;gap:.8rem;align-items:center}
+.t-item svg{width:34px;height:34px;stroke:var(--blue);flex:none}
+.t-item b{display:block;font-size:.88rem;color:var(--navy)}
+.t-item small{font-size:.76rem;color:var(--muted)}
+
+/* ── Financiamiento ── */
+.fin{background:var(--navy);color:#D6E3EF}
+.fin h2{color:#fff}
+.fin .lede{color:#A9C0D6}
+.fin-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center}
+@media(max-width:920px){.fin-grid{grid-template-columns:1fr}}
+.fin-list{list-style:none;display:grid;gap:.85rem;margin-top:1.4rem}
+.fin-list li{display:flex;gap:.7rem;align-items:start;font-size:.92rem;font-weight:600}
+.fin-list .chk2{width:22px;height:22px;border-radius:50%;background:rgba(255,198,41,.18);display:grid;place-items:center;flex:none;margin-top:.1rem}
+.fin-list .chk2 svg{width:12px;height:12px;stroke:var(--yellow);stroke-width:3}
+.calc{background:#fff;color:var(--ink);border-radius:12px;box-shadow:var(--sh-lg);padding:1.8rem}
+.calc h3{font-family:var(--cond);font-weight:800;font-size:1.2rem;color:var(--navy);display:flex;gap:.5rem;align-items:center}
+.calc h3 svg{width:20px;height:20px;stroke:var(--blue)}
+.calc-field{margin-top:1.2rem}
+.calc-field .lbl{display:flex;justify-content:space-between;font-size:.78rem;font-weight:800;color:var(--navy);margin-bottom:.45rem}
+.calc-field output{color:var(--blue);font-weight:800}
+input[type=range]{width:100%;height:6px;appearance:none;background:var(--line);border-radius:99px;outline:none}
+input[type=range]::-webkit-slider-thumb{appearance:none;width:21px;height:21px;border-radius:50%;background:var(--blue);border:3px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.3);cursor:grab}
+input[type=range]::-moz-range-thumb{width:21px;height:21px;border-radius:50%;background:var(--blue);border:3px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.3);cursor:grab}
+.terms{display:grid;grid-template-columns:repeat(3,1fr);gap:.55rem;margin-top:.5rem}
+.terms button{padding:.55rem;border-radius:8px;border:1.5px solid var(--line);font-weight:700;font-size:.84rem;color:var(--muted);transition:all .15s}
+.terms button.on{background:var(--navy);border-color:var(--navy);color:#fff}
+.calc-result{margin-top:1.3rem;background:#F0F5FA;border:1px solid var(--line);border-radius:10px;padding:1rem 1.2rem;display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap}
+.calc-result small{display:block;font-size:.68rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.calc-result b{font-family:var(--cond);font-size:1.8rem;font-weight:800;color:var(--navy)}
+.calc-note{font-size:.7rem;color:var(--muted);margin-top:.8rem;line-height:1.5}
+
+/* ── Servicios ── */
+.serv-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+@media(max-width:1020px){.serv-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:560px){.serv-grid{grid-template-columns:1fr}}
+.s-card{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:1.5rem 1.3rem;box-shadow:var(--sh);border-top:4px solid var(--yellow)}
+.s-card:nth-child(2){border-top-color:var(--blue)}
+.s-card:nth-child(3){border-top-color:var(--orange)}
+.s-card:nth-child(4){border-top-color:var(--wa)}
+.s-ico{width:50px;height:50px;border-radius:10px;background:#EEF4FA;display:grid;place-items:center;margin-bottom:.9rem}
+.s-ico svg{width:26px;height:26px;stroke:var(--navy)}
+.s-card h3{font-family:var(--cond);font-weight:800;font-size:1.03rem;color:var(--navy);margin-bottom:.4rem}
+.s-card p{font-size:.86rem;color:var(--muted)}
+
+/* ── Pasos ── */
+.steps{background:#fff;border-block:1px solid var(--line)}
+.steps-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:36px}
+@media(max-width:860px){.steps-grid{grid-template-columns:1fr;max-width:520px}}
+.step{background:var(--bg);border:1px solid var(--line);border-radius:var(--r);padding:1.6rem 1.4rem;position:relative}
+.step i{position:absolute;top:-14px;left:1.3rem;width:32px;height:32px;border-radius:50%;background:var(--yellow);color:var(--ink);font-style:normal;font-weight:800;display:grid;place-items:center;box-shadow:var(--sh)}
+.step h3{font-family:var(--cond);font-weight:800;font-size:1.05rem;color:var(--navy);margin:.4rem 0 .4rem}
+.step p{font-size:.87rem;color:var(--muted)}
+.steps-cta{text-align:center;margin-top:38px}
+
+/* ── Testimonios ── */
+.testi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+@media(max-width:960px){.testi-grid{grid-template-columns:1fr;max-width:540px}}
+.testi{background:#fff;border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--sh);overflow:hidden;display:flex;flex-direction:column}
+.testi-photo{aspect-ratio:16/9;position:relative}
+.testi-photo svg{width:100%;height:100%}
+.testi-photo .del{position:absolute;bottom:8px;left:8px;background:rgba(2,36,64,.85);color:#fff;font-size:.64rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;padding:.28rem .65rem;border-radius:5px}
+.testi-body{padding:1.1rem 1.2rem 1.25rem}
+.stars{color:var(--yellow-2);font-size:.9rem;letter-spacing:.1em;margin-bottom:.45rem}
+.testi-body p{font-size:.88rem}
+.testi-meta{display:flex;align-items:center;gap:.7rem;margin-top:.9rem}
+.av{width:40px;height:40px;border-radius:50%;background:var(--navy);color:var(--yellow);font-weight:800;font-size:.82rem;display:grid;place-items:center;flex:none}
+.testi-meta b{display:block;font-size:.86rem;color:var(--navy);line-height:1.2}
+.testi-meta small{font-size:.74rem;color:var(--muted)}
+.ig{margin-top:36px;background:linear-gradient(115deg,#6D28D9,#DB2777 55%,#F59E0B);border-radius:var(--r);color:#fff;padding:1.9rem 2.1rem;display:flex;justify-content:space-between;align-items:center;gap:1.3rem;flex-wrap:wrap;box-shadow:var(--sh-lg)}
+.ig h3{font-family:var(--cond);font-weight:800;font-size:1.25rem}
+.ig p{font-size:.9rem;opacity:.94}
+.btn-ig{background:#fff;color:#6D28D9;border-radius:7px}
+.btn-ig:hover{background:#F5F3FF}
+
+/* ── Formulario ── */
+.lead{background:#fff;border-top:1px solid var(--line)}
+.lead-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:52px;align-items:center}
+@media(max-width:920px){.lead-grid{grid-template-columns:1fr}}
+.lead-list{list-style:none;display:grid;gap:.85rem;margin-top:1.4rem}
+.lead-list li{display:flex;gap:.7rem;align-items:start;font-weight:600;font-size:.92rem;color:var(--navy)}
+.lead-list .chk2{width:22px;height:22px;border-radius:50%;background:rgba(30,142,62,.12);display:grid;place-items:center;flex:none;margin-top:.1rem}
+.lead-list .chk2 svg{width:12px;height:12px;stroke:var(--ok);stroke-width:3}
+.form-card{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:2rem;box-shadow:var(--sh)}
+.fgrid{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.fgrid .full{grid-column:1/-1}
+@media(max-width:560px){.fgrid{grid-template-columns:1fr}}
+.fld label{display:block;font-size:.78rem;font-weight:800;color:var(--navy);margin-bottom:.35rem}
+.fld label em{font-style:normal;font-weight:500;color:var(--muted)}
+.fld input,.fld select,.fld textarea{width:100%;padding:.8rem .95rem;border:1.5px solid var(--line);border-radius:8px;font-family:inherit;font-size:.92rem;background:#fff;transition:border-color .15s,box-shadow .15s}
+.fld textarea{min-height:96px;resize:vertical}
+.fld input:focus,.fld select:focus,.fld textarea:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(12,95,168,.14)}
+.form-card .btn{width:100%;margin-top:1.2rem;padding:1rem;font-size:.98rem}
+.fnote{font-size:.73rem;color:var(--muted);text-align:center;margin-top:.8rem}
+.fsuccess{display:none;text-align:center;padding:2.4rem 1rem}
+.fsuccess .big{width:66px;height:66px;border-radius:50%;background:rgba(30,142,62,.12);display:grid;place-items:center;margin:0 auto 1rem}
+.fsuccess .big svg{width:32px;height:32px;stroke:var(--ok);stroke-width:2.5}
+.fsuccess h3{font-family:var(--cond);font-weight:800;color:var(--navy);font-size:1.25rem;margin-bottom:.35rem}
+.fsuccess p{color:var(--muted);font-size:.9rem;margin-bottom:1.2rem}
+
+/* ── Footer ── */
+.ftr{background:#022440;color:#9DB4C9;padding:56px 0 0}
+.ftr-grid{display:grid;grid-template-columns:1.5fr 1fr 1fr 1.2fr;gap:40px;padding-bottom:42px}
+@media(max-width:960px){.ftr-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:560px){.ftr-grid{grid-template-columns:1fr}}
+.ftr .brand-name{color:#fff}
+.ftr p{font-size:.86rem;margin-top:.8rem}
+.ftr h4{font-family:var(--cond);font-weight:800;color:#fff;font-size:.95rem;text-transform:uppercase;letter-spacing:.08em;margin-bottom:.9rem}
+.ftr ul{list-style:none;display:grid;gap:.55rem}
+.ftr ul a{font-size:.87rem}
+.ftr ul a:hover{color:var(--yellow);text-decoration:underline}
+.hours{display:grid;gap:.4rem;font-size:.87rem}
+.hours b{color:#fff;font-weight:600}
+.socials{display:flex;gap:.6rem;margin-top:1rem}
+.socials a{width:40px;height:40px;border-radius:9px;background:rgba(255,255,255,.08);display:grid;place-items:center;transition:background .15s}
+.socials a:hover{background:var(--blue)}
+.socials svg{width:17px;height:17px;fill:#fff}
+.ftr-btm{border-top:1px solid rgba(255,255,255,.1);padding:1.2rem 0;font-size:.73rem;color:#5E7A93}
+.ftr-btm .wrap{display:flex;flex-wrap:wrap;gap:.6rem;justify-content:space-between}
+
+/* ── WhatsApp flotante ── */
+.wa-float{position:fixed;right:20px;bottom:20px;z-index:90;width:60px;height:60px;border-radius:50%;background:var(--wa);display:grid;place-items:center;box-shadow:0 10px 26px rgba(37,211,102,.45);transition:transform .2s}
+.wa-float:hover{transform:scale(1.08)}
+.wa-float svg{width:30px;height:30px;fill:#fff}
+.wa-float::after{content:"";position:absolute;inset:0;border-radius:50%;border:2px solid var(--wa);animation:pulse 2.2s infinite}
+@keyframes pulse{0%{transform:scale(1);opacity:.8}100%{transform:scale(1.6);opacity:0}}
+
+.rv{opacity:0;transform:translateY(22px);transition:opacity .6s ease,transform .6s ease}
+.rv.in{opacity:1;transform:none}
+
+/* ── Ficha de detalles (modal) ── */
+.lc-title{font:inherit;color:var(--blue);text-align:left;cursor:pointer;line-height:inherit}
+.lc-title:hover{text-decoration:underline}
+.lc-more{margin-top:.45rem;font-size:.8rem;font-weight:700;color:var(--blue);cursor:pointer;align-self:start}
+.lc-more:hover{text-decoration:underline}
+.b-cond{background:#5C6B7A}
+.dm{position:fixed;inset:0;z-index:96;background:rgba(2,36,64,.6);display:none;align-items:flex-start;justify-content:center;overflow-y:auto;padding:3vh 1rem}
+.dm.open{display:flex}
+.dm-card{background:#fff;border-radius:12px;box-shadow:var(--sh-lg);width:min(940px,100%);margin-bottom:3vh;overflow:hidden}
+.dm-head{display:flex;justify-content:space-between;align-items:center;gap:1rem;padding:1rem 1.3rem;border-bottom:1px solid var(--line)}
+.dm-head h3{font-family:var(--cond);font-weight:800;font-size:1.3rem;color:var(--navy)}
+.dm-x{width:38px;height:38px;border-radius:8px;background:var(--bg);display:grid;place-items:center;font-size:1rem;color:var(--navy);flex:none}
+.dm-x:hover{background:var(--line)}
+.dm-body{display:grid;grid-template-columns:1.05fr .95fr;gap:1.4rem;padding:1.3rem}
+@media(max-width:820px){.dm-body{grid-template-columns:1fr}}
+.dm-gal .main{aspect-ratio:4/3;border-radius:9px;overflow:hidden;background:#E8EDF2;border:1px solid var(--line)}
+.dm-gal .main img,.dm-gal .main svg{width:100%;height:100%;object-fit:cover}
+.dm-thumbs{display:grid;grid-template-columns:repeat(5,1fr);gap:.5rem;margin-top:.5rem}
+.dm-thumbs img{aspect-ratio:4/3;object-fit:cover;border-radius:7px;border:2px solid var(--line);cursor:pointer;width:100%}
+.dm-thumbs img.on{border-color:var(--blue)}
+.dm-chips{display:flex;flex-wrap:wrap;gap:.4rem;margin-bottom:.8rem}
+.chip{background:var(--bg);border:1px solid var(--line);border-radius:999px;font-size:.74rem;font-weight:700;color:var(--navy);padding:.28rem .7rem}
+.chip.hl{background:#FFF4D6;border-color:#F0DFA8}
+.dm-specs{display:grid;grid-template-columns:1fr 1fr;gap:.45rem 1rem;border:1px solid var(--line);border-radius:9px;padding:.9rem 1.1rem;margin-bottom:.9rem;font-size:.86rem;color:var(--muted)}
+.dm-specs b{color:var(--navy)}
+.dm-price{display:flex;align-items:baseline;gap:.7rem;margin-bottom:.1rem;flex-wrap:wrap}
+.dm-price b{font-family:var(--cond);font-size:1.95rem;font-weight:800;color:var(--navy)}
+.dm-price b.sale{color:var(--red)}
+.dm-price s{color:var(--muted);font-size:.95rem}
+.dm-est{font-size:.82rem;color:var(--muted);margin-bottom:.8rem}
+.dm-est b{color:var(--ok)}
+.dm-desc{font-size:.88rem;margin:.7rem 0 1rem;white-space:pre-line}
+.dm-feats-title{font-family:var(--cond);font-weight:800;font-size:.95rem;color:var(--navy);margin-bottom:.45rem}
+.dm-cta{display:grid;gap:.55rem;margin-top:.4rem}
+</style>
+</head>
+<body>
+
+<!-- ═══ TOPBAR ═══ -->
+<div class="topbar">
+  <div class="wrap">
+    <span>📞 <a href="tel:+10000000000"><b class="js-phone">(000) 000-0000</b></a> · Respuesta el mismo día</span>
+    <span class="r2">Lun–Sáb 9am–7pm · 🇲🇽 Atendemos en español</span>
+  </div>
+</div>
+
+<!-- ═══ HEADER CON BUSCADOR ═══ -->
+<header class="hdr">
+  <div class="wrap">
+    <a href="#inicio" class="brand" aria-label="Mobile Home Ventas — inicio">
+      <span class="brand-mark"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#FFC629" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 11.5L12 4l9.5 7.5"/><path d="M5 10.5V18a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-7.5"/><path d="M9.5 19v-5h5v5"/><circle cx="7.5" cy="21" r="1.3" fill="#FFC629" stroke="none"/><circle cx="16.5" cy="21" r="1.3" fill="#FFC629" stroke="none"/></svg></span>
+      <span class="brand-name">Mobile Home <span>Ventas</span><small>Entrega · Instalación · Financiamiento</small></span>
+    </a>
+    <div class="search" role="search">
+      <input type="text" id="qSearch" placeholder="Busca por modelo, tamaño, tipo o recámaras…" aria-label="Buscar en el inventario">
+      <button type="button" id="qBtn" aria-label="Buscar">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+      </button>
+    </div>
+    <div class="hdr-right">
+      <a class="btn btn-wa btn-sm" href="https://wa.me/10000000000?text=Hola%2C%20quiero%20cotizar%20una%20casa%20m%C3%B3vil" target="_blank" rel="noopener">
+        <svg class="ico" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm4.6 14.1c-.2.6-1 1.1-1.7 1.2-.7.1-1.5.3-3.7-.9-1.9-1-3.4-2.6-4.4-4.5-.8-1.5-.5-2.7.4-3.6.2-.2.5-.3.7-.3h.5c.2 0 .4-.1.6.4l.8 1.9c.1.1.1.3 0 .5l-.5.6c-.2.2-.5.3-.2.7a6.7 6.7 0 0 0 3.4 3c.2.1.4.1.5-.1.1-.2.6-.7.8-1 .2-.2.4-.2.6-.1.2.1 1.4.7 1.7.8.4.1.6.2.6.2.1.1.1.6-.1 1.2z"/></svg>
+        Cotizar por WhatsApp
+      </a>
+      <button class="burger" id="burger" aria-label="Abrir menú" aria-expanded="false" aria-controls="mnav"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+
+<!-- ═══ NAV AZUL ═══ -->
+<nav class="navbar" aria-label="Navegación principal">
+  <div class="wrap">
+    <ul>
+      <li><a href="#inicio">Inicio</a></li>
+      <li><a href="#inventario">Inventario</a></li>
+      <li><a href="#financiamiento">Financiamiento</a></li>
+      <li><a href="#servicios">Servicios</a></li>
+      <li><a href="#testimonios">Testimonios</a></li>
+      <li><a href="#contacto">Contacto</a></li>
+    </ul>
+  </div>
+</nav>
+<div class="mnav" id="mnav">
+  <a href="#inicio">Inicio</a><a href="#inventario">Inventario</a><a href="#financiamiento">Financiamiento</a>
+  <a href="#servicios">Servicios</a><a href="#testimonios">Testimonios</a><a href="#contacto">Contacto</a>
+  <a class="btn btn-wa btn-sm" href="https://wa.me/10000000000?text=Hola%2C%20quiero%20cotizar%20una%20casa%20m%C3%B3vil" target="_blank" rel="noopener">Cotizar por WhatsApp</a>
+</div>
+
+<!-- ═══ HERO COMPACTO ═══ -->
+<div class="hero" id="inicio">
+  <div class="wrap hero-grid">
+    <div>
+      <h1>Encuentra la Casa Móvil <span>Perfecta</span> para Ti y Tu Familia</h1>
+      <p>Casas móviles nuevas y seminuevas con entrega e instalación garantizada. Filtra, compara y pregunta por WhatsApp — te asesoramos en cada paso.</p>
+      <div class="hero-cta">
+        <a href="#inventario" class="btn btn-yellow">Ver Inventario Disponible</a>
+        <a href="https://wa.me/10000000000?text=Hola%2C%20quiero%20hablar%20con%20un%20asesor" target="_blank" rel="noopener" class="btn btn-line-w">Hablar con un Asesor</a>
+      </div>
+      <div class="hero-stats">
+        <div><b>120+</b><span>Casas entregadas</span></div>
+        <div><b>4.9★</b><span>Calificación</span></div>
+        <div><b>15</b><span>Años de experiencia</span></div>
+      </div>
+    </div>
+    <div class="hero-art" aria-hidden="true" id="heroRender"></div>
+  </div>
+</div>
+
+<!-- ═══ SRP · INVENTARIO ═══ -->
+<section class="srp" id="inventario">
+  <div class="wrap">
+    <p class="crumbs"><a href="#inicio">Inicio</a> / <a href="#inventario">Inventario</a> / Casas móviles en venta</p>
+    <div class="srp-head">
+      <h1>Casas Móviles en Venta <span class="n" id="count"></span></h1>
+      <div class="srp-tools">
+        <button class="btn btn-line btn-sm filter-toggle" id="filterToggle">
+          <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M7 12h10M10 18h4"/></svg>
+          Filtros
+        </button>
+        <div class="sort">
+          <label for="sortSel">Ordenar:</label>
+          <select id="sortSel">
+            <option value="featured">Destacadas</option>
+            <option value="price-asc">Precio: menor a mayor</option>
+            <option value="price-desc">Precio: mayor a menor</option>
+            <option value="beds-desc">Más recámaras</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="srp-body">
+      <!-- Filtros laterales -->
+      <aside class="filters" id="filters" aria-label="Filtros de inventario">
+        <div class="filters-head">
+          <b><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M7 12h10M10 18h4"/></svg>Filtrar resultados</b>
+          <div style="display:flex;gap:.5rem;align-items:center">
+            <button class="clear-f" id="clearF">Limpiar</button>
+            <button class="filters-close" id="filtersClose" aria-label="Cerrar filtros">✕</button>
+          </div>
+        </div>
+        <div class="fgroup">
+          <button class="fg-head" type="button">Tipo de casa <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></button>
+          <div class="fg-body">
+            <label class="chk"><input type="checkbox" data-f="type" value="single">Single Wide<span class="cnt" data-cnt="type-single"></span></label>
+            <label class="chk"><input type="checkbox" data-f="type" value="double">Double Wide<span class="cnt" data-cnt="type-double"></span></label>
+          </div>
+        </div>
+        <div class="fgroup">
+          <button class="fg-head" type="button">Recámaras <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></button>
+          <div class="fg-body">
+            <label class="chk"><input type="checkbox" data-f="beds" value="1">1 recámara</label>
+            <label class="chk"><input type="checkbox" data-f="beds" value="2">2 recámaras</label>
+            <label class="chk"><input type="checkbox" data-f="beds" value="3">3+ recámaras</label>
+          </div>
+        </div>
+        <div class="fgroup">
+          <button class="fg-head" type="button">Precio <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></button>
+          <div class="fg-body">
+            <label class="chk"><input type="checkbox" data-f="price" value="0-40000">Hasta $40,000</label>
+            <label class="chk"><input type="checkbox" data-f="price" value="40000-70000">$40,000 – $70,000</label>
+            <label class="chk"><input type="checkbox" data-f="price" value="70000-9999999">Más de $70,000</label>
+          </div>
+        </div>
+        <div class="fgroup">
+          <button class="fg-head" type="button">Estado <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></button>
+          <div class="fg-body">
+            <label class="chk"><input type="checkbox" data-f="badge" value="disp">Disponible</label>
+            <label class="chk"><input type="checkbox" data-f="badge" value="oport">Oportunidad</label>
+            <label class="chk"><input type="checkbox" data-f="badge" value="remod">Recién Remodelada</label>
+          </div>
+        </div>
+      </aside>
+      <div class="fdim" id="fdim"></div>
+
+      <!-- Resultados -->
+      <div>
+        <div class="results" id="results"></div>
+        <div class="empty" id="empty">
+          <b>No encontramos unidades con esos filtros</b>
+          Ajusta los filtros o escríbenos por WhatsApp y te avisamos en cuanto llegue una que encaje contigo.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ CONFIANZA ═══ -->
+<div class="trust">
+  <div class="wrap">
+    <div class="t-item rv"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l8 4v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6z"/><path d="M9 12l2 2 4-4"/></svg><div><b>Inspección de 40 puntos</b><small>en cada unidad publicada</small></div></div>
+    <div class="t-item rv"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M1 8h13v9H1z"/><path d="M14 11h5l3 3v3h-8z"/><circle cx="6" cy="19" r="2"/><circle cx="18" cy="19" r="2"/></svg><div><b>Flete e instalación</b><small>coordinados por nosotros</small></div></div>
+    <div class="t-item rv"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="13" rx="2"/><path d="M2 10h20"/><path d="M6 15h4"/></svg><div><b>Financiamiento accesible</b><small>opciones con ITIN o SSN</small></div></div>
+    <div class="t-item rv"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"/><path d="M8 10h8M8 13h5"/></svg><div><b>Atención en español</b><small>WhatsApp, llamada o video</small></div></div>
+  </div>
+</div>
+
+<!-- ═══ FINANCIAMIENTO ═══ -->
+<section class="fin" id="financiamiento">
+  <div class="wrap fin-grid">
+    <div class="rv">
+      <h2>Calcula tu pago mensual en segundos</h2>
+      <p class="lede">Mueve los controles y descubre qué casa se acomoda a tu bolsillo. Después, un asesor te ayuda a armar el plan real con las financieras aliadas.</p>
+      <ul class="fin-list">
+        <li><span class="chk2"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round"><path d="M4 12l5 5L20 6"/></svg></span>Enganches desde el 10% según la unidad</li>
+        <li><span class="chk2"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round"><path d="M4 12l5 5L20 6"/></svg></span>Opciones con ITIN o número de seguro social</li>
+        <li><span class="chk2"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round"><path d="M4 12l5 5L20 6"/></svg></span>Precalificación gratuita, sin afectar tu crédito</li>
+      </ul>
+    </div>
+    <div class="calc rv" role="group" aria-label="Estimador de pago mensual">
+      <h3><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><rect x="4" y="2" width="16" height="20" rx="2"/><path d="M8 6h8M8 11h2M8 15h2M14 11h2M14 15h2"/></svg>Estimador de pago</h3>
+      <div class="calc-field">
+        <div class="lbl"><span>Precio de la casa</span><output id="outPrice">$55,000</output></div>
+        <input type="range" id="rPrice" min="20000" max="120000" step="1000" value="55000" aria-label="Precio de la casa">
+      </div>
+      <div class="calc-field">
+        <div class="lbl"><span>Enganche</span><output id="outDown">15% · $8,250</output></div>
+        <input type="range" id="rDown" min="5" max="35" step="1" value="15" aria-label="Porcentaje de enganche">
+      </div>
+      <div class="calc-field">
+        <div class="lbl"><span>Plazo</span></div>
+        <div class="terms" id="terms">
+          <button type="button" data-y="10">10 años</button>
+          <button type="button" data-y="15" class="on">15 años</button>
+          <button type="button" data-y="20">20 años</button>
+        </div>
+      </div>
+      <div class="calc-result">
+        <div><small>Pago mensual estimado*</small><b id="outMo">$0</b></div>
+        <a class="btn btn-yellow btn-sm" id="calcWa" href="#" target="_blank" rel="noopener">Quiero este plan</a>
+      </div>
+      <p class="calc-note">*Estimación ilustrativa con tasa de referencia del 9.5% anual. No constituye una oferta de crédito; el plan final depende de la financiera y tu perfil.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ SERVICIOS ═══ -->
+<section id="servicios">
+  <div class="wrap">
+    <div class="rv" style="margin-bottom:34px">
+      <h2>Más que una venta: te acompañamos hasta que estrenes</h2>
+      <p class="lede">Compramos, inspeccionamos y entregamos cada unidad como si fuera para nuestra propia familia.</p>
+    </div>
+    <div class="serv-grid">
+      <div class="s-card rv">
+        <div class="s-ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l8 4v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6z"/><path d="M9 12l2 2 4-4"/></svg></div>
+        <h3>Unidades Inspeccionadas y Garantizadas</h3>
+        <p>Revisión de techo, pisos, plomería y electricidad antes de publicar cada casa. Lo que ves es lo que recibes.</p>
+      </div>
+      <div class="s-card rv">
+        <div class="s-ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="13" rx="2"/><path d="M2 10h20"/><path d="M6 15h4"/></svg></div>
+        <h3>Asesoría en Financiamiento y Facilidades</h3>
+        <p>Te orientamos con opciones de pago, enganches accesibles y planes según tu situación. Sin letras chiquitas.</p>
+      </div>
+      <div class="s-card rv">
+        <div class="s-ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M1 8h13v9H1z"/><path d="M14 11h5l3 3v3h-8z"/><circle cx="6" cy="19" r="2"/><circle cx="18" cy="19" r="2"/></svg></div>
+        <h3>Flete, Transporte e Instalación</h3>
+        <p>Coordinamos traslado, nivelación, anclaje y conexiones en tu terreno o en el parque de tu elección.</p>
+      </div>
+      <div class="s-card rv">
+        <div class="s-ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"/><path d="M8 10h8M8 13h5"/></svg></div>
+        <h3>Atención Personalizada y en Español</h3>
+        <p>Resolvemos tus dudas por WhatsApp, llamada o videollamada. Hablamos tu idioma y entendemos tu proceso.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ PASOS ═══ -->
+<section class="steps">
+  <div class="wrap">
+    <div class="rv">
+      <h2>Tu casa móvil en 3 pasos simples</h2>
+      <p class="lede">Un proceso claro y sin sorpresas, desde que la eliges hasta que recibes las llaves.</p>
+    </div>
+    <div class="steps-grid">
+      <div class="step rv"><i>1</i><h3>Selecciona el modelo que te guste</h3><p>Explora el inventario, compara tamaños y precios, y aparta la unidad que más se acomode a tu familia.</p></div>
+      <div class="step rv"><i>2</i><h3>Agenda una visita o videollamada</h3><p>Conócela en persona o por video tour en vivo. Te mostramos cada detalle por dentro y por fuera.</p></div>
+      <div class="step rv"><i>3</i><h3>Coordinamos todo lo demás</h3><p>Financiamiento, traslado e instalación en tu terreno o parque. Tú solo prepárate para estrenar.</p></div>
+    </div>
+    <div class="steps-cta rv"><a href="#contacto" class="btn btn-yellow">Comenzar mi proceso hoy</a></div>
+  </div>
+</section>
+
+<!-- ═══ TESTIMONIOS ═══ -->
+<section id="testimonios">
+  <div class="wrap">
+    <div class="rv" style="margin-bottom:34px">
+      <h2>Familias que ya estrenaron su casa</h2>
+      <p class="lede">Entregas reales, historias reales. Así se ve el día de recibir las llaves.</p>
+    </div>
+    <div class="testi-grid" id="testiGrid"></div>
+    <div class="ig rv">
+      <div>
+        <h3>📸 Síguenos en Instagram — @mobilehomeventas</h3>
+        <p>Videos de entregas, tours en vivo y las unidades nuevas antes que nadie.</p>
+      </div>
+      <a class="btn btn-ig" href="https://instagram.com/mobilehomeventas" target="_blank" rel="noopener">Seguir la cuenta</a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FORMULARIO ═══ -->
+<section class="lead" id="contacto">
+  <div class="wrap lead-grid">
+    <div class="rv">
+      <h2>Cuéntanos qué buscas y te asesoramos sin costo</h2>
+      <p class="lede">Responde en menos de 1 minuto y un asesor te contacta por WhatsApp el mismo día.</p>
+      <ul class="lead-list">
+        <li><span class="chk2"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round"><path d="M4 12l5 5L20 6"/></svg></span>Sin compromiso y sin afectar tu crédito</li>
+        <li><span class="chk2"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round"><path d="M4 12l5 5L20 6"/></svg></span>Opciones según tu presupuesto real</li>
+        <li><span class="chk2"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round"><path d="M4 12l5 5L20 6"/></svg></span>Respuesta el mismo día hábil</li>
+      </ul>
+    </div>
+    <div class="form-card rv">
+      <form id="leadForm" novalidate>
+        <div class="fgrid">
+          <div class="fld"><label for="name">Nombre completo</label>
+            <input type="text" id="name" name="name" placeholder="Ej. María González" required autocomplete="name"></div>
+          <div class="fld"><label for="phone">Teléfono / WhatsApp</label>
+            <input type="tel" id="phone" name="phone" placeholder="Ej. 555 123 4567" required autocomplete="tel"></div>
+          <div class="fld"><label for="land">¿Tienes terreno propio?</label>
+            <select id="land" name="land" required>
+              <option value="">Selecciona una opción</option>
+              <option>Sí, tengo terreno</option>
+              <option>No tengo terreno</option>
+              <option>Estoy buscando parque</option>
+            </select></div>
+          <div class="fld"><label for="budget">Presupuesto estimado</label>
+            <select id="budget" name="budget" required>
+              <option value="">Selecciona un rango</option>
+              <option>Hasta $40,000</option>
+              <option>$40,000 – $70,000</option>
+              <option>Más de $70,000</option>
+              <option>Aún no lo sé</option>
+            </select></div>
+          <div class="fld full"><label for="msg">Mensaje <em>(opcional)</em></label>
+            <textarea id="msg" name="msg" placeholder="Ej. Busco una 3 recámaras para entregar en 2 meses…"></textarea></div>
+        </div>
+        <button type="button" class="btn btn-yellow" id="leadBtn">Solicitar Asesoría Gratuita</button>
+        <p class="fnote">Al enviar aceptas ser contactado por WhatsApp o llamada. Nunca compartimos tus datos.</p>
+      </form>
+      <div class="fsuccess" id="fsuccess">
+        <div class="big"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round"><path d="M4 12l5 5L20 6"/></svg></div>
+        <h3>¡Gracias! Recibimos tu solicitud</h3>
+        <p>Un asesor te escribirá muy pronto. Si prefieres, escríbenos ahora mismo:</p>
+        <a class="btn btn-wa" id="successWa" href="#" target="_blank" rel="noopener">Continuar por WhatsApp</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FOOTER ═══ -->
+<footer class="ftr">
+  <div class="wrap ftr-grid">
+    <div>
+      <a href="#inicio" class="brand">
+        <span class="brand-mark"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#FFC629" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 11.5L12 4l9.5 7.5"/><path d="M5 10.5V18a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-7.5"/><path d="M9.5 19v-5h5v5"/></svg></span>
+        <span class="brand-name">Mobile Home <span>Ventas</span></span>
+      </a>
+      <p>Casas móviles nuevas y seminuevas con inspección, entrega e instalación. Atención personalizada y en español.</p>
+      <div class="socials">
+        <a href="https://instagram.com/mobilehomeventas" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24"><path d="M12 2.2c3.2 0 3.6 0 4.8.1 1.2.1 1.9.2 2.3.4.6.2 1 .5 1.4.9.4.4.7.8.9 1.4.2.4.4 1.1.4 2.3.1 1.2.1 1.6.1 4.8s0 3.6-.1 4.8c-.1 1.2-.2 1.9-.4 2.3-.2.6-.5 1-.9 1.4-.4.4-.8.7-1.4.9-.4.2-1.1.4-2.3.4-1.2.1-1.6.1-4.8.1s-3.6 0-4.8-.1c-1.2-.1-1.9-.2-2.3-.4-.6-.2-1-.5-1.4-.9-.4-.4-.7-.8-.9-1.4-.2-.4-.4-1.1-.4-2.3-.1-1.2-.1-1.6-.1-4.8s0-3.6.1-4.8c.1-1.2.2-1.9.4-2.3.2-.6.5-1 .9-1.4.4-.4.8-.7 1.4-.9.4-.2 1.1-.4 2.3-.4 1.2-.1 1.6-.1 4.8-.1zm0 5.4a4.4 4.4 0 1 1 0 8.8 4.4 4.4 0 0 1 0-8.8zm0 7.2a2.9 2.9 0 1 0 0-5.7 2.9 2.9 0 0 0 0 5.7zm5.6-7.4a1 1 0 1 1-2.1 0 1 1 0 0 1 2.1 0z"/></svg></a>
+        <a href="https://facebook.com" target="_blank" rel="noopener" aria-label="Facebook"><svg viewBox="0 0 24 24"><path d="M13.5 22v-8h2.7l.4-3.1h-3.1V8.9c0-.9.3-1.5 1.6-1.5h1.7V4.6c-.3 0-1.3-.1-2.4-.1-2.4 0-4 1.4-4 4.1v2.3H7.6V14h2.8v8z"/></svg></a>
+        <a href="https://wa.me/10000000000" target="_blank" rel="noopener" aria-label="WhatsApp"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm4.6 14.1c-.2.6-1 1.1-1.7 1.2-.7.1-1.5.3-3.7-.9-1.9-1-3.4-2.6-4.4-4.5-.8-1.5-.5-2.7.4-3.6.2-.2.5-.3.7-.3h.5c.2 0 .4-.1.6.4l.8 1.9c.1.1.1.3 0 .5l-.5.6c-.2.2-.5.3-.2.7a6.7 6.7 0 0 0 3.4 3c.2.1.4.1.5-.1.1-.2.6-.7.8-1 .2-.2.4-.2.6-.1.2.1 1.4.7 1.7.8.4.1.6.2.6.2.1.1.1.6-.1 1.2z"/></svg></a>
+      </div>
+    </div>
+    <div>
+      <h4>Enlaces rápidos</h4>
+      <ul>
+        <li><a href="#inventario">Inventario disponible</a></li>
+        <li><a href="#financiamiento">Estimador de pagos</a></li>
+        <li><a href="#servicios">Servicios</a></li>
+        <li><a href="#testimonios">Testimonios</a></li>
+        <li><a href="#contacto">Precalifícate gratis</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Horario de atención</h4>
+      <div class="hours">
+        <span><b>Lun – Vie:</b> 9:00 am – 7:00 pm</span>
+        <span><b>Sábado:</b> 9:00 am – 5:00 pm</span>
+        <span><b>Domingo:</b> Citas por WhatsApp</span>
+      </div>
+    </div>
+    <div>
+      <h4>Contacto directo</h4>
+      <ul>
+        <li><a href="https://wa.me/10000000000">📱 WhatsApp: <span class="js-phone">(000) 000-0000</span></a></li>
+        <li><a href="mailto:ventas@mobilehomeventas.com">✉️ ventas@mobilehomeventas.com</a></li>
+        <li><a href="#contacto">📍 Visitas con cita previa</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="ftr-btm">
+    <div class="wrap">
+      <span>© 2026 Mobile Home Ventas. Todos los derechos reservados.</span>
+      <span>Precios, cuotas y disponibilidad son de referencia y pueden cambiar sin previo aviso. Las cuotas mostradas son estimaciones ilustrativas y no constituyen una oferta de crédito.</span>
+    </div>
+  </div>
+</footer>
+
+<!-- ═══ FICHA DE DETALLES ═══ -->
+<div class="dm" id="dm" role="dialog" aria-modal="true" aria-label="Ficha de la casa">
+  <div class="dm-card">
+    <div class="dm-head">
+      <h3 id="dmTitle"></h3>
+      <button class="dm-x" id="dmX" aria-label="Cerrar">✕</button>
+    </div>
+    <div class="dm-body">
+      <div class="dm-gal">
+        <div class="main" id="dmMain"></div>
+        <div class="dm-thumbs" id="dmThumbs"></div>
+      </div>
+      <div id="dmInfo"></div>
+    </div>
+  </div>
+</div>
+
+<a class="wa-float" href="https://wa.me/10000000000?text=Hola%2C%20vengo%20de%20la%20p%C3%A1gina%20web%20y%20quiero%20informaci%C3%B3n" target="_blank" rel="noopener" aria-label="Escríbenos por WhatsApp">
+  <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm4.6 14.1c-.2.6-1 1.1-1.7 1.2-.7.1-1.5.3-3.7-.9-1.9-1-3.4-2.6-4.4-4.5-.8-1.5-.5-2.7.4-3.6.2-.2.5-.3.7-.3h.5c.2 0 .4-.1.6.4l.8 1.9c.1.1.1.3 0 .5l-.5.6c-.2.2-.5.3-.2.7a6.7 6.7 0 0 0 3.4 3c.2.1.4.1.5-.1.1-.2.6-.7.8-1 .2-.2.4-.2.6-.1.2.1 1.4.7 1.7.8.4.1.6.2.6.2.1.1.1.6-.1 1.2z"/></svg>
+</a>
+
+<!-- Conexión a Supabase (opcional): configura url y anonKey en supabase-config.js -->
+<script src="supabase-config.js"></script>
+<!-- Datos administrables: genera este archivo desde admin.html y súbelo junto a esta página -->
+<script src="data.js"></script>
+<script>
+/* ══════════════════════════════════════════════════════════════
+   DATOS
+   ══════════════════════════════════════════════════════════════ */
+const DB = window.MHV_DATA || null;
+let WA = (DB && DB.settings && DB.settings.whatsapp) || "10000000000";
+const wa = t => `https://wa.me/${WA}?text=${encodeURIComponent(t)}`;
+const fmt = n => "$" + Math.round(+n || 0).toLocaleString("en-US");
+const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, m => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));
+const monthlyRef = p => Math.round(p * .021 / 10) * 10;
+
+const DEFAULTS = [
+  { id:1, name:"Modelo Esperanza", size:"16×76", type:"single", beds:3, baths:2, price:52900, oldPrice:0, badge:"disp",
+    location:"Lote principal", desc:"Cocina abierta, closets amplios y aire central. Lista para entrega inmediata.",
+    c:{wall:"#E8E2D4", trim:"#FFFFFF", roof:"#5B6770", door:"#8A4B32", skyA:"#BFE0F0", skyB:"#F3EEDD", time:"day"} },
+  { id:2, name:"Modelo Familiar", size:"28×56", type:"double", beds:4, baths:2, price:79900, oldPrice:86500, badge:"remod",
+    location:"Lote principal", desc:"Recién remodelada: pisos nuevos, pintura completa y baños renovados.",
+    c:{wall:"#B8C4C9", trim:"#FFFFFF", roof:"#3E4A52", door:"#20303B", skyA:"#F6C88F", skyB:"#FBE8D2", time:"dusk"} },
+  { id:3, name:"Modelo Compacta", size:"14×60", type:"single", beds:2, baths:1, price:34500, oldPrice:0, badge:"oport",
+    location:"Lote principal", desc:"Ideal para pareja o inversión en renta. Excelente estado general.",
+    c:{wall:"#DCE5D8", trim:"#FFFFFF", roof:"#55624F", door:"#3F5240", skyA:"#C7E3F2", skyB:"#EDF3E4", time:"day"} },
+  { id:4, name:"Modelo Horizonte", size:"16×80", type:"single", beds:3, baths:2, price:58900, oldPrice:0, badge:"disp",
+    location:"Lote principal", desc:"La single wide más amplia del inventario, con sala y comedor separados.",
+    c:{wall:"#E3D3C2", trim:"#FFF8EE", roof:"#6E5B49", door:"#7A3B2E", skyA:"#BFDCEB", skyB:"#F6EFE2", time:"day"} },
+  { id:5, name:"Modelo Gran Vista", size:"28×64", type:"double", beds:4, baths:3, price:94500, oldPrice:0, badge:"disp",
+    location:"Lote principal", desc:"Double wide premium: recámara principal con baño completo y walk-in closet.",
+    c:{wall:"#F0EBE1", trim:"#FFFFFF", roof:"#43505C", door:"#26374A", skyA:"#A9D2EC", skyB:"#EAF2F5", time:"day"} },
+  { id:6, name:"Modelo Inicio", size:"12×50", type:"single", beds:1, baths:1, price:24900, oldPrice:28900, badge:"oport",
+    location:"Lote principal", desc:"La puerta de entrada perfecta: precio accesible y estructura sólida.",
+    c:{wall:"#D9CDB8", trim:"#FFFFFF", roof:"#7A6A52", door:"#5C4A33", skyA:"#F3CF9E", skyB:"#F8ECD8", time:"dusk"} },
+];
+
+/* Ficha completa de las unidades de muestra */
+const DEF_EXTRA = {
+  1:{brand:"Clayton", year:2018, cond:"seminueva", sqft:1216, features:["Aire central","Electrodomésticos incluidos","Walk-in closet","Pisos nuevos"]},
+  2:{brand:"Fleetwood", year:2016, cond:"seminueva", sqft:1568, features:["Cocina remodelada","Pisos nuevos","Techo nuevo","Deck / porche incluido","Isla en la cocina"]},
+  3:{brand:"Champion", year:2015, cond:"seminueva", sqft:840, features:["Aire central","Electrodomésticos incluidos"]},
+  4:{brand:"Clayton", year:2020, cond:"seminueva", sqft:1280, features:["Aire central","Walk-in closet","Lavadora y secadora"]},
+  5:{brand:"Palm Harbor", year:2022, cond:"nueva", sqft:1792, features:["Aire central","Isla en la cocina","Tina en baño principal","Walk-in closet","Electrodomésticos incluidos"]},
+  6:{brand:"Champion", year:2012, cond:"seminueva", sqft:600, features:["Calentador de agua nuevo"]}
+};
+DEFAULTS.forEach(function(d){
+  var x = DEF_EXTRA[d.id] || {};
+  d.brand = x.brand || ""; d.year = x.year || 0; d.cond = x.cond || "seminueva";
+  d.sqft = x.sqft || 0; d.features = x.features || []; d.stock = "";
+  d.descLong = d.desc + "\n\nUnidad con inspección de 40 puntos aprobada. El precio no incluye flete e instalación: te cotizamos el traslado a tu terreno o parque sin compromiso. Agenda una visita o videollamada para conocerla.";
+});
+
+const PALETTES = DEFAULTS.map(d => d.c);
+function mapListings(raw){
+  return raw.map((l, i) => ({
+      id: l.id != null ? l.id : i + 1,
+      name: l.name || "Modelo",
+      size: l.size || "",
+      type: l.type === "double" ? "double" : "single",
+      beds: +l.beds || 1,
+      baths: +l.baths || 1,
+      price: +l.price || 0,
+      oldPrice: +l.oldPrice || 0,
+      badge: ["disp","oport","remod"].includes(l.badge) ? l.badge : "disp",
+      location: l.location || "",
+      desc: l.desc || "",
+      brand: l.brand || "",
+      year: +l.year || 0,
+      cond: l.cond === "nueva" ? "nueva" : "seminueva",
+      sqft: +l.sqft || 0,
+      stock: l.stock || "",
+      descLong: l.descLong || "",
+      features: Array.isArray(l.features) ? l.features.filter(Boolean) : [],
+      photos: Array.isArray(l.photos) ? l.photos.filter(Boolean) : [],
+      c: PALETTES[i % PALETTES.length]
+    }));
+}
+let LISTINGS = (DB && Array.isArray(DB.listings) && DB.listings.length)
+  ? mapListings(DB.listings)
+  : DEFAULTS;
+
+const BADGES = { disp:["Disponible","b-disp"], oport:["Oportunidad","b-oport"], remod:["Recién Remodelada","b-remod"] };
+
+const TESTIMONIALS = [
+  { n:"Familia Ramírez", p:"Entrega en su terreno",
+    q:"Nos ayudaron con el financiamiento y en 3 semanas ya estábamos viviendo en nuestra casa. Todo el proceso por WhatsApp, súper fácil.",
+    c:{wall:"#E8E2D4", trim:"#fff", roof:"#5B6770", door:"#8A4B32", skyA:"#BFE0F0", skyB:"#F3EEDD", time:"day"} },
+  { n:"Carlos y Ana", p:"Instalación en parque",
+    q:"La casa llegó tal como en las fotos. Ellos coordinaron el flete y la instalación con el parque. Cero estrés para nosotros.",
+    c:{wall:"#DCE5D8", trim:"#fff", roof:"#55624F", door:"#3F5240", skyA:"#F6C88F", skyB:"#FBE8D2", time:"dusk"} },
+  { n:"Doña Lupita", p:"Casa seminueva remodelada",
+    q:"Me trataron con mucha paciencia y en español. Me explicaron cada pago antes de firmar. La recomiendo con los ojos cerrados.",
+    c:{wall:"#E3D3C2", trim:"#FFF8EE", roof:"#6E5B49", door:"#7A3B2E", skyA:"#BFDCEB", skyB:"#F6EFE2", time:"day"} },
+];
+
+/* ══════════════════════════════════════════════════════════════
+   ILUSTRACIÓN SVG (fallback cuando una casa aún no tiene fotos)
+   ══════════════════════════════════════════════════════════════ */
+let gid = 0;
+function homeArt(c, wide){
+  const u = "g" + (++gid);
+  const W = 640, H = 400;
+  const hw = wide ? 470 : 360, hx = (W - hw) / 2 + 20;
+  const wallY = 190, wallH = 118, roofOv = 16;
+  const sun = c.time === "dusk";
+  const win = (x,y,w,h,sh) => `
+    <g><rect x="${x-3}" y="${y-3}" width="${w+6}" height="${h+6}" rx="3" fill="${c.trim}"/>
+    <rect x="${x}" y="${y}" width="${w}" height="${h}" rx="2" fill="url(#glass${u})"/>
+    <line x1="${x+w/2}" y1="${y}" x2="${x+w/2}" y2="${y+h}" stroke="${c.trim}" stroke-width="2.5"/>
+    ${sh?`<rect x="${x-12}" y="${y-3}" width="8" height="${h+6}" rx="2" fill="${c.roof}"/>
+    <rect x="${x+w+4}" y="${y-3}" width="8" height="${h+6}" rx="2" fill="${c.roof}"/>`:""}</g>`;
+  const wins = wide
+    ? win(hx+34,208,46,42,1)+win(hx+108,208,46,42,1)+win(hx+hw-84,208,46,42,1)+win(hx+hw-160,208,46,42,1)
+    : win(hx+30,208,46,42,1)+win(hx+100,208,46,42,1)+win(hx+hw-78,208,46,42,1);
+  const doorX = wide ? hx+hw/2-20 : hx+hw/2+10;
+  return `
+<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Casa móvil ilustrada">
+  <defs>
+    <linearGradient id="sky${u}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${c.skyA}"/><stop offset="1" stop-color="${c.skyB}"/></linearGradient>
+    <linearGradient id="grass${u}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${sun?"#B8A96B":"#9DBB7A"}"/><stop offset="1" stop-color="${sun?"#8F8352":"#7EA35F"}"/></linearGradient>
+    <linearGradient id="glass${u}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${sun?"#FFD9A0":"#DCEFF9"}"/><stop offset=".55" stop-color="${sun?"#E8A96C":"#AFD3E8"}"/><stop offset="1" stop-color="${sun?"#C97F4E":"#8FBAD6"}"/></linearGradient>
+    <linearGradient id="wall${u}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${c.wall}"/><stop offset="1" stop-color="${c.wall}" stop-opacity=".82"/></linearGradient>
+  </defs>
+  ${c.skyA === "none" ? "" : `<rect width="${W}" height="${H}" fill="url(#sky${u})"/>`}
+  ${sun?`<circle cx="530" cy="118" r="34" fill="#FFE3B0"/><circle cx="530" cy="118" r="52" fill="#FFD98F" opacity=".28"/>`
+       :`<circle cx="540" cy="72" r="26" fill="#FFF3C9"/><circle cx="540" cy="72" r="42" fill="#FFF3C9" opacity=".25"/>`}
+  <g fill="#FFFFFF" opacity="${sun?".55":".85"}"><ellipse cx="130" cy="70" rx="46" ry="13"/><ellipse cx="168" cy="60" rx="30" ry="10"/><ellipse cx="420" cy="48" rx="38" ry="11"/><ellipse cx="452" cy="40" rx="24" ry="8"/></g>
+  <path d="M0 236 q40 -26 80 0 q30 -34 70 -4 q36 -28 76 0 q40 -30 84 0 q32 -26 72 0 q40 -30 80 0 q38 -24 78 0 V270 H0 Z" fill="${sun?"#7C7A4E":"#5F7D55"}" opacity=".5"/>
+  <rect y="252" width="${W}" height="${H-252}" fill="url(#grass${u})"/>
+  <ellipse cx="${W/2}" cy="330" rx="330" ry="52" fill="rgba(0,0,0,.07)"/>
+  <path d="M${doorX-14} 316 L${doorX+52} 316 L${doorX+120} ${H} L${doorX-90} ${H} Z" fill="${sun?"#CBB894":"#D8CBB4"}" stroke="rgba(0,0,0,.08)" stroke-width="2"/>
+  <ellipse cx="${hx+hw/2}" cy="322" rx="${hw/2+34}" ry="18" fill="rgba(0,0,0,.16)"/>
+  <rect x="${hx+6}" y="${wallY+wallH}" width="${hw-12}" height="22" fill="${c.roof}" opacity=".78"/>
+  <g stroke="rgba(255,255,255,.22)" stroke-width="2">${Array.from({length:Math.floor(hw/26)},(_,i)=>`<line x1="${hx+16+i*26}" y1="${wallY+wallH}" x2="${hx+16+i*26}" y2="${wallY+wallH+22}"/>`).join("")}</g>
+  <rect x="${hx}" y="${wallY}" width="${hw}" height="${wallH}" fill="url(#wall${u})"/>
+  <g stroke="rgba(0,0,0,.06)" stroke-width="1.5">${Array.from({length:8},(_,i)=>`<line x1="${hx}" y1="${wallY+14+i*13}" x2="${hx+hw}" y2="${wallY+14+i*13}"/>`).join("")}</g>
+  <rect x="${hx-3}" y="${wallY}" width="7" height="${wallH}" fill="${c.trim}"/>
+  <rect x="${hx+hw-4}" y="${wallY}" width="7" height="${wallH}" fill="${c.trim}"/>
+  <path d="M${hx-roofOv} ${wallY} L${hx+hw*0.5} ${wallY-46} L${hx+hw+roofOv} ${wallY} Z" fill="${c.roof}"/>
+  <rect x="${hx-roofOv-4}" y="${wallY-4}" width="${hw+2*roofOv+8}" height="9" rx="3" fill="${c.trim}"/>
+  <rect x="${hx+hw-70}" y="${wallY-38}" width="10" height="22" rx="2" fill="${c.roof}" opacity=".9"/>
+  ${wins}
+  <g>
+    <rect x="${doorX-4}" y="200" width="46" height="86" rx="3" fill="${c.trim}"/>
+    <rect x="${doorX}" y="204" width="38" height="82" rx="2" fill="${c.door}"/>
+    <rect x="${doorX+6}" y="212" width="26" height="22" rx="2" fill="url(#glass${u})"/>
+    <circle cx="${doorX+31}" cy="252" r="2.6" fill="${c.trim}"/>
+    <rect x="${doorX-22}" y="286" width="86" height="9" rx="2" fill="#8B6F4E"/>
+    <rect x="${doorX-18}" y="295" width="6" height="24" fill="#6E563C"/>
+    <rect x="${doorX+54}" y="295" width="6" height="24" fill="#6E563C"/>
+    <rect x="${doorX-24}" y="300" width="90" height="8" rx="2" fill="#8B6F4E"/>
+    <rect x="${doorX-20}" y="308" width="82" height="8" rx="2" fill="#7C6244"/>
+    <rect x="${doorX-22}" y="262" width="4" height="26" fill="${c.trim}"/>
+    <rect x="${doorX+58}" y="262" width="4" height="26" fill="${c.trim}"/>
+    <rect x="${doorX-22}" y="262" width="84" height="4" rx="2" fill="${c.trim}"/>
+  </g>
+  <g fill="${sun?"#6E7C43":"#5E8A4E"}"><circle cx="${hx+18}" cy="314" r="15"/><circle cx="${hx+38}" cy="318" r="12"/><circle cx="${hx+hw-24}" cy="316" r="14"/><circle cx="${hx+hw-44}" cy="319" r="10"/></g>
+  <g><rect x="66" y="238" width="12" height="66" rx="4" fill="#7A5A3C"/><circle cx="72" cy="212" r="42" fill="${sun?"#8A8A4C":"#6E9C5C"}"/><circle cx="48" cy="228" r="28" fill="${sun?"#7C7C42":"#5F8A4E"}"/><circle cx="98" cy="230" r="26" fill="${sun?"#96955A":"#7CA968"}"/></g>
+  <g><rect x="576" y="252" width="9" height="48" rx="3" fill="#7A5A3C"/><circle cx="580" cy="236" r="30" fill="${sun?"#8A8A4C":"#6E9C5C"}" opacity=".92"/></g>
+</svg>`;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   SRP — filtros multi-select, orden, búsqueda y render
+   ══════════════════════════════════════════════════════════════ */
+const results = document.getElementById("results");
+const emptyEl = document.getElementById("empty");
+const countEl = document.getElementById("count");
+const sortSel = document.getElementById("sortSel");
+let query = "";
+const phIndex = {}; // índice de foto visible por casa
+
+function activeFilters(){
+  const f = { type:new Set(), beds:new Set(), price:new Set(), badge:new Set() };
+  document.querySelectorAll('.fg-body input:checked').forEach(i => f[i.dataset.f].add(i.value));
+  return f;
+}
+
+function matches(u, f){
+  if(f.type.size && !f.type.has(u.type)) return false;
+  if(f.beds.size){
+    let ok = false;
+    f.beds.forEach(v => { const n = +v; if(n === 3 ? u.beds >= 3 : u.beds === n) ok = true; });
+    if(!ok) return false;
+  }
+  if(f.price.size){
+    let ok = false;
+    f.price.forEach(v => { const [lo,hi] = v.split("-").map(Number); if(u.price >= lo && u.price <= hi) ok = true; });
+    if(!ok) return false;
+  }
+  if(f.badge.size && !f.badge.has(u.badge)) return false;
+  if(query){
+    const hay = `${u.name} ${u.size} ${u.beds} recamaras recámaras ${u.type === "double" ? "double doble wide" : "single sencilla wide"} ${u.desc} ${u.location}`.toLowerCase();
+    if(!query.toLowerCase().split(/\s+/).every(w => hay.includes(w))) return false;
+  }
+  return true;
+}
+
+function sortItems(items){
+  const s = sortSel.value;
+  const a = [...items];
+  if(s === "price-asc") a.sort((x,y) => x.price - y.price);
+  if(s === "price-desc") a.sort((x,y) => y.price - x.price);
+  if(s === "beds-desc") a.sort((x,y) => y.beds - x.beds);
+  return a;
+}
+
+function cardHTML(u){
+  const [label, cls] = BADGES[u.badge];
+  const sale = u.oldPrice > u.price && u.oldPrice > 0;
+  const hasPh = u.photos && u.photos.length;
+  const i = phIndex[u.id] || 0;
+  const ask = `Hola, me interesa el ${u.name} ${u.size} (${u.beds} rec / ${u.baths} baños) en ${fmt(u.price)}. ¿Sigue disponible?`;
+  return `
+  <article class="lcard rv in" data-lid="${u.id}">
+    <div class="lc-media">
+      ${hasPh
+        ? `<img src="${u.photos[i]}" alt="${esc(u.name)} ${esc(u.size)}" loading="lazy">
+           ${u.photos.length > 1 ? `
+           <button class="ph-nav ph-prev" aria-label="Foto anterior"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round"><path d="M15 6l-6 6 6 6"/></svg></button>
+           <button class="ph-nav ph-next" aria-label="Foto siguiente"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg></button>` : ""}
+           <span class="ph-count"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3.5"/></svg><span class="ph-i">${i+1}</span>/${u.photos.length}</span>`
+        : homeArt(u.c, u.type === "double")}
+      <div class="badges-col">
+        ${sale ? `<span class="bdg b-rebaja">Precio Rebajado</span>` : ""}
+        <span class="bdg ${cls}">${label}</span>
+        ${u.cond === "nueva" ? `<span class="bdg b-cond">Nueva</span>` : ""}
+      </div>
+      <button class="fav" aria-label="Guardar en favoritos"><svg viewBox="0 0 24 24" stroke-width="2"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21.2l7.8-7.8 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg></button>
+    </div>
+    <div class="lc-info">
+      <h3><button class="lc-title" data-open="1">${u.year ? u.year + " " : ""}${u.brand ? esc(u.brand) + " — " : ""}${esc(u.name)} · ${esc(u.size)} ${u.type === "double" ? "Double Wide" : "Single Wide"}</button></h3>
+      <div class="lc-loc">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        ${esc(u.location || "Disponible para entrega")} · Stock #${esc(u.stock || "MH-" + String(u.id).padStart(3,"0"))}
+      </div>
+      <div class="lc-specs">
+        <div><small>Recámaras</small><b>${u.beds}</b></div>
+        <div><small>Baños</small><b>${u.baths}</b></div>
+        <div><small>Tamaño</small><b>${esc(u.size)} ft</b></div>
+        <div><small>Tipo</small><b>${u.type === "double" ? "Double Wide" : "Single Wide"}</b></div>
+        ${u.year ? `<div><small>Año</small><b>${u.year}</b></div>` : ""}
+        ${u.sqft ? `<div><small>Pies²</small><b>${u.sqft.toLocaleString("en-US")}</b></div>` : ""}
+      </div>
+      ${u.desc ? `<p class="lc-desc">${esc(u.desc)}</p>` : ""}
+      <button class="lc-more" data-open="1">Ver ficha completa →</button>
+    </div>
+    <div class="lc-buy">
+      ${sale ? `<span class="was">Antes: <s>${fmt(u.oldPrice)}</s></span>` : ""}
+      <div class="now ${sale ? "sale" : ""}"><small>${sale ? "Precio rebajado" : "Precio"}</small><b>${fmt(u.price)}</b></div>
+      ${sale ? `<span class="save">Ahorras ${fmt(u.oldPrice - u.price)}</span>` : ""}
+      <span class="est">Est. <b>${fmt(monthlyRef(u.price))}/mes*</b></span>
+      <a class="btn btn-yellow btn-sm" href="${wa(ask)}" target="_blank" rel="noopener">Verificar Disponibilidad</a>
+      <a class="btn btn-wa btn-sm" href="${wa("Hola, quiero información del " + u.name + " " + u.size)}" target="_blank" rel="noopener">
+        <svg class="ico" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm4.6 14.1c-.2.6-1 1.1-1.7 1.2-.7.1-1.5.3-3.7-.9-1.9-1-3.4-2.6-4.4-4.5-.8-1.5-.5-2.7.4-3.6.2-.2.5-.3.7-.3h.5c.2 0 .4-.1.6.4l.8 1.9c.1.1.1.3 0 .5l-.5.6c-.2.2-.5.3-.2.7a6.7 6.7 0 0 0 3.4 3c.2.1.4.1.5-.1.1-.2.6-.7.8-1 .2-.2.4-.2.6-.1.2.1 1.4.7 1.7.8.4.1.6.2.6.2.1.1.1.6-.1 1.2z"/></svg>
+        WhatsApp
+      </a>
+    </div>
+  </article>`;
+}
+
+function apply(){
+  const f = activeFilters();
+  const items = sortItems(LISTINGS.filter(u => matches(u, f)));
+  results.innerHTML = items.map(cardHTML).join("");
+  countEl.textContent = `· ${items.length} resultado${items.length === 1 ? "" : "s"}`;
+  emptyEl.style.display = items.length ? "none" : "block";
+}
+
+/* carrusel de fotos + favoritos (delegación) */
+results.addEventListener("click", e => {
+  const fav = e.target.closest(".fav");
+  if(fav){ fav.classList.toggle("on"); return; }
+  const nav = e.target.closest(".ph-nav");
+  if(!nav){
+    const opener = e.target.closest("[data-open]") || e.target.closest(".lc-media");
+    if(opener){
+      const c = e.target.closest(".lcard");
+      if(c) openDetail(+c.dataset.lid);
+    }
+    return;
+  }
+  const card = nav.closest(".lcard");
+  const u = LISTINGS.find(x => x.id === +card.dataset.lid);
+  if(!u || !u.photos || u.photos.length < 2) return;
+  let i = phIndex[u.id] || 0;
+  i = nav.classList.contains("ph-next") ? (i + 1) % u.photos.length : (i - 1 + u.photos.length) % u.photos.length;
+  phIndex[u.id] = i;
+  card.querySelector(".lc-media img").src = u.photos[i];
+  card.querySelector(".ph-i").textContent = i + 1;
+});
+
+/* filtros: cambios instantáneos, grupos plegables, limpiar */
+document.querySelectorAll(".fg-body input").forEach(i => i.addEventListener("change", apply));
+document.querySelectorAll(".fg-head").forEach(h => h.addEventListener("click", () => h.parentElement.classList.toggle("closed")));
+document.getElementById("clearF").addEventListener("click", () => {
+  document.querySelectorAll(".fg-body input").forEach(i => i.checked = false);
+  query = ""; document.getElementById("qSearch").value = "";
+  apply();
+});
+sortSel.addEventListener("change", apply);
+
+/* buscador del header */
+function doSearch(){
+  query = document.getElementById("qSearch").value.trim();
+  apply();
+  document.getElementById("inventario").scrollIntoView({behavior:"smooth"});
+}
+document.getElementById("qBtn").addEventListener("click", doSearch);
+document.getElementById("qSearch").addEventListener("keydown", e => { if(e.key === "Enter"){ e.preventDefault(); doSearch(); } });
+
+/* drawer de filtros en móvil */
+const filtersEl = document.getElementById("filters"), fdim = document.getElementById("fdim");
+document.getElementById("filterToggle").addEventListener("click", () => { filtersEl.classList.add("open"); fdim.classList.add("show"); });
+function closeFilters(){ filtersEl.classList.remove("open"); fdim.classList.remove("show"); }
+document.getElementById("filtersClose").addEventListener("click", closeFilters);
+fdim.addEventListener("click", closeFilters);
+
+/* ══════════════════════════════════════════════════════════════
+   ESTIMADOR DE PAGO
+   ══════════════════════════════════════════════════════════════ */
+const rPrice = document.getElementById("rPrice"), rDown = document.getElementById("rDown");
+const outPrice = document.getElementById("outPrice"), outDown = document.getElementById("outDown"), outMo = document.getElementById("outMo");
+const calcWaBtn = document.getElementById("calcWa");
+let years = 15;
+const RATE = 0.095;
+function calc(){
+  const price = +rPrice.value, downPct = +rDown.value;
+  const down = price * downPct / 100, principal = price - down;
+  const r = RATE / 12, n = years * 12;
+  const mo = principal * r / (1 - Math.pow(1 + r, -n));
+  outPrice.textContent = fmt(price);
+  outDown.textContent = `${downPct}% · ${fmt(down)}`;
+  outMo.textContent = fmt(mo) + "/mes";
+  calcWaBtn.href = wa(`Hola, hice una simulación en la página: casa de ${fmt(price)}, enganche de ${fmt(down)} (${downPct}%), a ${years} años ≈ ${fmt(mo)}/mes. ¿Me ayudan a armar el plan real?`);
+}
+rPrice.addEventListener("input", calc);
+rDown.addEventListener("input", calc);
+document.getElementById("terms").addEventListener("click", e => {
+  const btn = e.target.closest("button[data-y]"); if(!btn) return;
+  document.querySelectorAll("#terms button").forEach(b => b.classList.remove("on"));
+  btn.classList.add("on"); years = +btn.dataset.y; calc();
+});
+calc();
+
+/* ══════════════════════════════════════════════════════════════
+   TESTIMONIOS + HERO + FORM + NAV + AJUSTES + REVEAL
+   ══════════════════════════════════════════════════════════════ */
+document.getElementById("testiGrid").innerHTML = TESTIMONIALS.map(t => `
+  <article class="testi rv">
+    <div class="testi-photo">${homeArt(t.c, true)}<span class="del">✓ Casa entregada</span></div>
+    <div class="testi-body">
+      <div class="stars" aria-label="5 de 5 estrellas">★★★★★</div>
+      <p>“${t.q}”</p>
+      <div class="testi-meta">
+        <span class="av">${t.n.split(" ").map(w => w[0]).slice(0,2).join("")}</span>
+        <span><b>${t.n}</b><small>${t.p}</small></span>
+      </div>
+    </div>
+  </article>`).join("");
+
+document.getElementById("heroRender").innerHTML =
+  homeArt({wall:"#EDE6D8", trim:"#FFFFFF", roof:"#43505C", door:"#8A4B32", skyA:"none", skyB:"none", time:"day"}, true);
+
+const leadForm = document.getElementById("leadForm");
+document.getElementById("leadBtn").addEventListener("click", () => {
+  if(!leadForm.checkValidity()){ leadForm.reportValidity(); return; }
+  /* Compatible con Safari antiguo (sin Object.fromEntries) */
+  const d = {};
+  new FormData(leadForm).forEach((v, k) => { d[k] = v; });
+  const text = `Hola, quiero asesoría gratuita 🙌
+• Nombre: ${d.name}
+• Teléfono: ${d.phone}
+• Terreno: ${d.land}
+• Presupuesto: ${d.budget}${d.msg ? "\n• Mensaje: " + d.msg : ""}`;
+  document.getElementById("successWa").href = wa(text);
+  leadForm.style.display = "none";
+  document.getElementById("fsuccess").style.display = "block";
+});
+
+const burger = document.getElementById("burger"), mnav = document.getElementById("mnav");
+burger.addEventListener("click", () => {
+  const open = mnav.classList.toggle("open");
+  burger.setAttribute("aria-expanded", open);
+});
+mnav.querySelectorAll("a").forEach(a => a.addEventListener("click", () => {
+  mnav.classList.remove("open"); burger.setAttribute("aria-expanded", "false");
+}));
+
+/* ══════════════════════════════════════════════════════════════
+   FICHA DE DETALLES
+   ══════════════════════════════════════════════════════════════ */
+const dm = document.getElementById("dm");
+let dmUnit = null;
+
+function openDetail(id){
+  const u = LISTINGS.find(function(x){ return x.id === id; });
+  if(!u) return;
+  dmUnit = u;
+  const sale = u.oldPrice > u.price && u.oldPrice > 0;
+  const typeTxt = u.type === "double" ? "Double Wide" : "Single Wide";
+  const title = (u.year ? u.year + " " : "") + (u.brand ? u.brand + " — " : "") + u.name + " · " + u.size;
+  document.getElementById("dmTitle").textContent = title;
+
+  const hasPh = u.photos && u.photos.length;
+  document.getElementById("dmMain").innerHTML = hasPh
+    ? '<img id="dmImg" src="' + u.photos[0] + '" alt="' + esc(u.name) + '">'
+    : homeArt(u.c, u.type === "double");
+  document.getElementById("dmThumbs").innerHTML = hasPh && u.photos.length > 1
+    ? u.photos.map(function(ph, i){
+        return '<img src="' + ph + '" class="' + (i === 0 ? "on" : "") + '" data-i="' + i + '" alt="Foto ' + (i + 1) + '">';
+      }).join("")
+    : "";
+
+  const feats = (u.features && u.features.length)
+    ? '<div class="dm-feats-title">Características</div><div class="dm-chips">' +
+      u.features.map(function(f){ return '<span class="chip hl">✓ ' + esc(f) + '</span>'; }).join("") + '</div>'
+    : "";
+
+  const ask = "Hola, me interesa el " + title + " en " + fmt(u.price) + ". ¿Sigue disponible?";
+  document.getElementById("dmInfo").innerHTML =
+    '<div class="dm-chips">' +
+      '<span class="chip">' + (u.cond === "nueva" ? "Nueva" : "Seminueva") + '</span>' +
+      '<span class="chip">' + typeTxt + '</span>' +
+      '<span class="chip">Stock #' + esc(u.stock || "MH-" + String(u.id).padStart(3, "0")) + '</span>' +
+    '</div>' +
+    '<div class="dm-price">' +
+      (sale ? '<s>' + fmt(u.oldPrice) + '</s>' : '') +
+      '<b class="' + (sale ? "sale" : "") + '">' + fmt(u.price) + '</b>' +
+      (sale ? '<span class="save">Ahorras ' + fmt(u.oldPrice - u.price) + '</span>' : '') +
+    '</div>' +
+    '<p class="dm-est">Pago estimado: <b>' + fmt(monthlyRef(u.price)) + '/mes*</b> · sujeto a aprobación</p>' +
+    '<div class="dm-specs">' +
+      '<span>Recámaras: <b>' + u.beds + '</b></span>' +
+      '<span>Baños: <b>' + u.baths + '</b></span>' +
+      '<span>Tamaño: <b>' + esc(u.size) + ' ft</b></span>' +
+      (u.sqft ? '<span>Superficie: <b>' + u.sqft.toLocaleString("en-US") + ' ft²</b></span>' : '') +
+      (u.year ? '<span>Año: <b>' + u.year + '</b></span>' : '') +
+      (u.brand ? '<span>Marca: <b>' + esc(u.brand) + '</b></span>' : '') +
+      (u.location ? '<span>Ubicación: <b>' + esc(u.location) + '</b></span>' : '') +
+    '</div>' +
+    feats +
+    (u.descLong || u.desc ? '<p class="dm-desc">' + esc(u.descLong || u.desc) + '</p>' : '') +
+    '<div class="dm-cta">' +
+      '<a class="btn btn-yellow" target="_blank" rel="noopener" href="' + wa(ask) + '">Verificar Disponibilidad</a>' +
+      '<a class="btn btn-wa" target="_blank" rel="noopener" href="' + wa("Hola, quiero agendar una visita o videollamada para el " + title) + '">Agendar visita por WhatsApp</a>' +
+    '</div>';
+  dm.classList.add("open");
+  document.body.style.overflow = "hidden";
+}
+function closeDetail(){ dm.classList.remove("open"); document.body.style.overflow = ""; }
+document.getElementById("dmX").addEventListener("click", closeDetail);
+dm.addEventListener("click", function(e){ if(e.target === dm) closeDetail(); });
+document.addEventListener("keydown", function(e){ if(e.key === "Escape") closeDetail(); });
+document.getElementById("dmThumbs").addEventListener("click", function(e){
+  const t = e.target.closest("img[data-i]"); if(!t || !dmUnit) return;
+  document.getElementById("dmImg").src = dmUnit.photos[+t.dataset.i];
+  document.querySelectorAll("#dmThumbs img").forEach(function(x){ x.classList.remove("on"); });
+  t.classList.add("on");
+});
+
+/* Ajustes del negocio (desde data.js o Supabase) */
+function applySettings(s){
+  if(!s) return;
+  if(s.whatsapp){
+    const num = String(s.whatsapp).replace(/\D/g, "");
+    if(num){
+      WA = num;
+      document.querySelectorAll('a[href*="wa.me/"]').forEach(a =>
+        a.href = a.href.replace(/wa\.me\/\d+/, "wa.me/" + num));
+    }
+  }
+  if(s.phone) document.querySelectorAll(".js-phone").forEach(el => el.textContent = s.phone);
+  if(s.instagram){
+    const h = String(s.instagram).replace("@","").trim();
+    if(h) document.querySelectorAll('a[href*="instagram.com"]').forEach(a => a.href = "https://instagram.com/" + h);
+  }
+}
+if(DB) applySettings(DB.settings);
+
+const io = new IntersectionObserver(es => es.forEach(en => {
+  if(en.isIntersecting){ en.target.classList.add("in"); io.unobserve(en.target); }
+}), {threshold:.08});
+document.querySelectorAll(".rv").forEach(el => io.observe(el));
+
+apply();
+
+/* ══════════════════════════════════════════════════════════════
+   SUPABASE — carga el inventario desde la nube si está configurado
+   (supabase-config.js). Si falla o está vacío, la página se queda
+   con data.js o con las unidades de muestra: nunca se rompe.
+   ══════════════════════════════════════════════════════════════ */
+(function(){
+  var cfg = window.MHV_SUPABASE;
+  if(!cfg || !cfg.url || !cfg.anonKey || typeof fetch !== "function") return;
+  var base = String(cfg.url).replace(/\/+$/, "");
+  fetch(base + "/rest/v1/site_data?id=eq.1&select=data", {
+    headers: { apikey: cfg.anonKey, Authorization: "Bearer " + cfg.anonKey }
+  })
+  .then(function(r){ if(!r.ok) throw new Error("HTTP " + r.status); return r.json(); })
+  .then(function(rows){
+    var d = rows && rows[0] && rows[0].data;
+    if(!d) return;
+    applySettings(d.settings);
+    if(Array.isArray(d.listings) && d.listings.length){
+      LISTINGS = mapListings(d.listings);
+      apply();
+    }
+    calc();
+  })
+  .catch(function(e){ /* sin conexión a Supabase: la página sigue con data.js / muestras */ });
+})();
+</script>
+</body>
+</html>

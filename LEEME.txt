@@ -1,0 +1,80 @@
+════════════════════════════════════════════════
+ MOBILE HOME VENTAS — Cómo poner en línea tu sitio
+════════════════════════════════════════════════
+
+ARCHIVOS:
+• index.html          → tu página pública (la que ven los clientes)
+• admin.html          → tu panel para subir casas, fotos e información
+• supabase-config.js  → conexión a tu base de datos Supabase (pega ahí tu URL y clave)
+• supabase-setup.sql  → script que prepara la base de datos (se corre UNA vez)
+• data.js             → modo antiguo sin base de datos (opcional, ya no es necesario)
+
+⚠️ IMPORTANTE (iPhone):
+Los archivos HTML NO funcionan al abrirlos directo en el iPhone.
+Necesitan estar en internet y abrirse desde Safari con una dirección web.
+
+────────────────────────────────────────────────
+PASO 1 · Publicar la página en VERCEL (una vez)
+────────────────────────────────────────────────
+1. Entra a vercel.com y haz login con tu cuenta de GitHub.
+2. Botón "Add New…" → "Project".
+3. Importa el repositorio  benjamincuevas/mobile-home-ventas.
+4. No cambies nada (Framework: "Other", sin build) → botón "Deploy".
+5. En 1 minuto tendrás tu página en una dirección tipo:
+   mobile-home-ventas.vercel.app
+
+CONECTAR TU DOMINIO COMPRADO EN VERCEL:
+1. En Vercel abre tu proyecto → "Settings" → "Domains".
+2. Botón "Add" → escribe tu dominio (ej. tudominio.com) → "Add".
+3. Como el dominio lo compraste en Vercel, se conecta solo,
+   sin configurar nada más. En unos minutos tu página abre
+   con tu dominio propio.
+   Tu página:  https://tudominio.com
+   Tu panel:   https://tudominio.com/admin.html
+
+Cada vez que se suba un cambio al repositorio de GitHub,
+Vercel actualiza la página automáticamente.
+
+────────────────────────────────────────────────
+PASO 2 · Conectar la base de datos SUPABASE (una vez)
+────────────────────────────────────────────────
+1. Entra a supabase.com → crea una cuenta gratis → "New project".
+   Ponle nombre y una contraseña de base de datos (guárdala).
+2. Cuando el proyecto cargue, ve al menú "SQL Editor" →
+   "New query" → pega TODO el contenido del archivo
+   supabase-setup.sql → botón "Run".
+   (Eso crea la tabla del inventario y el espacio para fotos.)
+3. Menú "Authentication" → "Users" → "Add user":
+   escribe TU correo y una contraseña, y marca "Auto Confirm User".
+   Con ese correo y contraseña entrarás al panel admin.
+4. Menú "Settings" (engrane) → "API":
+   copia la "Project URL" y la clave "anon public".
+5. Abre el archivo supabase-config.js del repositorio en GitHub
+   (github.com → tu repositorio → supabase-config.js → lápiz ✏️),
+   pega la URL y la clave entre las comillas, y guarda con
+   "Commit changes". Vercel actualiza la página sola.
+
+────────────────────────────────────────────────
+CÓMO SE USA YA CONECTADO (el día a día)
+────────────────────────────────────────────────
+1. Abre  tudominio.com/admin.html  en Safari.
+2. Entra con tu correo y contraseña (los de Supabase).
+3. Agrega o edita casas y fotos.
+4. Presiona  "☁️ Publicar en la página".
+5. ¡Listo! La página pública se actualiza al instante.
+   Ya NO hay que descargar ni subir data.js.
+
+────────────────────────────────────────────────
+SI AÚN NO CONECTAS SUPABASE (modo antiguo)
+────────────────────────────────────────────────
+Mientras supabase-config.js esté vacío, todo funciona como antes:
+Panel (código 2468) → "🚀 Descargar data.js" → subir data.js
+al hosting junto a la página.
+
+CONSEJOS DE SEGURIDAD:
+• Con Supabase, el panel pide correo y contraseña de verdad:
+  no compartas esa contraseña.
+• La clave "anon public" SÍ puede ir en la página (es pública
+  por diseño); la que NUNCA debes poner es la "service_role".
+• Si quieres, renombra admin.html a algo difícil de adivinar
+  (ej. panel-mh2026.html).
