@@ -39,6 +39,7 @@
   --cond:'Roboto Condensed',sans-serif;
 }
 *{margin:0;padding:0;box-sizing:border-box}
+[hidden]{display:none !important}
 html{scroll-behavior:smooth}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation:none!important;transition:none!important}}
 body{font-family:var(--body);background:var(--bg);color:var(--ink);line-height:1.55;-webkit-font-smoothing:antialiased}
@@ -397,7 +398,7 @@ input[type=range]::-moz-range-thumb{width:21px;height:21px;border-radius:50%;bac
 <!-- ═══ TOPBAR ═══ -->
 <div class="topbar">
   <div class="wrap">
-    <span>📞 <a href="tel:+10000000000"><b class="js-phone">(000) 000-0000</b></a> · Respuesta el mismo día</span>
+    <span class="js-phone-wrap" hidden>📞 <a href="tel:0"><b class="js-phone"></b></a> · Respuesta el mismo día</span>
     <span class="r2">Lun–Sáb 9am–7pm · 🇲🇽 Atendemos en español</span>
   </div>
 </div>
@@ -745,7 +746,7 @@ input[type=range]::-moz-range-thumb{width:21px;height:21px;border-radius:50%;bac
       <h4>Contacto directo</h4>
       <ul>
         <li><a href="https://instagram.com/mobilehomeventas" target="_blank" rel="noopener">📸 Instagram: @mobilehomeventas</a></li>
-        <li><a href="tel:+10000000000">📞 <span class="js-phone">(000) 000-0000</span></a></li>
+        <li class="js-phone-wrap" hidden><a href="tel:0">📞 <span class="js-phone"></span></a></li>
         <li><a href="mailto:ventas@mobilehomeventas.com">✉️ ventas@mobilehomeventas.com</a></li>
         <li><a href="#contacto">📍 Visitas con cita previa</a></li>
       </ul>
@@ -1243,7 +1244,14 @@ document.getElementById("dmThumbs").addEventListener("click", function(e){
 /* Ajustes del negocio (desde data.js o Supabase) */
 function applySettings(s){
   if(!s) return;
-  if(s.phone) document.querySelectorAll(".js-phone").forEach(el => el.textContent = s.phone);
+  /* El teléfono solo se muestra si está configurado en el panel;
+     sin teléfono, sus bloques quedan ocultos (nada de 000-0000). */
+  if(s.phone){
+    const digits = String(s.phone).replace(/\D/g, "");
+    document.querySelectorAll(".js-phone").forEach(el => el.textContent = s.phone);
+    document.querySelectorAll(".js-phone-wrap").forEach(el => { el.hidden = false; });
+    if(digits) document.querySelectorAll('a[href^="tel:"]').forEach(a => a.href = "tel:" + digits);
+  }
   if(s.instagram){
     const h = String(s.instagram).replace("@","").trim();
     if(h){
