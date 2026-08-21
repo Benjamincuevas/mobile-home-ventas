@@ -190,6 +190,7 @@ main{padding:44px 0 90px}
       <button class="btn" id="btnBackup">💾 Respaldo JSON</button>
       <button class="btn pub" id="btnPublish">🚀 Descargar data.js para publicar</button>
       <button class="btn pub" id="btnCloudSave" hidden>☁️ Publicar en la página</button>
+      <button class="btn" id="btnLogout" hidden>🚪 Salir</button>
       <input type="file" id="fileImport" accept=".js,.json" hidden>
     </div>
   </div>
@@ -719,6 +720,27 @@ renderUnits();
 /* ══════════════════════════════════════════════
    SUPABASE — sesión, carga y publicación en la nube
    ══════════════════════════════════════════════ */
+/* Sesión recordada en este navegador (solo los tokens, nunca la
+   contraseña). Con try/catch: en modo privado de Safari localStorage
+   puede fallar y el panel debe seguir funcionando pidiendo login. */
+function loadStoredSession(){
+  try{
+    var raw = localStorage.getItem("MHV_SB_SESSION");
+    return raw ? JSON.parse(raw) : null;
+  }catch(e){ return null; }
+}
+function storeSession(){
+  try{
+    localStorage.setItem("MHV_SB_SESSION", JSON.stringify({
+      access_token: sbSession.access_token,
+      refresh_token: sbSession.refresh_token
+    }));
+  }catch(e){}
+}
+function clearStoredSession(){
+  try{ localStorage.removeItem("MHV_SB_SESSION"); }catch(e){}
+}
+
 function cloudLogin(){
   var email = $("gEmail").value.trim(), pass = $("gPass").value;
   if(!email || !pass){ $("gateCloudErr").style.display = "block"; return; }
@@ -733,6 +755,7 @@ function cloudLogin(){
   .then(function(j){
     if(!j || !j.access_token) throw j;
     sbSession = j;
+    storeSession();
     $("gate").style.display = "none";
     loadFromCloud();
   })
@@ -775,6 +798,7 @@ function refreshCloudSession(){
   .then(function(j){
     if(!j || !j.access_token) throw new Error("refresh falló");
     sbSession = j;
+    storeSession();   // Supabase rota el refresh token: guardar siempre el nuevo
   });
 }
 
@@ -847,7 +871,10 @@ function cloudSave(){
   if(!s.listings.length && !confirm("Aún no has agregado casas. ¿Publicar la página vacía?")) return;
   var btn = $("btnCloudSave");
   btn.disabled = true; btn.textContent = "☁️ Publicando…";
-  uploadAllPhotos(s)
+  /* Renovar el token antes de subir (puede haber caducado tras una
+     sesión larga); si la renovación falla se intenta con el actual. */
+  refreshCloudSession().catch(function(){ return null; })
+    .then(function(){ return uploadAllPhotos(s); })
     .then(function(){ return upsertSiteData(s); })
     .then(function(r){
       if(r.status === 401){
@@ -884,7 +911,31 @@ if(SB){
     $(id).addEventListener("keydown", function(e){ if(e.key === "Enter"){ e.preventDefault(); cloudLogin(); } });
   });
   $("btnCloudSave").addEventListener("click", cloudSave);
-  setTimeout(function(){ $("gEmail").focus(); }, 50);
+  $("btnLogout").hidden = false;
+  $("btnLogout").addEventListener("click", function(){
+    if(dirty && !confirm("Tienes cambios sin publicar. ¿Salir de todos modos?")) return;
+    clearStoredSession();
+    sbSession = null;
+    dirty = false;
+    location.reload();
+  });
+
+  /* Sesión recordada: entrar directo renovando el token; si ya no
+     sirve (caducó o se cerró sesión), se muestra el login normal. */
+  var stored = loadStoredSession();
+  if(stored && stored.refresh_token){
+    sbSession = stored;
+    refreshCloudSession().then(function(){
+      $("gate").style.display = "none";
+      loadFromCloud();
+    }).catch(function(){
+      sbSession = null;
+      clearStoredSession();
+      setTimeout(function(){ $("gEmail").focus(); }, 50);
+    });
+  } else {
+    setTimeout(function(){ $("gEmail").focus(); }, 50);
+  }
 }
 </script>
 </body>
