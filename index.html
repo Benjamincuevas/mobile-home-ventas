@@ -285,8 +285,9 @@ input[type=range]::-moz-range-thumb{width:21px;height:21px;border-radius:50%;bac
 .testi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
 @media(max-width:960px){.testi-grid{grid-template-columns:1fr;max-width:540px}}
 .testi{background:#fff;border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--sh);overflow:hidden;display:flex;flex-direction:column}
-.testi-photo{aspect-ratio:16/9;position:relative}
+.testi-photo{aspect-ratio:16/9;position:relative;background:#E8EDF2;overflow:hidden}
 .testi-photo svg{width:100%;height:100%}
+.testi-photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .testi-photo .del{position:absolute;bottom:8px;left:8px;background:rgba(2,36,64,.85);color:#fff;font-size:.64rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;padding:.28rem .65rem;border-radius:5px}
 .testi-body{padding:1.1rem 1.2rem 1.25rem}
 .stars{color:var(--yellow-2);font-size:.9rem;letter-spacing:.1em;margin-bottom:.45rem}
@@ -1127,18 +1128,39 @@ calc();
 /* ══════════════════════════════════════════════════════════════
    TESTIMONIOS + HERO + FORM + NAV + AJUSTES + REVEAL
    ══════════════════════════════════════════════════════════════ */
-document.getElementById("testiGrid").innerHTML = TESTIMONIALS.map(t => `
-  <article class="testi rv">
-    <div class="testi-photo">${homeArt(t.c, true)}<span class="del">✓ Casa entregada</span></div>
+/* Testimonios: administrables desde el panel (con foto opcional);
+   sin datos propios se muestran los 3 de muestra ilustrados. */
+function mapTestis(raw){
+  return raw.map(function(t, i){
+    return {
+      id: t.id != null ? t.id : i + 1,
+      n: t.n || "Cliente",
+      p: t.p || "",
+      q: t.q || "",
+      photo: t.photo || ""
+    };
+  });
+}
+function renderTestimonials(list){
+  const P = TESTIMONIALS.map(t => t.c);
+  document.getElementById("testiGrid").innerHTML = list.map((t, i) => `
+  <article class="testi rv in">
+    <div class="testi-photo">${t.photo
+      ? `<img src="${esc(t.photo)}" alt="Casa entregada a ${esc(t.n)}" loading="lazy">`
+      : homeArt(t.c || P[i % P.length], true)}<span class="del">✓ Casa entregada</span></div>
     <div class="testi-body">
       <div class="stars" aria-label="5 de 5 estrellas">★★★★★</div>
-      <p>“${t.q}”</p>
+      <p>“${esc(t.q)}”</p>
       <div class="testi-meta">
-        <span class="av">${t.n.split(" ").map(w => w[0]).slice(0,2).join("")}</span>
-        <span><b>${t.n}</b><small>${t.p}</small></span>
+        <span class="av">${esc(String(t.n || "C").trim().split(/\s+/).map(w => w[0]).slice(0,2).join("").toUpperCase())}</span>
+        <span><b>${esc(t.n)}</b><small>${esc(t.p || "")}</small></span>
       </div>
     </div>
   </article>`).join("");
+}
+renderTestimonials((DB && Array.isArray(DB.testimonials) && DB.testimonials.length)
+  ? mapTestis(DB.testimonials)
+  : TESTIMONIALS);
 
 document.getElementById("heroRender").innerHTML =
   homeArt({wall:"#EDE6D8", trim:"#FFFFFF", roof:"#43505C", door:"#8A4B32", skyA:"none", skyB:"none", time:"day"}, true);
@@ -1290,6 +1312,9 @@ apply();
     if(Array.isArray(d.listings) && d.listings.length){
       LISTINGS = mapListings(d.listings);
       apply();
+    }
+    if(Array.isArray(d.testimonials) && d.testimonials.length){
+      renderTestimonials(mapTestis(d.testimonials));
     }
     calc();
   })

@@ -239,6 +239,17 @@ main{padding:44px 0 90px}
     <div class="units" id="units"></div>
   </section>
 
+  <!-- ═══════════ TESTIMONIOS ═══════════ -->
+  <section class="panel">
+    <div class="panel-head">
+      <div>
+        <h2>Testimonios <span id="testiCount" style="font-family:var(--body);font-size:.85rem;color:var(--muted)"></span></h2>
+        <p>Reseñas de clientes que se muestran en la página. La foto de la casa entregada es opcional (sin foto se usa una ilustración).</p>
+      </div>
+    </div>
+    <div class="units" id="testis"></div>
+  </section>
+
 </main>
 
 <!-- ═══════════ EDITOR ═══════════ -->
@@ -353,6 +364,43 @@ main{padding:44px 0 90px}
   </div>
 </div>
 
+<!-- ═══════════ EDITOR DE TESTIMONIO ═══════════ -->
+<div class="overlay" id="tOverlay">
+  <div class="editor" role="dialog" aria-modal="true" aria-labelledby="tTitle" style="width:min(560px,100%)">
+    <div class="editor-head">
+      <h2 id="tTitle">Nuevo testimonio</h2>
+      <button class="x" id="tClose" aria-label="Cerrar">✕</button>
+    </div>
+    <div>
+      <div class="fld" style="margin-bottom:1rem">
+        <label for="tName">Nombre del cliente</label>
+        <input type="text" id="tName" placeholder="Ej. Familia Ramírez">
+      </div>
+      <div class="fld" style="margin-bottom:1rem">
+        <label for="tRole">Detalle corto <em>(opcional)</em></label>
+        <input type="text" id="tRole" placeholder="Ej. Entrega en su terreno">
+      </div>
+      <div class="fld" style="margin-bottom:1rem">
+        <label for="tQuote">Reseña</label>
+        <textarea id="tQuote" style="min-height:110px" placeholder="Ej. Nos ayudaron con el financiamiento y en 3 semanas ya estábamos en nuestra casa…"></textarea>
+      </div>
+      <div class="fld">
+        <label>Foto de la casa entregada <em>(opcional · se comprime sola)</em></label>
+        <div class="drop" id="tDrop" tabindex="0" role="button" aria-label="Subir foto del testimonio">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M17 8l-5-5-5 5"/><path d="M12 3v12"/></svg>
+          <b>Arrastra la foto aquí</b> o haz clic para elegirla
+        </div>
+        <input type="file" id="tFile" accept="image/*" hidden>
+        <div class="photo-grid" id="tPhotoGrid"></div>
+      </div>
+      <div class="editor-foot">
+        <button type="button" class="btn btn-line" id="tCancel">Cancelar</button>
+        <button type="button" class="btn btn-amber" id="tSave">Guardar testimonio</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script src="supabase-config.js"></script>
@@ -377,7 +425,8 @@ let sbSession = null;   // tokens de la sesión iniciada (solo en memoria)
    ══════════════════════════════════════════════ */
 let state = {
   settings: { whatsapp:"", phone:"", instagram:"" },
-  listings: []
+  listings: [],
+  testimonials: []
 };
 let editingId = null;      // id de la casa en edición (null = nueva)
 let draftPhotos = [];      // fotos del editor
@@ -425,6 +474,16 @@ const SAMPLE_UNITS = [
     desc:"La puerta de entrada perfecta: precio accesible y estructura sólida.",
     descLong:"La puerta de entrada perfecta: precio accesible y estructura sólida." + SAMPLE_NOTE,
     features:["Calentador de agua nuevo"], photos:[] }
+];
+
+/* Los 3 testimonios de muestra que enseña la página pública. */
+const SAMPLE_TESTIS = [
+  { id:1, n:"Familia Ramírez", p:"Entrega en su terreno",
+    q:"Nos ayudaron con el financiamiento y en 3 semanas ya estábamos viviendo en nuestra casa. Todo el proceso en línea, súper fácil.", photo:"" },
+  { id:2, n:"Carlos y Ana", p:"Instalación en parque",
+    q:"La casa llegó tal como en las fotos. Ellos coordinaron el flete y la instalación con el parque. Cero estrés para nosotros.", photo:"" },
+  { id:3, n:"Doña Lupita", p:"Casa seminueva remodelada",
+    q:"Me trataron con mucha paciencia y en español. Me explicaron cada pago antes de firmar. La recomiendo con los ojos cerrados.", photo:"" }
 ];
 $("featGrid").innerHTML = COMMON_FEATS.map(function(f, i){
   return '<label class="feat"><input type="checkbox" value="' + esc(f) + '" data-feat="1">' + esc(f) + '</label>';
@@ -535,7 +594,7 @@ function closeEditor(){ $("overlay").classList.remove("open"); }
 $("edClose").addEventListener("click", closeEditor);
 $("edCancel").addEventListener("click", closeEditor);
 $("overlay").addEventListener("click", e => { if(e.target === $("overlay")) closeEditor(); });
-document.addEventListener("keydown", e => { if(e.key === "Escape") closeEditor(); });
+document.addEventListener("keydown", e => { if(e.key === "Escape"){ closeEditor(); closeTesti(); } });
 
 $("edSave").addEventListener("click", () => {
   const data = {
@@ -634,6 +693,116 @@ function compress(file){
 }
 
 /* ══════════════════════════════════════════════
+   TESTIMONIOS — lista y editor
+   ══════════════════════════════════════════════ */
+let editingTestiId = null;
+let tDraftPhoto = "";
+
+function renderTestis(){
+  const grid = $("testis");
+  grid.innerHTML = state.testimonials.map(t => `
+    <article class="unit">
+      <div class="unit-media">
+        ${t.photo
+          ? `<img src="${esc(t.photo)}" alt="${esc(t.n)}">`
+          : `<span class="nph">💬<br>Sin foto (se usa ilustración)</span>`}
+      </div>
+      <div class="unit-body">
+        <h3>${esc(t.n)}</h3>
+        <div class="meta">${esc(t.p || "")}</div>
+        <div class="meta" style="font-weight:400">“${esc(t.q.length > 90 ? t.q.slice(0, 90) + "…" : t.q)}”</div>
+        <div class="unit-acts">
+          <button class="btn btn-line btn-sm" data-tact="edit" data-id="${t.id}">✏️ Editar</button>
+          <button class="btn btn-danger btn-sm" data-tact="del" data-id="${t.id}">🗑</button>
+        </div>
+      </div>
+    </article>`).join("") + `
+    <button class="add-unit" id="addTesti" type="button" style="min-height:220px">
+      <span><span class="plus">+</span>Agregar testimonio</span>
+    </button>`;
+  $("testiCount").textContent = `· ${state.testimonials.length}`;
+  $("addTesti").addEventListener("click", () => openTesti(null));
+}
+
+$("testis").addEventListener("click", e => {
+  const btn = e.target.closest("button[data-tact]"); if(!btn) return;
+  const id = +btn.dataset.id;
+  if(btn.dataset.tact === "edit") openTesti(id);
+  if(btn.dataset.tact === "del"){
+    const t = state.testimonials.find(x => x.id === id);
+    if(t && confirm(`¿Eliminar el testimonio de "${t.n}"?`)){
+      state.testimonials = state.testimonials.filter(x => x.id !== id);
+      renderTestis(); markDirty(); toast("Testimonio eliminado");
+    }
+  }
+});
+
+function renderTestiPhoto(){
+  $("tPhotoGrid").innerHTML = tDraftPhoto ? `
+    <div class="ph main">
+      <img src="${esc(tDraftPhoto)}" alt="Foto del testimonio">
+      <button type="button" class="del" data-tdel="1" aria-label="Quitar foto">✕</button>
+    </div>` : "";
+}
+$("tPhotoGrid").addEventListener("click", e => {
+  if(e.target.closest("[data-tdel]")){ tDraftPhoto = ""; renderTestiPhoto(); }
+});
+
+function openTesti(id){
+  editingTestiId = id;
+  const t = id != null ? state.testimonials.find(x => x.id === id) : null;
+  $("tTitle").textContent = t ? "Editar testimonio" : "Nuevo testimonio";
+  $("tName").value = (t && t.n) || "";
+  $("tRole").value = (t && t.p) || "";
+  $("tQuote").value = (t && t.q) || "";
+  tDraftPhoto = (t && t.photo) || "";
+  renderTestiPhoto();
+  $("tOverlay").classList.add("open");
+  $("tName").focus();
+}
+function closeTesti(){ $("tOverlay").classList.remove("open"); }
+$("tClose").addEventListener("click", closeTesti);
+$("tCancel").addEventListener("click", closeTesti);
+$("tOverlay").addEventListener("click", e => { if(e.target === $("tOverlay")) closeTesti(); });
+
+$("tSave").addEventListener("click", () => {
+  const data = {
+    n: $("tName").value.trim(),
+    p: $("tRole").value.trim(),
+    q: $("tQuote").value.trim(),
+    photo: tDraftPhoto
+  };
+  if(!data.n || !data.q){ toast("Completa el nombre y la reseña"); return; }
+  if(editingTestiId != null){
+    const i = state.testimonials.findIndex(x => x.id === editingTestiId);
+    state.testimonials[i] = { ...state.testimonials[i], ...data };
+    toast("Testimonio actualizado ✔");
+  } else {
+    const id = state.testimonials.length ? Math.max(...state.testimonials.map(x => x.id)) + 1 : 1;
+    state.testimonials.push({ id, ...data });
+    toast("Testimonio agregado ✔");
+  }
+  renderTestis(); markDirty(); closeTesti();
+});
+
+const tDrop = $("tDrop"), tFile = $("tFile");
+tDrop.addEventListener("click", () => tFile.click());
+tDrop.addEventListener("keydown", e => { if(e.key === "Enter" || e.key === " "){ e.preventDefault(); tFile.click(); } });
+["dragover","dragenter"].forEach(ev => tDrop.addEventListener(ev, e => { e.preventDefault(); tDrop.classList.add("over"); }));
+["dragleave","drop"].forEach(ev => tDrop.addEventListener(ev, e => { e.preventDefault(); tDrop.classList.remove("over"); }));
+tDrop.addEventListener("drop", e => addTestiFile(e.dataTransfer.files));
+tFile.addEventListener("change", () => { addTestiFile(tFile.files); tFile.value = ""; });
+async function addTestiFile(files){
+  const img = [...files].filter(f => f.type.startsWith("image/"))[0];
+  if(!img) return;
+  try{
+    tDraftPhoto = await compress(img);
+    renderTestiPhoto();
+    toast("Foto lista ✔");
+  } catch(e){ toast("No se pudo leer la foto"); }
+}
+
+/* ══════════════════════════════════════════════
    PUBLICAR / RESPALDO / IMPORTAR
    ══════════════════════════════════════════════ */
 function snapshot(){
@@ -667,6 +836,10 @@ $("btnBackup").addEventListener("click", () => {
 function hydrate(data){
   state = {
     settings: { whatsapp:"", phone:"", instagram:"", ...(data.settings || {}) },
+    testimonials: (Array.isArray(data.testimonials) ? data.testimonials : []).map((t, i) => ({
+      id: t.id != null ? t.id : i + 1,
+      n: t.n || "Cliente", p: t.p || "", q: t.q || "", photo: t.photo || ""
+    })),
     listings: (Array.isArray(data.listings) ? data.listings : []).map((l, i) => ({
       id: l.id != null ? l.id : i + 1, name: l.name || "Modelo", size: l.size || "",
       type: l.type === "double" ? "double" : "single",
@@ -681,9 +854,16 @@ function hydrate(data){
       desc: l.desc || "", photos: Array.isArray(l.photos) ? l.photos.filter(Boolean) : []
     }))
   };
+  /* Sin testimonios propios se cargan los de muestra de la página,
+     para poder editarlos igual que las casas. */
+  if(!state.testimonials.length){
+    state.testimonials = SAMPLE_TESTIS.map(function(t){
+      return { id: t.id, n: t.n, p: t.p, q: t.q, photo: t.photo };
+    });
+  }
   $("sPhone").value = state.settings.phone || "";
   $("sIg").value = state.settings.instagram || "";
-  renderUnits(); dirty = false; $("unsaved").hidden = true;
+  renderUnits(); renderTestis(); dirty = false; $("unsaved").hidden = true;
 }
 
 $("btnImport").addEventListener("click", () => $("fileImport").click());
@@ -711,6 +891,7 @@ $("fileImport").addEventListener("change", async () => {
    inventario está vacío. */
 if(!SB) hydrate({ settings: {}, listings: SAMPLE_UNITS });
 renderUnits();
+renderTestis();
 
 /* ══════════════════════════════════════════════
    SUPABASE — sesión, carga y publicación en la nube
@@ -825,21 +1006,28 @@ function uploadPhoto(durl, path){
 }
 
 /* Sube al Storage las fotos que siguen siendo data-URLs y las
-   reemplaza por su dirección pública (una por una, en orden). */
+   reemplaza por su dirección pública (una por una, en orden).
+   Cada trabajo apunta a obj[key]: fotos de casas (photos[i]) y
+   foto de testimonios (photo). */
 function uploadAllPhotos(s){
   var jobs = [];
   s.listings.forEach(function(u){
     u.photos.forEach(function(p, i){
       if(String(p).indexOf("data:") === 0){
-        jobs.push({ u: u, i: i, path: "casa-" + u.id + "/" + Date.now() + "-" + i + ".jpg" });
+        jobs.push({ obj: u.photos, key: i, path: "casa-" + u.id + "/" + Date.now() + "-" + i + ".jpg" });
       }
     });
+  });
+  (s.testimonials || []).forEach(function(t){
+    if(t.photo && String(t.photo).indexOf("data:") === 0){
+      jobs.push({ obj: t, key: "photo", path: "testi-" + t.id + "/" + Date.now() + ".jpg" });
+    }
   });
   var chain = Promise.resolve(), done = 0;
   jobs.forEach(function(job){
     chain = chain.then(function(){
-      return uploadPhoto(job.u.photos[job.i], job.path).then(function(url){
-        job.u.photos[job.i] = url;
+      return uploadPhoto(job.obj[job.key], job.path).then(function(url){
+        job.obj[job.key] = url;
         done++;
         toast("Subiendo fotos… " + done + "/" + jobs.length);
       });

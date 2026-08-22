@@ -47,6 +47,10 @@ window.MHV_DATA = {
     cond: "nueva|seminueva", sqft: 0, stock: "",
     desc: "corta (tarjeta)", descLong: "completa (modal)",
     features: ["Aire central", ...], photos: ["data:image/jpeg;base64,..."]
+  }],
+  testimonials: [{            // opcional; sin ellos la página usa 3 de muestra
+    id: 1, n: "Familia Ramírez", p: "Entrega en su terreno",
+    q: "Texto de la reseña…", photo: ""   // foto opcional; sin foto → ilustración SVG
   }]
 };
 ```
@@ -62,6 +66,7 @@ Todos los campos nuevos son opcionales; el mapeo en ambos archivos aplica defaul
 - Formulario de precalificación → muestra un resumen para copiar y abre el DM de Instagram (IG no permite pre-llenar mensajes).
 - Todos los CTAs abren el mensaje directo de Instagram (helper `igDm()` → `ig.me/m/{usuario}`).
 - Fallback visual: función `homeArt(c, wide)` genera ilustraciones SVG de casas cuando una unidad no tiene fotos.
+- Testimonios administrables desde el panel (nombre, detalle, reseña, foto opcional); sin datos propios se muestran 3 de muestra ilustrados.
 
 ## Reglas y restricciones (IMPORTANTES — no romper)
 

@@ -27,5 +27,14 @@ window.MHV_DATA = {
       features: ["Aire central", "Pisos nuevos", "Deck / porche incluido"],
       photos: []
     }
+  ],
+  testimonials: [
+    {
+      id: 1,
+      n: "Familia Demo",
+      p: "Entrega en su terreno",
+      q: "Ejemplo de reseña de un cliente satisfecho.",
+      photo: ""
+    }
   ]
 };
