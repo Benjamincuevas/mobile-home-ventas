@@ -13,6 +13,7 @@ Sitio de venta de casas móviles (mobile homes) orientado a generación de leads
 | `data.js` | Generado por el admin (botón "Descargar data.js"). Define `window.MHV_DATA`. Modo clásico / respaldo. Si no existe y no hay Supabase, la página usa 6 unidades de muestra con ilustraciones SVG. |
 | `data.ejemplo.js` | Ejemplo del contrato de datos (renombrar a `data.js` para probar). |
 | `LEEME.txt` | Instrucciones de publicación para el dueño del negocio (no técnico): Vercel + dominio + Supabase. |
+| `og-image.jpg` | Imagen de vista previa al compartir el link (meta Open Graph en `index.html`, apunta a `https://easyhomemobile.com/og-image.jpg`). |
 
 ## Arquitectura y flujo
 
