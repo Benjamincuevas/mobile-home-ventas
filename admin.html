@@ -149,6 +149,13 @@ main{padding:44px 0 90px}
 .feat{display:flex;align-items:center;gap:.5rem;font-size:.83rem;cursor:pointer}
 .feat input{width:16px;height:16px;accent-color:var(--pine-3);flex:none;cursor:pointer}
 
+/* ── Video del testimonio ── */
+.vbar{height:8px;border-radius:999px;background:var(--sand);overflow:hidden;margin-top:.7rem}
+.vbar span{display:block;height:100%;width:0;background:var(--pine-3);transition:width .2s}
+.vprev{margin-top:.9rem;border:2px solid var(--amber);border-radius:12px;overflow:hidden;background:#000}
+.vprev video{width:100%;max-height:260px;display:block;background:#000}
+.vprev .vacts{background:#fff;padding:.55rem .7rem;display:flex;justify-content:flex-end}
+
 /* ── Toast ── */
 .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);z-index:120;background:var(--pine);color:#fff;font-size:.86rem;font-weight:700;padding:.8rem 1.4rem;border-radius:999px;box-shadow:var(--sh-lg);opacity:0;pointer-events:none;transition:opacity .25s,transform .25s}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
@@ -384,7 +391,7 @@ main{padding:44px 0 90px}
         <label for="tQuote">Reseña</label>
         <textarea id="tQuote" style="min-height:110px" placeholder="Ej. Nos ayudaron con el financiamiento y en 3 semanas ya estábamos en nuestra casa…"></textarea>
       </div>
-      <div class="fld">
+      <div class="fld" style="margin-bottom:1rem">
         <label>Foto de la casa entregada <em>(opcional · se comprime sola)</em></label>
         <div class="drop" id="tDrop" tabindex="0" role="button" aria-label="Subir foto del testimonio">
           <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M17 8l-5-5-5 5"/><path d="M12 3v12"/></svg>
@@ -392,6 +399,17 @@ main{padding:44px 0 90px}
         </div>
         <input type="file" id="tFile" accept="image/*" hidden>
         <div class="photo-grid" id="tPhotoGrid"></div>
+      </div>
+      <div class="fld">
+        <label>Video del cliente <em>(opcional · se muestra en lugar de la foto)</em></label>
+        <div class="drop" id="tVDrop" tabindex="0" role="button" aria-label="Subir video del testimonio">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 10l4.5-2.5v9L15 14"/><rect x="3" y="6" width="12" height="12" rx="2"/></svg>
+          <b>Arrastra el video aquí</b> o haz clic para elegirlo
+          <small>MP4 o MOV · máximo 50 MB · se sube al momento</small>
+        </div>
+        <input type="file" id="tVFile" accept="video/*" hidden>
+        <div class="vbar" id="tVBar" hidden><span id="tVBarFill"></span></div>
+        <div id="tVideoBox"></div>
       </div>
       <div class="editor-foot">
         <button type="button" class="btn btn-line" id="tCancel">Cancelar</button>
@@ -697,6 +715,8 @@ function compress(file){
    ══════════════════════════════════════════════ */
 let editingTestiId = null;
 let tDraftPhoto = "";
+let tDraftVideo = "";
+const MAX_VIDEO_MB = 50;   // límite por archivo (plan gratuito de Supabase)
 
 function renderTestis(){
   const grid = $("testis");
@@ -705,7 +725,8 @@ function renderTestis(){
       <div class="unit-media">
         ${t.photo
           ? `<img src="${esc(t.photo)}" alt="${esc(t.n)}">`
-          : `<span class="nph">💬<br>Sin foto (se usa ilustración)</span>`}
+          : `<span class="nph">${t.video ? "🎬<br>Con video" : "💬<br>Sin foto (se usa ilustración)"}</span>`}
+        ${t.video ? `<span class="nfotos">🎬 Video</span>` : ""}
       </div>
       <div class="unit-body">
         <h3>${esc(t.n)}</h3>
@@ -748,6 +769,17 @@ $("tPhotoGrid").addEventListener("click", e => {
   if(e.target.closest("[data-tdel]")){ tDraftPhoto = ""; renderTestiPhoto(); }
 });
 
+function renderTestiVideo(){
+  $("tVideoBox").innerHTML = tDraftVideo ? `
+    <div class="vprev">
+      <video src="${esc(tDraftVideo)}" controls preload="metadata" playsinline></video>
+      <div class="vacts"><button type="button" class="btn btn-danger btn-sm" data-vdel="1">🗑 Quitar video</button></div>
+    </div>` : "";
+}
+$("tVideoBox").addEventListener("click", e => {
+  if(e.target.closest("[data-vdel]")){ tDraftVideo = ""; renderTestiVideo(); toast("Video quitado del testimonio"); }
+});
+
 function openTesti(id){
   editingTestiId = id;
   const t = id != null ? state.testimonials.find(x => x.id === id) : null;
@@ -756,7 +788,10 @@ function openTesti(id){
   $("tRole").value = (t && t.p) || "";
   $("tQuote").value = (t && t.q) || "";
   tDraftPhoto = (t && t.photo) || "";
+  tDraftVideo = (t && t.video) || "";
   renderTestiPhoto();
+  renderTestiVideo();
+  $("tVBar").hidden = true;
   $("tOverlay").classList.add("open");
   $("tName").focus();
 }
@@ -770,7 +805,8 @@ $("tSave").addEventListener("click", () => {
     n: $("tName").value.trim(),
     p: $("tRole").value.trim(),
     q: $("tQuote").value.trim(),
-    photo: tDraftPhoto
+    photo: tDraftPhoto,
+    video: tDraftVideo
   };
   if(!data.n || !data.q){ toast("Completa el nombre y la reseña"); return; }
   if(editingTestiId != null){
@@ -800,6 +836,83 @@ async function addTestiFile(files){
     renderTestiPhoto();
     toast("Foto lista ✔");
   } catch(e){ toast("No se pudo leer la foto"); }
+}
+
+/* ── Video: se sube directo al Storage al elegirlo ──
+   Los videos pesan demasiado para viajar en el documento JSON,
+   así que van al bucket en el momento y solo se guarda su URL. */
+const tVDrop = $("tVDrop"), tVFile = $("tVFile");
+tVDrop.addEventListener("click", () => tVFile.click());
+tVDrop.addEventListener("keydown", e => { if(e.key === "Enter" || e.key === " "){ e.preventDefault(); tVFile.click(); } });
+["dragover","dragenter"].forEach(ev => tVDrop.addEventListener(ev, e => { e.preventDefault(); tVDrop.classList.add("over"); }));
+["dragleave","drop"].forEach(ev => tVDrop.addEventListener(ev, e => { e.preventDefault(); tVDrop.classList.remove("over"); }));
+tVDrop.addEventListener("drop", e => addTestiVideo(e.dataTransfer.files));
+tVFile.addEventListener("change", () => { addTestiVideo(tVFile.files); tVFile.value = ""; });
+
+function videoExt(type){
+  var t = String(type || "");
+  if(t.indexOf("quicktime") > -1) return "mov";
+  if(t.indexOf("webm") > -1) return "webm";
+  var sub = t.split("/")[1];
+  return sub ? sub.replace(/[^a-z0-9]/gi, "") : "mp4";
+}
+
+function uploadVideoFile(file){
+  return new Promise(function(res, rej){
+    var path = "testi-video/" + Date.now() + "." + videoExt(file.type);
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", SB.url + "/storage/v1/object/fotos/" + path, true);
+    xhr.setRequestHeader("apikey", SB.key);
+    xhr.setRequestHeader("Authorization", "Bearer " + sbSession.access_token);
+    xhr.setRequestHeader("Content-Type", file.type || "video/mp4");
+    xhr.setRequestHeader("x-upsert", "true");
+    xhr.upload.onprogress = function(e){
+      if(e.lengthComputable){
+        var pct = Math.round(e.loaded / e.total * 100);
+        $("tVBarFill").style.width = pct + "%";
+      }
+    };
+    xhr.onload = function(){
+      if(xhr.status >= 200 && xhr.status < 300){
+        res(SB.url + "/storage/v1/object/public/fotos/" + path);
+      } else {
+        rej(new Error("HTTP " + xhr.status));
+      }
+    };
+    xhr.onerror = function(){ rej(new Error("red")); };
+    xhr.send(file);
+  });
+}
+
+function addTestiVideo(files){
+  var vid = null;
+  for(var i = 0; i < files.length; i++){
+    if(String(files[i].type).indexOf("video/") === 0){ vid = files[i]; break; }
+  }
+  if(!vid) return;
+  if(!SB || !sbSession){
+    toast("Los videos necesitan la conexión a la nube (Supabase) para guardarse.");
+    return;
+  }
+  if(vid.size > MAX_VIDEO_MB * 1024 * 1024){
+    toast("El video pesa " + Math.round(vid.size / 1048576) + " MB. El máximo es " + MAX_VIDEO_MB + " MB — recórtalo e intenta de nuevo.");
+    return;
+  }
+  $("tVBar").hidden = false;
+  $("tVBarFill").style.width = "0%";
+  toast("Subiendo video… no cierres esta ventana");
+  refreshCloudSession().catch(function(){ return null; })
+    .then(function(){ return uploadVideoFile(vid); })
+    .then(function(url){
+      tDraftVideo = url;
+      renderTestiVideo();
+      $("tVBar").hidden = true;
+      toast("Video listo ✔ — recuerda guardar el testimonio");
+    })
+    .catch(function(err){
+      $("tVBar").hidden = true;
+      toast("No se pudo subir el video. Revisa tu internet e intenta de nuevo.");
+    });
 }
 
 /* ══════════════════════════════════════════════
@@ -838,7 +951,7 @@ function hydrate(data){
     settings: { whatsapp:"", phone:"", instagram:"", ...(data.settings || {}) },
     testimonials: (Array.isArray(data.testimonials) ? data.testimonials : []).map((t, i) => ({
       id: t.id != null ? t.id : i + 1,
-      n: t.n || "Cliente", p: t.p || "", q: t.q || "", photo: t.photo || ""
+      n: t.n || "Cliente", p: t.p || "", q: t.q || "", photo: t.photo || "", video: t.video || ""
     })),
     listings: (Array.isArray(data.listings) ? data.listings : []).map((l, i) => ({
       id: l.id != null ? l.id : i + 1, name: l.name || "Modelo", size: l.size || "",
@@ -858,7 +971,7 @@ function hydrate(data){
      para poder editarlos igual que las casas. */
   if(!state.testimonials.length){
     state.testimonials = SAMPLE_TESTIS.map(function(t){
-      return { id: t.id, n: t.n, p: t.p, q: t.q, photo: t.photo };
+      return { id: t.id, n: t.n, p: t.p, q: t.q, photo: t.photo, video: "" };
     });
   }
   $("sPhone").value = state.settings.phone || "";

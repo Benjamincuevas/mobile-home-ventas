@@ -306,6 +306,9 @@ input[type=range]::-moz-range-thumb{width:21px;height:21px;border-radius:50%;bac
 .testi-photo{aspect-ratio:16/9;position:relative;background:#E8EDF2;overflow:hidden}
 .testi-photo svg{width:100%;height:100%}
 .testi-photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.testi-photo video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;background:#000}
+.testi-photo.has-video{aspect-ratio:4/5;background:#000}
+.testi-photo.has-video video{object-fit:contain}
 .testi-photo .del{position:absolute;bottom:8px;left:8px;background:rgba(2,36,64,.85);color:#fff;font-size:.64rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;padding:.28rem .65rem;border-radius:5px}
 .testi-body{padding:1.1rem 1.2rem 1.25rem}
 .stars{color:var(--yellow-2);font-size:.9rem;letter-spacing:.1em;margin-bottom:.45rem}
@@ -1155,17 +1158,29 @@ function mapTestis(raw){
       n: t.n || "Cliente",
       p: t.p || "",
       q: t.q || "",
-      photo: t.photo || ""
+      photo: t.photo || "",
+      video: t.video || ""
     };
   });
 }
+/* Solo se aceptan URLs http(s) o imágenes embebidas: evita que un
+   dato manipulado inyecte un enlace javascript: en la página. */
+function safeUrl(u){
+  const s = String(u == null ? "" : u).trim();
+  return (/^https?:\/\//i.test(s) || /^data:image\//i.test(s)) ? s : "";
+}
 function renderTestimonials(list){
   const P = TESTIMONIALS.map(t => t.c);
-  document.getElementById("testiGrid").innerHTML = list.map((t, i) => `
+  document.getElementById("testiGrid").innerHTML = list.map((t, i) => {
+    const vid = safeUrl(t.video), ph = safeUrl(t.photo);
+    const media = vid
+      ? `<video src="${esc(vid)}" controls preload="metadata" playsinline ${ph ? `poster="${esc(ph)}"` : ""}></video>`
+      : (ph
+        ? `<img src="${esc(ph)}" alt="Casa entregada a ${esc(t.n)}" loading="lazy">`
+        : homeArt(t.c || P[i % P.length], true));
+    return `
   <article class="testi rv in">
-    <div class="testi-photo">${t.photo
-      ? `<img src="${esc(t.photo)}" alt="Casa entregada a ${esc(t.n)}" loading="lazy">`
-      : homeArt(t.c || P[i % P.length], true)}<span class="del">✓ Casa entregada</span></div>
+    <div class="testi-photo${vid ? " has-video" : ""}">${media}<span class="del">${vid ? "🎬 Video del cliente" : "✓ Casa entregada"}</span></div>
     <div class="testi-body">
       <div class="stars" aria-label="5 de 5 estrellas">★★★★★</div>
       <p>“${esc(t.q)}”</p>
@@ -1174,7 +1189,8 @@ function renderTestimonials(list){
         <span><b>${esc(t.n)}</b><small>${esc(t.p || "")}</small></span>
       </div>
     </div>
-  </article>`).join("");
+  </article>`;
+  }).join("");
 }
 renderTestimonials((DB && Array.isArray(DB.testimonials) && DB.testimonials.length)
   ? mapTestis(DB.testimonials)

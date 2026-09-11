@@ -20,7 +20,8 @@ Sitio de venta de casas móviles (mobile homes) orientado a generación de leads
 **Modo Supabase** (activo cuando `supabase-config.js` tiene `url` y `anonKey`):
 
 1. El dueño abre `admin.html` y entra con correo/contraseña (Supabase Auth, grant `password` vía REST `/auth/v1/token`; tokens solo en memoria, refresh en 401).
-2. El panel carga el inventario de `GET /rest/v1/site_data?id=eq.1` y al presionar "☁️ Publicar": sube las fotos que sigan siendo data-URLs a Storage (`POST /storage/v1/object/fotos/casa-{id}/...`, quedan como URLs públicas) y hace upsert del documento completo `{settings, listings}` en la columna jsonb `data` (POST con `Prefer: resolution=merge-duplicates`).
+2. El panel carga el inventario de `GET /rest/v1/site_data?id=eq.1` y al presionar "☁️ Publicar": sube las fotos que sigan siendo data-URLs a Storage (`POST /storage/v1/object/fotos/casa-{id}/...` y `testi-{id}/...`, quedan como URLs públicas) y hace upsert del documento completo `{settings, listings, testimonials}` en la columna jsonb `data` (POST con `Prefer: resolution=merge-duplicates`).
+   Excepción: los videos de testimonios NO pasan por el documento (pesan demasiado en base64); se suben al elegirlos vía XHR con barra de progreso a `fotos/testi-video/{timestamp}.{ext}` y solo se guarda su URL. Límite `MAX_VIDEO_MB` = 50 (tope por archivo del plan gratuito).
 3. `index.html` al cargar hace `fetch` del mismo registro y, si trae listings, re-renderiza (prioridad: Supabase → `data.js` → muestras; si el fetch falla, la página nunca se rompe).
 
 Todo por REST con `fetch` — **no** se usa la librería supabase-js (regla 1: sin dependencias).
@@ -51,7 +52,9 @@ window.MHV_DATA = {
   }],
   testimonials: [{            // opcional; sin ellos la página usa 3 de muestra
     id: 1, n: "Familia Ramírez", p: "Entrega en su terreno",
-    q: "Texto de la reseña…", photo: ""   // foto opcional; sin foto → ilustración SVG
+    q: "Texto de la reseña…",
+    photo: "",   // opcional; sin foto → ilustración SVG. Con video actúa de poster
+    video: ""    // opcional; URL pública en Storage. Si existe, reemplaza a la foto
   }]
 };
 ```
@@ -67,7 +70,7 @@ Todos los campos nuevos son opcionales; el mapeo en ambos archivos aplica defaul
 - Formulario de precalificación → muestra un resumen para copiar y abre el DM de Instagram (IG no permite pre-llenar mensajes).
 - Todos los CTAs abren el mensaje directo de Instagram (helper `igDm()` → `ig.me/m/{usuario}`).
 - Fallback visual: función `homeArt(c, wide)` genera ilustraciones SVG de casas cuando una unidad no tiene fotos.
-- Testimonios administrables desde el panel (nombre, detalle, reseña, foto opcional); sin datos propios se muestran 3 de muestra ilustrados.
+- Testimonios administrables desde el panel (nombre, detalle, reseña, foto y video opcionales); sin datos propios se muestran 3 de muestra ilustrados. El video se reproduce con `<video controls playsinline preload="metadata">` usando la foto como `poster`; `safeUrl()` descarta URLs que no sean http(s) o `data:image/`.
 
 ## Reglas y restricciones (IMPORTANTES — no romper)
 
